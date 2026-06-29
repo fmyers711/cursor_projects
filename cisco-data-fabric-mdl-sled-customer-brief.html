@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cisco Data Fabric &amp; Machine Data Lake — State Government &amp; Higher Education</title>
+  <style>
+    :root {
+      --bg: #f2f5f7;
+      --panel: #ffffff;
+      --text: #07182d;
+      --muted: #536070;
+      --accent: #ff007f;
+      --blue: #0a60ff;
+      --blue-light: #e0eeff;
+      --border: #ced4db;
+      --success: #2d6a1e;
+      --success-bg: #eef8ea;
+      --warn-bg: #fff8f0;
+      --warn-border: #e8a020;
+      --tier-a: #0a60ff;
+      --tier-b: #7c3aed;
+      --tier-c: #536070;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      font-size: 15px;
+    }
+    header {
+      background: linear-gradient(135deg, #07182d 0%, #12275c 55%, #0f214d 100%);
+      color: #fff;
+      padding: 1.75rem 2rem 2rem;
+    }
+    header .inner { max-width: 1100px; margin: 0 auto; }
+    header .eyebrow {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #7ae2ff;
+      margin: 0 0 0.5rem;
+    }
+    header h1 {
+      margin: 0;
+      font-size: clamp(1.35rem, 3vw, 1.85rem);
+      font-weight: 700;
+      line-height: 1.25;
+      max-width: 54rem;
+    }
+    header .subtitle {
+      margin: 0.75rem 0 0;
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.95rem;
+      max-width: 52rem;
+    }
+    header .meta {
+      margin-top: 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.65);
+    }
+    header .meta span {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 0.25rem 0.65rem;
+      border-radius: 4px;
+    }
+    nav.toc {
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      overflow-x: auto;
+    }
+    nav.toc ul {
+      list-style: none;
+      margin: 0 auto;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem 1.25rem;
+      max-width: 1100px;
+      font-size: 0.85rem;
+    }
+    nav.toc a { color: var(--blue); text-decoration: none; white-space: nowrap; }
+    nav.toc a:hover { text-decoration: underline; }
+    main { max-width: 1100px; margin: 0 auto; padding: 2rem 2rem 3rem; }
+    section { margin-bottom: 2.5rem; }
+    h2 {
+      font-size: 1.35rem;
+      margin: 0 0 1rem;
+      color: var(--text);
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 0.4rem;
+    }
+    h3 {
+      font-size: 1.05rem;
+      margin: 1.25rem 0 0.5rem;
+      color: var(--text);
+    }
+    h4 {
+      font-size: 0.95rem;
+      margin: 1rem 0 0.4rem;
+      color: var(--muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    p { margin: 0.65rem 0; }
+    ul, ol { margin: 0.5rem 0 0.75rem 1.25rem; padding: 0; }
+    li { margin: 0.35rem 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      margin: 1rem 0;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.55rem 0.7rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: var(--blue-light);
+      color: var(--text);
+      font-weight: 600;
+    }
+    tr:nth-child(even) td { background: #f8fafc; }
+    .callout {
+      background: var(--success-bg);
+      border: 1px solid #b8ddb0;
+      border-left: 4px solid var(--success);
+      padding: 1.1rem 1.25rem;
+      margin: 1.25rem 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .callout.warn {
+      background: var(--warn-bg);
+      border-color: #f0d9b8;
+      border-left-color: var(--warn-border);
+    }
+    .callout.accent {
+      background: #fff0f7;
+      border-color: #ffb8d9;
+      border-left-color: var(--accent);
+    }
+    .callout.dark {
+      background: #07182d;
+      border-color: #1e3a5f;
+      border-left-color: #7ae2ff;
+      color: rgba(255, 255, 255, 0.92);
+    }
+    .callout h3 {
+      margin-top: 0;
+      border: none;
+      padding: 0;
+      font-size: 1.1rem;
+      color: var(--success);
+    }
+    .callout.warn h3 { color: #8a5a00; }
+    .callout.accent h3 { color: var(--accent); }
+    .callout.dark h3 { color: #7ae2ff; }
+    .pillars {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .pillar {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.1rem;
+      border-top: 3px solid var(--accent);
+    }
+    .pillar.tier-a { border-top-color: var(--tier-a); }
+    .pillar.tier-b { border-top-color: var(--tier-b); }
+    .pillar.tier-c { border-top-color: var(--tier-c); }
+    .pillar strong {
+      display: block;
+      font-size: 0.95rem;
+      margin-bottom: 0.35rem;
+    }
+    .pillar span {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 0.15rem 0.45rem;
+      border-radius: 3px;
+      background: var(--blue-light);
+      color: var(--blue);
+      margin-right: 0.35rem;
+      white-space: nowrap;
+    }
+    .tag.primary { background: #ffe8f3; color: var(--accent); }
+    .tag.success { background: var(--success-bg); color: var(--success); }
+    .tag.warn { background: var(--warn-bg); color: #8a5a00; }
+    .tag.muted { background: #eef1f4; color: var(--muted); }
+    .stat-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem 2.5rem;
+      margin: 1.25rem 0;
+    }
+    .stat-item { min-width: 140px; }
+    .metric-highlight {
+      display: inline-block;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1.2;
+    }
+    .metric-label {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 400;
+      margin-top: 0.15rem;
+    }
+    .workflow {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.75rem;
+      margin: 1.25rem 0;
+    }
+    .workflow-step {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      position: relative;
+    }
+    .workflow-step .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.75rem;
+      height: 1.75rem;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .workflow-step strong { display: block; font-size: 0.95rem; }
+    .workflow-step span { font-size: 0.82rem; color: var(--muted); }
+    .audience-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .audience-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.15rem 1.25rem;
+      border-left: 4px solid var(--blue);
+    }
+    .audience-card h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1rem;
+      color: var(--blue);
+    }
+    .audience-card ul { margin: 0.35rem 0 0 1.1rem; font-size: 0.9rem; }
+    .quote-block {
+      background: #f0f4f8;
+      border-left: 4px solid var(--blue);
+      padding: 0.85rem 1.1rem;
+      margin: 0.75rem 0;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.92rem;
+    }
+    .quote-block em { color: var(--muted); font-size: 0.82rem; }
+    footer {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1rem 2rem 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    @media print {
+      nav.toc { position: static; }
+      header { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <p class="eyebrow">Cisco Data Fabric · Powered by Splunk · MELT</p>
+    <h1>Cisco Data Fabric &amp; Machine Data Lake for State Government &amp; Higher Education</h1>
+    <p class="subtitle">
+      A governed, tiered machine-data lifecycle that lets agencies and campuses land all telemetry economically, promote only what missions require, and make data AI-ready—with no upfront landing cost and no data engineering burden.
+    </p>
+    <div class="meta">
+      <span>Audience: CIO · CISO · CTO · AI GRC · Developers</span>
+      <span>Sector: State, Local, Education (SLED)</span>
+      <span>Focus: capabilities · availability · mission benefits</span>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Table of contents">
+  <ul>
+    <li><a href="#executive">Executive summary</a></li>
+    <li><a href="#problem">The challenge</a></li>
+    <li><a href="#solution">The solution</a></li>
+    <li><a href="#tiers">Three-tier architecture</a></li>
+    <li><a href="#lifecycle">Land → Discover → Promote</a></li>
+    <li><a href="#mdl">Machine Data Lake</a></li>
+    <li><a href="#products">Product mapping</a></li>
+    <li><a href="#federation">Federated search</a></li>
+    <li><a href="#ai">AI-ready capabilities</a></li>
+    <li><a href="#patterns">Four usage patterns</a></li>
+    <li><a href="#security">Security workflow</a></li>
+    <li><a href="#sled">SLED benefits</a></li>
+    <li><a href="#stakeholders">By role</a></li>
+    <li><a href="#availability">GA vs. roadmap</a></li>
+    <li><a href="#messaging">Key messaging</a></li>
+    <li><a href="#bottom-line">Bottom line</a></li>
+  </ul>
+</nav>
+
+<main>
+
+<section id="executive">
+  <h2>Executive summary</h2>
+  <p>
+    <strong>Cisco Data Fabric (CDF)</strong>, powered by Splunk, is not a single product—it is a <strong>tiered machine-data lifecycle</strong> that transforms previously inaccessible operational data into a governed, searchable, AI-ready asset. At its core is the <strong>Splunk Machine Data Lake (MDL)</strong>: an economic, fully managed landing zone where structured and unstructured telemetry can be retained without the traditional trade-off between expensive indexing and dropping data.
+  </p>
+
+  <div class="stat-row">
+    <div class="stat-item">
+      <span class="metric-highlight">&gt;90%</span>
+      <span class="metric-label">of operational data today sits in low-cost storage—largely unstructured and untapped for AI/ML</span>
+    </div>
+    <div class="stat-item">
+      <span class="metric-highlight">10×</span>
+      <span class="metric-label">visibility with Machine Data Lake (defensible claim)</span>
+    </div>
+    <div class="stat-item">
+      <span class="metric-highlight">$0</span>
+      <span class="metric-label">upfront cost to land data in MDL</span>
+    </div>
+  </div>
+
+  <div class="callout dark">
+    <h3>Solution in one line</h3>
+    <p style="margin:0;font-size:1.05rem;">
+      <strong>Land it all → Discover → Promote on demand → Search / Power AI</strong> — a governed, fully managed lifecycle that delivers dramatically more visibility while you pay premium analytics cost only when the mission requires it.
+    </p>
+  </div>
+
+  <div class="pillars">
+    <div class="pillar">
+      <strong>Economic landing</strong>
+      <span>Retain all telemetry without dropping logs—critical for budget-constrained agencies and campuses.</span>
+    </div>
+    <div class="pillar">
+      <strong>Fully managed</strong>
+      <span>Splunk governs, catalogs, and maintains landed data—no schema, partitioning, or cardinality burden on lean IT/SOC teams.</span>
+    </div>
+    <div class="pillar">
+      <strong>Effortless promotion</strong>
+      <span>Move only the data you need, when you need it—by use case, data window, or trigger.</span>
+    </div>
+    <div class="pillar">
+      <strong>Federated search</strong>
+      <span>Search-in-place across Splunk and external lakes (S3, Security Lake, and more)—no replatforming.</span>
+    </div>
+    <div class="pillar">
+      <strong>AI-ready by design</strong>
+      <span>Parquet, vector indexes, GenAI APIs, MCP—zero data prep for state AI programs and academic research.</span>
+    </div>
+    <div class="pillar">
+      <strong>Compliance-ready</strong>
+      <span>Long-term retention tiers support audit, records mandates, and forensic lookback.</span>
+    </div>
+  </div>
+</section>
+
+<section id="problem">
+  <h2>The challenge public-sector IT faces today</h2>
+  <p>
+    State agencies, local governments, and higher education institutions generate vast volumes of machine data—security events, application logs, infrastructure metrics, research telemetry, and compliance evidence. Yet most organizations face an impossible choice:
+  </p>
+  <ul>
+    <li><strong>Expensive indexing</strong> — Index everything in Splunk and blow through constrained budgets.</li>
+    <li><strong>Dropping data</strong> — Delete or sample telemetry, creating blind spots for security, operations, and AI.</li>
+    <li><strong>Unmanaged external lakes</strong> — Dump data into S3 or cloud storage with no governance, discoverability, or path to analytics.</li>
+  </ul>
+  <p>
+    The result: more than 90% of operational data lands in low-cost cloud storage—unstructured, inaccessible, and untapped for AI and ML. For SLED environments, this is compounded by <strong>tight budgets</strong>, <strong>lean IT and SOC teams</strong>, <strong>fragmented agency or campus silos</strong>, and <strong>long-term compliance mandates</strong> that demand retention without proportional staffing.
+  </p>
+</section>
+
+<section id="solution">
+  <h2>The solution — Cisco Data Fabric</h2>
+  <p>
+    CDF unifies the full machine-data lifecycle under one governed architecture. Instead of choosing between cost and coverage, organizations can <strong>land everything economically</strong>, <strong>discover and understand data in place</strong>, <strong>promote only high-value slices</strong> into analytics or hot tiers, and <strong>search or feed AI</strong> across all tiers and external sources through federated search.
+  </p>
+
+  <div class="callout accent">
+    <h3>Unified value proposition for SLED</h3>
+    <p style="margin:0;">
+      <strong>Retain more, govern more, search more</strong> — and pay for premium AI analytics only when the mission requires it.
+    </p>
+  </div>
+
+  <h3>Signature workflow — the differentiator</h3>
+  <div class="workflow">
+    <div class="workflow-step">
+      <div class="step-num">1</div>
+      <strong>Land</strong>
+      <span>Ingest all machine data cost-effectively into a governed landing zone</span>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">2</div>
+      <strong>Discover</strong>
+      <span>Browse, filter, and catalog data slices—search-in-place without moving data</span>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">3</div>
+      <strong>Promote</strong>
+      <span>Elevate only needed data by use case, window, or trigger</span>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">4</div>
+      <strong>Search / Power AI</strong>
+      <span>Investigate, train ML, and feed agents with zero data prep</span>
+    </div>
+  </div>
+</section>
+
+<section id="tiers">
+  <h2>Three-tier architecture</h2>
+  <p>
+    CDF organizes machine data into three retention and capability bands. Each tier maps to named Splunk products with clear use cases—so CIOs and CISOs can align spend to mission priority rather than paying hot-tier prices for archive data.
+  </p>
+
+  <div class="pillars">
+    <div class="pillar tier-a">
+      <span class="tag">Tier A — Hot</span>
+      <strong>Real-time operations</strong>
+      <span><strong>Products:</strong> Splunk Index, Enterprise Security, Observability Cloud</span>
+      <span style="display:block;margin-top:0.5rem;"><strong>Retention:</strong> 7–14 days (security example)</span>
+      <span style="display:block;margin-top:0.35rem;"><strong>Use cases:</strong> CIM detections, active investigation, monitoring, troubleshooting</span>
+    </div>
+    <div class="pillar tier-b">
+      <span class="tag primary">Tier B — Analytics</span>
+      <strong>Scaled analytics &amp; ML</strong>
+      <span><strong>Product:</strong> MDL Analytics Table</span>
+      <span style="display:block;margin-top:0.5rem;"><strong>Retention:</strong> 90–180 days</span>
+      <span style="display:block;margin-top:0.35rem;"><strong>Use cases:</strong> OCSF batch detections, enriched search, ML training, agentic investigation</span>
+    </div>
+    <div class="pillar tier-c">
+      <span class="tag muted">Tier C — Archive</span>
+      <strong>Long-term evidence</strong>
+      <span><strong>Products:</strong> MDL Raw Tier / Long-Term Retention</span>
+      <span style="display:block;margin-top:0.5rem;"><strong>Retention:</strong> Long-term</span>
+      <span style="display:block;margin-top:0.35rem;"><strong>Use cases:</strong> Compliance, audit, forensic lookback, historical IOC hunting, promotion on demand</span>
+    </div>
+  </div>
+
+  <p>
+    <strong>Federated Search</strong> unifies all three tiers plus external lakes (Amazon S3, Amazon Security Lake, and expanding sources)—enabling search-in-place without replatforming fragmented agency or campus data estates.
+  </p>
+</section>
+
+<section id="lifecycle">
+  <h2>MDL lifecycle — Land, Discover, Promote, Search</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Stage</th>
+        <th>Capability</th>
+        <th>What it delivers</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Land</strong></td>
+        <td>Central landing zone, governed</td>
+        <td>Ingest all machine data cost-effectively into one place—with no upfront landing cost.</td>
+      </tr>
+      <tr>
+        <td><strong>Discover</strong></td>
+        <td>Browse &amp; filter data slices; catalogued &amp; organized; search-in-place</td>
+        <td>Find and understand data without moving it—critical for lean teams managing multi-agency estates.</td>
+      </tr>
+      <tr>
+        <td><strong>Promote</strong></td>
+        <td>Right structure for the right job; promote by use case / data window / trigger</td>
+        <td>Move only needed data into indexing or Analytics Table—seamless tiering without data engineering.</td>
+      </tr>
+      <tr>
+        <td><strong>Search / Power AI</strong></td>
+        <td>Query, investigate, train ML, API access, MCP, AI reasoning</td>
+        <td>High-value analytics and agent consumption on demand—with open formats and zero data prep.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="mdl">
+  <h2>Machine Data Lake — deep dive</h2>
+  <p>
+    <strong>Splunk Machine Data Lake (MDL)</strong> is the economic, fully managed landing zone at the heart of Cisco Data Fabric. It answers the question every SLED CIO and CISO asks: <em>How do we keep everything without breaking the budget or burying our teams in data engineering?</em>
+  </p>
+
+  <h3>Three core pillars</h3>
+  <div class="pillars">
+    <div class="pillar">
+      <strong>Economic landing zone</strong>
+      <span>Land unstructured <em>and</em> structured data with no upfront costs—retain forensic and low-priority logs that previously had no cost-effective home.</span>
+    </div>
+    <div class="pillar">
+      <strong>Turnkey / fully managed</strong>
+      <span>Splunk governs, manages, and maintains landed data with clear organizational structure. No manual schema design, partitioning, or cardinality tuning.</span>
+    </div>
+    <div class="pillar">
+      <strong>Effortless promotion</strong>
+      <span>Promote only the data you need, when you need it—by use case, data window, or automated trigger.</span>
+    </div>
+  </div>
+
+  <h3>MDL internal components</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Component</th>
+        <th>Role</th>
+        <th>Retention (security example)</th>
+        <th>Primary use cases</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>MDL Raw Tier</strong></td>
+        <td>Lowest-cost storage of raw landed data; limited-capability scans</td>
+        <td>Long-term</td>
+        <td>Audit, compliance, historical IOC hunting, forensics, discovery for promotion</td>
+      </tr>
+      <tr>
+        <td><strong>MDL Analytics Table</strong></td>
+        <td>Structured/enriched mid-tier for performant analytics</td>
+        <td>90–180 days</td>
+        <td>OCSF batch detections, troubleshooting, ML training, agentic investigation</td>
+      </tr>
+      <tr>
+        <td><strong>MDL Long-Term Retention</strong></td>
+        <td>Archive evidence cost-effectively</td>
+        <td>Long-term</td>
+        <td>Compliance, audits, future-proofing, attack reconstruction</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Data management &amp; governance</h3>
+  <ul>
+    <li><strong>Catalogued &amp; organized</strong> — Data is structured and discoverable, not an unmanaged raw dump.</li>
+    <li><strong>Governed access</strong> — Enterprise-wide, controlled discoverability aligned with public-sector access policies.</li>
+    <li><strong>Search-in-place</strong> — Investigate without promoting or moving data first.</li>
+    <li><strong>Seamless tiering</strong> — No manual schema, partitioning, or cardinality engineering.</li>
+    <li><strong>Browse &amp; filter data slices</strong> — Targeted discovery before committing to promotion costs.</li>
+  </ul>
+</section>
+
+<section id="products">
+  <h2>CDF product &amp; availability mapping</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>CDF layer</th>
+        <th>Cisco / Splunk product</th>
+        <th>Capability</th>
+        <th>Tier</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Umbrella architecture</td>
+        <td>Cisco Data Fabric (powered by Splunk)</td>
+        <td>Unifies lifecycle, AI data management, AI-native experiences, federation</td>
+        <td>All</td>
+        <td><span class="tag success">GA</span></td>
+      </tr>
+      <tr>
+        <td>Data foundation</td>
+        <td>Splunk Machine Data Lake (MDL)</td>
+        <td>Central economic landing zone; structured &amp; unstructured data</td>
+        <td>B / C</td>
+        <td><span class="tag success">GA</span> <span class="tag warn">features in dev</span></td>
+      </tr>
+      <tr>
+        <td>Mid-tier analytics</td>
+        <td>MDL Analytics Table</td>
+        <td>Enriched search, OCSF batch detections, ML training, agentic investigation</td>
+        <td>B</td>
+        <td><span class="tag success">GA</span></td>
+      </tr>
+      <tr>
+        <td>Long-term retention</td>
+        <td>MDL Raw Tier / Long-Term Retention</td>
+        <td>Audit, compliance, historical IOC hunting, raw scans</td>
+        <td>C</td>
+        <td><span class="tag success">GA</span></td>
+      </tr>
+      <tr>
+        <td>High-performance ops</td>
+        <td>Splunk Index (Hot), Enterprise, Splunk Cloud</td>
+        <td>Real-time CIM detections, active investigation</td>
+        <td>A</td>
+        <td><span class="tag success">GA</span></td>
+      </tr>
+      <tr>
+        <td>Security operations</td>
+        <td>Splunk Enterprise Security</td>
+        <td>CIM detections, active investigations, guided workflows</td>
+        <td>A / B</td>
+        <td><span class="tag success">GA</span></td>
+      </tr>
+      <tr>
+        <td>Observability</td>
+        <td>Splunk Observability (O11y) Cloud</td>
+        <td>Monitoring, exploration, troubleshooting, historical analysis</td>
+        <td>A</td>
+        <td><span class="tag success">GA</span></td>
+      </tr>
+      <tr>
+        <td>Ingest &amp; routing</td>
+        <td>Edge Processor / Ingest Processor</td>
+        <td>Data routing, real-time detection feeds; streaming detections (future)</td>
+        <td>—</td>
+        <td><span class="tag success">GA</span> <span class="tag warn">streaming roadmap</span></td>
+      </tr>
+      <tr>
+        <td>Cross-silo search</td>
+        <td>Federated Search</td>
+        <td>Search-in-place across Splunk + third-party lakes</td>
+        <td>All</td>
+        <td><span class="tag success">GA</span> <span class="tag warn">mixed</span></td>
+      </tr>
+      <tr>
+        <td>AI / agent experiences</td>
+        <td>Triage Agent, Guided Response, Malware Reversing, Incident Analysis &amp; Response</td>
+        <td>Agentic investigation &amp; response</td>
+        <td>—</td>
+        <td><span class="tag warn">Roadmap</span></td>
+      </tr>
+      <tr>
+        <td>Open AI / data tooling</td>
+        <td>Parquet export, GenAI APIs, vector indexes, MCP</td>
+        <td>ML training, semantic search, AI reasoning, zero data prep</td>
+        <td>B</td>
+        <td><span class="tag success">GA</span> <span class="tag">emerging</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="federation">
+  <h2>Federated search — break down silos</h2>
+  <p>
+    Federated Search lets SLED organizations query data <strong>where it lives</strong>—across Splunk deployments, MDL tiers, and external cloud lakes—without costly replatforming or ETL projects. This is especially valuable when agencies, campuses, or research units maintain separate data estates that must remain searchable under central governance.
+  </p>
+
+  <h3>Source availability</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Data source</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Splunk Enterprise, Splunk Cloud, Splunk O11y Cloud</td>
+        <td><span class="tag success">Available now</span></td>
+      </tr>
+      <tr>
+        <td>Amazon S3, Amazon Security Lake</td>
+        <td><span class="tag success">Available now</span></td>
+      </tr>
+      <tr>
+        <td>Splunk Machine Data Lake, Azure Data Lakes, Snowflake, Splunk DDSS</td>
+        <td><span class="tag warn">Under development</span></td>
+      </tr>
+      <tr>
+        <td>Amazon CloudWatch Lake</td>
+        <td><span class="tag muted">Roadmap</span></td>
+      </tr>
+    </tbody>
+  </table>
+  <p><strong>Open formats supported:</strong> JSON, Parquet, Iceberg, Delta Lake.</p>
+</section>
+
+<section id="ai">
+  <h2>AI-ready capabilities — zero data prep</h2>
+  <p>
+    State AI initiatives, research programs, and governed enterprise AI all require machine data in consumable formats—not months of ETL. MDL delivers AI-ready outputs directly from the lake:
+  </p>
+  <ul>
+    <li><strong>Parquet export</strong> — Direct feed for ML training pipelines and research workloads.</li>
+    <li><strong>GenAI-ready APIs</strong> — Programmatic data access for AI applications and campus-developed tools.</li>
+    <li><strong>Vector indexes</strong> — Built for semantic search across security and operational corpora.</li>
+    <li><strong>MCP readiness</strong> — Data made consumable for AI reasoning agents with appropriate governance boundaries.</li>
+    <li><strong>Open formats</strong> — JSON, Parquet, Iceberg, Delta Lake for interoperability with existing analytics stacks.</li>
+  </ul>
+
+  <div class="callout">
+    <h3>For AI GRC and responsible-AI programs</h3>
+    <p style="margin:0;">
+      MDL provides <strong>governed discoverability</strong> and <strong>controlled promotion</strong>—so AI systems access only approved data slices with audit trails, rather than unconstrained dumps from unmanaged lakes. This supports state executive orders on AI, higher-ed research ethics boards, and federal compliance frameworks that require data lineage and access control.
+    </p>
+  </div>
+</section>
+
+<section id="patterns">
+  <h2>Four patterns for MDL + federation</h2>
+  <p>Choose the right capability level for each data type and mission—without one-size-fits-all indexing costs.</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Pattern</th>
+        <th>Mechanism</th>
+        <th>Best for</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>1. Full capability</strong></td>
+        <td>Index + Search</td>
+        <td>Heavy/frequent searches, CIM detections, infrastructure and service monitoring</td>
+      </tr>
+      <tr>
+        <td><strong>2. Enriched</strong></td>
+        <td>MDL Analytics Table + Search</td>
+        <td>OCSF/SPL2 detections, active investigation, balanced cost, future AI/ML</td>
+      </tr>
+      <tr>
+        <td><strong>3. Limited capability (raw)</strong></td>
+        <td>MDL Raw Tier + Search</td>
+        <td>Long-period retention, audit/compliance, historical IOC hunting</td>
+      </tr>
+      <tr>
+        <td><strong>4. Limited capability (third party)</strong></td>
+        <td>Third-party lake + Federated Search</td>
+        <td>Data that must stay external (e.g., agency-owned S3), searched in-place</td>
+      </tr>
+    </tbody>
+  </table>
+  <p><em>Use-case support depends on data shape and format.</em></p>
+</section>
+
+<section id="security">
+  <h2>Security workflow example</h2>
+  <p>A typical SLED security operations flow through CDF tiers:</p>
+  <ol>
+    <li><strong>Data intake</strong> — Routed via Edge Processor / Ingest Processor.</li>
+    <li><strong>Immediate operations (Tier A)</strong> — High-value CIM detections remain in Splunk Index (Hot) with Enterprise Security; 7–14 day retention for active investigation.</li>
+    <li><strong>Scaled analytics (Tier B)</strong> — Batch OCSF detections and extended investigations land in MDL Analytics Table; 90–180 day retention.</li>
+    <li><strong>Long-term evidence (Tier C)</strong> — Raw and long-tail evidence held in MDL Long-Term Retention; small raw scans and promotion back up when deeper investigation is needed.</li>
+    <li><strong>Agentic response (future)</strong> — Feeds Triage, Guided Response, and Malware Reversing agents as they become available.</li>
+  </ol>
+</section>
+
+<section id="sled">
+  <h2>Why CDF matters for state government &amp; higher education</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Capability</th>
+        <th>SLED benefit</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Economic landing zone (MDL)</td>
+        <td>Retain all telemetry without dropping logs—essential for budget-constrained agencies and multi-campus systems.</td>
+      </tr>
+      <tr>
+        <td>Turnkey / fully managed</td>
+        <td>Reduces burden on lean public-sector IT and SOC teams; no dedicated data engineering for tiering.</td>
+      </tr>
+      <tr>
+        <td>Federated Search</td>
+        <td>Unifies fragmented agency, campus, and research data estates without mandatory consolidation projects.</td>
+      </tr>
+      <tr>
+        <td>Long-term retention (Tier C)</td>
+        <td>Supports compliance, audit, public records, and legislative retention mandates.</td>
+      </tr>
+      <tr>
+        <td>AI-ready outputs</td>
+        <td>Enables state AI programs, research analytics, and campus innovation with zero data prep.</td>
+      </tr>
+      <tr>
+        <td>Tiered promotion</td>
+        <td>Pay premium analytics cost only when investigations, audits, or AI missions require it.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="stakeholders">
+  <h2>Benefits by role</h2>
+  <div class="audience-grid">
+    <div class="audience-card">
+      <h3>CIO / IT leadership</h3>
+      <ul>
+        <li>End the false choice between expensive indexing and data loss.</li>
+        <li>Fully managed lifecycle reduces staffing and data-engineering overhead.</li>
+        <li>Federated search consolidates visibility across agency or campus silos.</li>
+        <li>Align spend to mission priority via tiered retention—not one-tier pricing.</li>
+        <li>Foundation for state AI initiatives without building a separate data platform.</li>
+      </ul>
+    </div>
+    <div class="audience-card">
+      <h3>CISO / security leadership</h3>
+      <ul>
+        <li>Retain forensic and long-tail evidence for compliance and IOC hunting.</li>
+        <li>Hot tier for real-time CIM detections; analytics tier for OCSF batch detections.</li>
+        <li>Promote cold evidence on demand for deeper investigations.</li>
+        <li>Search-in-place across Security Lake and Splunk without replatforming.</li>
+        <li>Future agentic triage and guided response on governed data (roadmap).</li>
+      </ul>
+    </div>
+    <div class="audience-card">
+      <h3>CTO / platform engineering</h3>
+      <ul>
+        <li>Seamless tiering with no manual schema, partitioning, or cardinality tuning.</li>
+        <li>Edge/Ingest Processor for intelligent routing at the boundary.</li>
+        <li>Open formats (Parquet, Iceberg, Delta) for interoperability.</li>
+        <li>Federated search across cloud lakes reduces custom integration work.</li>
+        <li>Clear promotion paths from archive to analytics to hot index.</li>
+      </ul>
+    </div>
+    <div class="audience-card">
+      <h3>AI GRC / data governance</h3>
+      <ul>
+        <li>Governed, catalogued data—not unmanaged dumps in external lakes.</li>
+        <li>Controlled discoverability and promotion support responsible AI access.</li>
+        <li>Audit-friendly retention tiers for records and compliance mandates.</li>
+        <li>Lineage from landed raw data through promoted analytics slices.</li>
+        <li>MCP and API access with enterprise access controls.</li>
+      </ul>
+    </div>
+    <div class="audience-card">
+      <h3>Developers &amp; data scientists</h3>
+      <ul>
+        <li>Parquet export and GenAI-ready APIs—zero data prep for ML pipelines.</li>
+        <li>Vector indexes for semantic search applications.</li>
+        <li>MCP consumption for agent and application development.</li>
+        <li>Search-in-place to explore data before committing to promotion.</li>
+        <li>Standard open formats for integration with campus research stacks.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="availability">
+  <h2>What's available today vs. roadmap</h2>
+
+  <div class="callout">
+    <h3>Generally available (GA) today</h3>
+    <ul style="margin-bottom:0;">
+      <li>Tiered use cases and promotion lifecycle</li>
+      <li>MDL landing zone, Analytics Table, and long-term retention</li>
+      <li>Core federated search (Splunk Enterprise/Cloud/O11y, Amazon S3, Amazon Security Lake)</li>
+      <li>Parquet export, GenAI APIs, vector indexes (emerging), MCP readiness</li>
+      <li>Edge Processor / Ingest Processor for routing</li>
+    </ul>
+  </div>
+
+  <div class="callout warn">
+    <h3>Under development / roadmap</h3>
+    <ul style="margin-bottom:0;">
+      <li><strong>Under development:</strong> MDL as a federated search source; Azure Data Lakes; Snowflake; Splunk DDSS federation</li>
+      <li><strong>Roadmap:</strong> Streaming detections; Amazon CloudWatch Lake federation</li>
+      <li><strong>Future agents:</strong> Triage Agent, Guided Response Agent, Malware Reversing Agent, Incident Analysis &amp; Response Agent</li>
+    </ul>
+  </div>
+
+  <h3>Most defensible claims</h3>
+  <ul>
+    <li>More than 90% of operational data sits in low-cost storage today—largely unstructured and inaccessible; MDL unlocks it.</li>
+    <li>10× visibility with Machine Data Lake.</li>
+    <li>No upfront cost to land data.</li>
+    <li>Tiered retention bands: Hot 7–14 days → Analytics Table 90–180 days → MDL long-term.</li>
+    <li>Named GA products and tiers as documented above.</li>
+  </ul>
+  <p><em>Treat roadmap items as forward-looking and clearly caveated in procurement and architecture discussions.</em></p>
+</section>
+
+<section id="messaging">
+  <h2>Key messaging</h2>
+
+  <h4>Executive / sales</h4>
+  <div class="quote-block">
+    "Stop choosing between expensive indexing and dropping data — land it all, promote only what you need."
+    <br><em>General SLED audience</em>
+  </div>
+  <div class="quote-block">
+    "Retain more, govern more, search more — pay premium AI analytics cost only when the mission requires it."
+    <br><em>State government &amp; higher education</em>
+  </div>
+
+  <h4>Technical</h4>
+  <div class="quote-block">
+    "Seamless tiering with no data engineering; land, discover, promote is the differentiator."
+  </div>
+  <div class="quote-block">
+    "AI-ready by design — open formats, Parquet, vector indexes, MCP, zero data prep."
+  </div>
+
+  <h4>Machine Data Lake specific</h4>
+  <div class="quote-block">
+    "MDL is your no-upfront-cost landing zone — keep everything, promote only what the mission needs."
+  </div>
+  <div class="quote-block">
+    "Splunk-managed forensic and low-priority log storage — the cost-effective option that didn't exist before."
+    <br><em>SLED security &amp; compliance</em>
+  </div>
+</section>
+
+<section id="bottom-line">
+  <h2>Bottom line</h2>
+  <div class="callout dark">
+    <p style="margin:0;font-size:1.02rem;">
+      <strong>Cisco Data Fabric</strong> turns previously inaccessible machine data into a <strong>governed, searchable, AI-ready asset</strong>—the affordable foundation for agentic AI, built for SLED budgets and compliance demands. Land everything. Discover in place. Promote on demand. Search and power AI across every tier and silo—without replatforming, without data engineering, and without paying hot-tier prices for data you only need to retain.
+    </p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p>
+    <strong>Cisco Data Fabric &amp; Machine Data Lake — SLED Customer Brief.</strong>
+    Content synthesized from harmonized CDF/MDL product analyses. Capabilities and availability reflect documented GA status and stated roadmap items as of document creation—validate current product availability with your Cisco account team before external distribution or procurement decisions.
+  </p>
+</footer>
+
+</body>
+</html>
