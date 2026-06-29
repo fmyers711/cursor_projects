@@ -71,27 +71,6 @@
       padding: 0.25rem 0.65rem;
       border-radius: 4px;
     }
-    nav.toc {
-      background: var(--panel);
-      border-bottom: 1px solid var(--border);
-      padding: 0.75rem 2rem;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      overflow-x: auto;
-    }
-    nav.toc ul {
-      list-style: none;
-      margin: 0 auto;
-      padding: 0;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.35rem 1.25rem;
-      max-width: 1100px;
-      font-size: 0.85rem;
-    }
-    nav.toc a { color: var(--blue); text-decoration: none; white-space: nowrap; }
-    nav.toc a:hover { text-decoration: underline; }
     main { max-width: 1100px; margin: 0 auto; padding: 2rem 2rem 3rem; }
     section { margin-bottom: 2.5rem; }
     h2 {
@@ -302,7 +281,6 @@
       font-size: 0.85rem;
     }
     @media print {
-      nav.toc { position: static; }
       header { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
     }
   </style>
@@ -323,27 +301,6 @@
     </div>
   </div>
 </header>
-
-<nav class="toc" aria-label="Table of contents">
-  <ul>
-    <li><a href="#executive">Executive summary</a></li>
-    <li><a href="#problem">The challenge</a></li>
-    <li><a href="#solution">The solution</a></li>
-    <li><a href="#tiers">Three-tier architecture</a></li>
-    <li><a href="#lifecycle">Land → Discover → Promote</a></li>
-    <li><a href="#mdl">Machine Data Lake</a></li>
-    <li><a href="#products">Product mapping</a></li>
-    <li><a href="#federation">Federated search</a></li>
-    <li><a href="#ai">AI-ready capabilities</a></li>
-    <li><a href="#patterns">Four usage patterns</a></li>
-    <li><a href="#security">Security workflow</a></li>
-    <li><a href="#sled">SLED benefits</a></li>
-    <li><a href="#stakeholders">By role</a></li>
-    <li><a href="#availability">GA vs. roadmap</a></li>
-    <li><a href="#messaging">Key messaging</a></li>
-    <li><a href="#bottom-line">Bottom line</a></li>
-  </ul>
-</nav>
 
 <main>
 
@@ -456,41 +413,6 @@
   </div>
 </section>
 
-<section id="tiers">
-  <h2>Three-tier architecture</h2>
-  <p>
-    CDF organizes machine data into three retention and capability bands. Each tier maps to named Splunk products with clear use cases—so CIOs and CISOs can align spend to mission priority rather than paying hot-tier prices for archive data.
-  </p>
-
-  <div class="pillars">
-    <div class="pillar tier-a">
-      <span class="tag">Tier A — Hot</span>
-      <strong>Real-time operations</strong>
-      <span><strong>Products:</strong> Splunk Index, Enterprise Security, Observability Cloud</span>
-      <span style="display:block;margin-top:0.5rem;"><strong>Retention:</strong> 7–14 days (security example)</span>
-      <span style="display:block;margin-top:0.35rem;"><strong>Use cases:</strong> CIM detections, active investigation, monitoring, troubleshooting</span>
-    </div>
-    <div class="pillar tier-b">
-      <span class="tag primary">Tier B — Analytics</span>
-      <strong>Scaled analytics &amp; ML</strong>
-      <span><strong>Product:</strong> MDL Analytics Table</span>
-      <span style="display:block;margin-top:0.5rem;"><strong>Retention:</strong> 90–180 days</span>
-      <span style="display:block;margin-top:0.35rem;"><strong>Use cases:</strong> OCSF batch detections, enriched search, ML training, agentic investigation</span>
-    </div>
-    <div class="pillar tier-c">
-      <span class="tag muted">Tier C — Archive</span>
-      <strong>Long-term evidence</strong>
-      <span><strong>Products:</strong> MDL Raw Tier / Long-Term Retention</span>
-      <span style="display:block;margin-top:0.5rem;"><strong>Retention:</strong> Long-term</span>
-      <span style="display:block;margin-top:0.35rem;"><strong>Use cases:</strong> Compliance, audit, forensic lookback, historical IOC hunting, promotion on demand</span>
-    </div>
-  </div>
-
-  <p>
-    <strong>Federated Search</strong> unifies all three tiers plus external lakes (Amazon S3, Amazon Security Lake, and expanding sources)—enabling search-in-place without replatforming fragmented agency or campus data estates.
-  </p>
-</section>
-
 <section id="lifecycle">
   <h2>MDL lifecycle — Land, Discover, Promote, Search</h2>
   <table>
@@ -524,6 +446,44 @@
       </tr>
     </tbody>
   </table>
+</section>
+
+<section id="tiers">
+  <h2>Three-tier architecture</h2>
+  <p>
+    CDF organizes machine data into three retention and capability bands. Each tier maps to named Splunk products with clear use cases—so CIOs and CISOs can align spend to mission priority rather than paying hot-tier prices for archive data.
+  </p>
+  <p>
+    Tier A is provided by core Splunk Indexes and premium applications. Tiers B and C are provided by the Machine Data Lake (MDL).
+  </p>
+
+  <div class="pillars">
+    <div class="pillar tier-a">
+      <span class="tag">Tier A — Hot</span>
+      <strong>Real-time operations</strong>
+      <span><strong>Products:</strong> Splunk Index, Enterprise Security, Observability Cloud</span>
+      <span style="display:block;margin-top:0.5rem;"><strong>Retention:</strong> 7–14 days (security example)</span>
+      <span style="display:block;margin-top:0.35rem;"><strong>Use cases:</strong> CIM detections, active investigation, monitoring, troubleshooting</span>
+    </div>
+    <div class="pillar tier-b">
+      <span class="tag primary">Tier B — Analytics</span>
+      <strong>Scaled analytics &amp; ML</strong>
+      <span><strong>Product:</strong> MDL Analytics Table</span>
+      <span style="display:block;margin-top:0.5rem;"><strong>Retention:</strong> 90–180 days</span>
+      <span style="display:block;margin-top:0.35rem;"><strong>Use cases:</strong> OCSF batch detections, enriched search, ML training, agentic investigation</span>
+    </div>
+    <div class="pillar tier-c">
+      <span class="tag muted">Tier C — Archive</span>
+      <strong>Long-term evidence</strong>
+      <span><strong>Products:</strong> MDL Raw Tier / Long-Term Retention</span>
+      <span style="display:block;margin-top:0.5rem;"><strong>Retention:</strong> Long-term</span>
+      <span style="display:block;margin-top:0.35rem;"><strong>Use cases:</strong> Compliance, audit, forensic lookback, historical IOC hunting, promotion on demand</span>
+    </div>
+  </div>
+
+  <p>
+    <strong>Federated Search</strong> unifies all three tiers plus external lakes (Amazon S3, Amazon Security Lake, and expanding sources)—enabling search-in-place without replatforming fragmented agency or campus data estates.
+  </p>
 </section>
 
 <section id="mdl">
