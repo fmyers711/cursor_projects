@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cisco Cloud Control &amp; Cisco Data Fabric — SLED Seller Brief</title>
+  <style>
+    :root {
+      --bg: #f2f5f7;
+      --panel: #ffffff;
+      --text: #07182d;
+      --muted: #536070;
+      --accent: #ff007f;
+      --blue: #0a60ff;
+      --blue-light: #e0eeff;
+      --border: #ced4db;
+      --success: #2d6a1e;
+      --success-bg: #eef8ea;
+      --warn-bg: #fff8f0;
+      --warn-border: #e8a020;
+      --cdf: #7c3aed;
+      --ccc: #0a60ff;
+      --canvas: #ff007f;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      font-size: 15px;
+    }
+    header {
+      background: linear-gradient(135deg, #07182d 0%, #12275c 55%, #0f214d 100%);
+      color: #fff;
+      padding: 1.75rem 2rem 2rem;
+    }
+    header .inner { max-width: 1100px; margin: 0 auto; }
+    header .eyebrow {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #7ae2ff;
+      margin: 0 0 0.5rem;
+    }
+    header h1 {
+      margin: 0;
+      font-size: clamp(1.35rem, 3vw, 1.85rem);
+      font-weight: 700;
+      line-height: 1.25;
+      max-width: 54rem;
+    }
+    header .subtitle {
+      margin: 0.75rem 0 0;
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.95rem;
+      max-width: 52rem;
+    }
+    header .meta {
+      margin-top: 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.65);
+    }
+    header .meta span {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 0.25rem 0.65rem;
+      border-radius: 4px;
+    }
+    main { max-width: 1100px; margin: 0 auto; padding: 2rem 2rem 3rem; }
+    section { margin-bottom: 2.5rem; }
+    h2 {
+      font-size: 1.35rem;
+      margin: 0 0 1rem;
+      color: var(--text);
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 0.4rem;
+    }
+    h3 {
+      font-size: 1.05rem;
+      margin: 1.25rem 0 0.5rem;
+      color: var(--text);
+    }
+    h4 {
+      font-size: 0.95rem;
+      margin: 1rem 0 0.4rem;
+      color: var(--muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    p { margin: 0.65rem 0; }
+    ul, ol { margin: 0.5rem 0 0.75rem 1.25rem; padding: 0; }
+    li { margin: 0.35rem 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      margin: 1rem 0;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.55rem 0.7rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: var(--blue-light);
+      color: var(--text);
+      font-weight: 600;
+    }
+    tr:nth-child(even) td { background: #f8fafc; }
+    th.cdf { background: #ede9fe; color: #5b21b6; }
+    th.ccc { background: var(--blue-light); color: var(--blue); }
+    th.canvas { background: #ffe8f3; color: var(--accent); }
+    .callout {
+      background: var(--success-bg);
+      border: 1px solid #b8ddb0;
+      border-left: 4px solid var(--success);
+      padding: 1.1rem 1.25rem;
+      margin: 1.25rem 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .callout.warn {
+      background: var(--warn-bg);
+      border-color: #f0d9b8;
+      border-left-color: var(--warn-border);
+    }
+    .callout.accent {
+      background: #fff0f7;
+      border-color: #ffb8d9;
+      border-left-color: var(--accent);
+    }
+    .callout.dark {
+      background: #07182d;
+      border-color: #1e3a5f;
+      border-left-color: #7ae2ff;
+      color: rgba(255, 255, 255, 0.92);
+    }
+    .callout h3 {
+      margin-top: 0;
+      border: none;
+      padding: 0;
+      font-size: 1.1rem;
+      color: var(--success);
+    }
+    .callout.warn h3 { color: #8a5a00; }
+    .callout.accent h3 { color: var(--accent); }
+    .callout.dark h3 { color: #7ae2ff; }
+    .pillars {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .pillar {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.1rem;
+      border-top: 3px solid var(--accent);
+    }
+    .pillar.cdf { border-top-color: var(--cdf); }
+    .pillar.ccc { border-top-color: var(--ccc); }
+    .pillar.canvas { border-top-color: var(--canvas); }
+    .pillar strong {
+      display: block;
+      font-size: 0.95rem;
+      margin-bottom: 0.35rem;
+    }
+    .pillar span {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 0.15rem 0.45rem;
+      border-radius: 3px;
+      background: var(--blue-light);
+      color: var(--blue);
+      margin-right: 0.35rem;
+      white-space: nowrap;
+    }
+    .tag.cdf { background: #ede9fe; color: #5b21b6; }
+    .tag.ccc { background: var(--blue-light); color: var(--blue); }
+    .tag.canvas { background: #ffe8f3; color: var(--accent); }
+    .tag.primary { background: #ffe8f3; color: var(--accent); }
+    .workflow {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.75rem;
+      margin: 1.25rem 0;
+    }
+    .workflow-step {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+    }
+    .workflow-step .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.75rem;
+      height: 1.75rem;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .workflow-step.cdf .step-num { background: var(--cdf); }
+    .workflow-step.ccc .step-num { background: var(--ccc); }
+    .workflow-step.canvas .step-num { background: var(--canvas); }
+    .workflow-step strong { display: block; font-size: 0.95rem; }
+    .workflow-step span { font-size: 0.82rem; color: var(--muted); }
+    .audience-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .audience-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.15rem 1.25rem;
+      border-left: 4px solid var(--blue);
+    }
+    .audience-card h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1rem;
+      color: var(--blue);
+    }
+    .audience-card ul { margin: 0.35rem 0 0 1.1rem; font-size: 0.9rem; }
+    .quote-block {
+      background: #f0f4f8;
+      border-left: 4px solid var(--blue);
+      padding: 0.85rem 1.1rem;
+      margin: 0.75rem 0;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.92rem;
+    }
+    .quote-block em { color: var(--muted); font-size: 0.82rem; }
+    .stack-diagram {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      gap: 0.75rem;
+      align-items: stretch;
+      margin: 1.25rem 0;
+    }
+    .stack-layer {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.1rem 1.25rem;
+    }
+    .stack-layer.cdf { border-top: 4px solid var(--cdf); }
+    .stack-layer.ccc { border-top: 4px solid var(--ccc); }
+    .stack-layer.canvas { border-top: 4px solid var(--canvas); }
+    .stack-layer h3 { margin: 0 0 0.5rem; font-size: 1rem; }
+    .stack-layer.cdf h3 { color: var(--cdf); }
+    .stack-layer.ccc h3 { color: var(--ccc); }
+    .stack-layer.canvas h3 { color: var(--canvas); }
+    .stack-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .dont-say {
+      background: #fff5f5;
+      border: 1px solid #f5c6c6;
+      border-left: 4px solid #d91821;
+      border-radius: 0 8px 8px 0;
+      padding: 1rem 1.25rem;
+      margin: 0.75rem 0;
+      font-size: 0.9rem;
+    }
+    .do-say {
+      background: var(--success-bg);
+      border: 1px solid #b8ddb0;
+      border-left: 4px solid var(--success);
+      border-radius: 0 8px 8px 0;
+      padding: 1rem 1.25rem;
+      margin: 0.75rem 0;
+      font-size: 0.9rem;
+    }
+    footer {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1rem 2rem 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    @media (max-width: 900px) {
+      .stack-diagram { grid-template-columns: 1fr; }
+      .stack-arrow { transform: rotate(90deg); padding: 0.25rem 0; }
+    }
+    @media print {
+      header { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <p class="eyebrow">Cisco Platform Positioning · SLED Sales Enablement</p>
+    <h1>Cisco Cloud Control &amp; Cisco Data Fabric — Complementary Positioning for State Government &amp; Higher Education</h1>
+    <p class="subtitle">
+      A seller brief that clarifies where each platform fits, defuses overlap confusion, and positions the stronger-together story — Cloud Control operationalized by live Cisco context and enhanced by Data Fabric intelligence.
+    </p>
+    <div class="meta">
+      <span>Audience: SLED sellers · SEs · account teams</span>
+      <span>Sector: State, Local, Education</span>
+      <span>Focus: differentiation · use cases · talk tracks</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section id="executive">
+  <h2>Executive summary</h2>
+  <div class="pillars">
+    <div class="pillar ccc">
+      <strong>Cisco Cloud Control (CCC)</strong>
+      <span>Cisco's <strong>unified operations/control plane</strong> for the portfolio — one login, one front door, unified inventory, topology, alerts, and AI-assisted operations.</span>
+    </div>
+    <div class="pillar cdf">
+      <strong>Cisco Data Fabric (CDF)</strong>
+      <span>The <strong>data, correlation, and intelligence layer</strong> — powered by Splunk — that adds historical, cross-domain, and multi-vendor context.</span>
+    </div>
+    <div class="pillar canvas">
+      <strong>AI Canvas</strong>
+      <span>The <strong>collaborative investigation and action workspace inside Cloud Control</strong> — where teams and AI investigate and resolve issues together.</span>
+    </div>
+  </div>
+
+  <div class="callout warn">
+    <h3>Important clarification</h3>
+    <ul style="margin-bottom:0;">
+      <li><strong>Cisco Cloud Control is not Security Cloud Control.</strong> Security Cloud Control remains the specialized security operating plane for security workflows.</li>
+      <li><strong>Cisco Cloud Control</strong> is the broader, cross-portfolio front door across networking, security, observability, compute, collaboration, and related domains.</li>
+      <li><strong>CDF does not replace Cloud Control</strong>, and <strong>Cloud Control does not replace Splunk or an enterprise data fabric</strong>.</li>
+    </ul>
+  </div>
+
+  <div class="callout dark">
+    <h3>Seller shorthand</h3>
+    <p style="margin:0;font-size:1.05rem;">
+      <strong>Cloud Control is the control plane. Data Fabric is the intelligence plane. AI Canvas is the action workspace.</strong><br>
+      Winning message: <em>Cloud Control operationalized by live Cisco context and enhanced by Data Fabric intelligence</em> — not Cloud Control <em>versus</em> Data Fabric.
+    </p>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Technology</th>
+        <th>Core benefit</th>
+        <th>Simple description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="tag ccc">CCC</span> Cloud Control</td>
+        <td><strong>Operational simplification across the Cisco portfolio</strong></td>
+        <td>One login, one front door, unified inventory, topology, alerts, workflows, and AI-assisted operations</td>
+      </tr>
+      <tr>
+        <td><span class="tag cdf">CDF</span> Data Fabric</td>
+        <td><strong>Enterprise-scale data intelligence across time, tools, and domains</strong></td>
+        <td>Retains, correlates, and analyzes data across Cisco and third-party environments</td>
+      </tr>
+      <tr>
+        <td><span class="tag canvas">AI Canvas</span></td>
+        <td><strong>Collaborative, governed action</strong></td>
+        <td>A multiplayer workspace inside Cloud Control where teams and AI investigate and resolve issues together</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="quote-block">
+    "Cloud Control tells you the live Cisco state. Data Fabric tells you what happened over time and how it connects. AI Canvas helps your teams decide what to do next and execute in a governed way."
+    <br><em>Customer-friendly version</em>
+  </div>
+</section>
+
+<section id="confusion">
+  <h2>Overlap, confusion, and how to remove it</h2>
+
+  <h4>Similarities (why they sound alike)</h4>
+  <ul>
+    <li>Both are designed to reduce operational silos.</li>
+    <li>Both improve visibility across domains.</li>
+    <li>Both support Cisco's platform and AI operations strategy.</li>
+    <li>Both help customers move beyond isolated point tools.</li>
+    <li>Both improve the speed and quality of operations when used together.</li>
+  </ul>
+
+  <h4>Where overlap can appear</h4>
+  <ul>
+    <li>Both are associated with <strong>visibility, correlation, AI, and platform value</strong>.</li>
+    <li>Both can influence troubleshooting and operations workflows.</li>
+    <li>Both contribute to cross-domain outcomes.</li>
+    <li>Both can surface insights that feel similar to the user.</li>
+  </ul>
+
+  <h4>What creates the confusion</h4>
+  <table>
+    <thead>
+      <tr>
+        <th>Source of confusion</th>
+        <th>Why it blurs the line</th>
+        <th>Clean clarification</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Cloud Control inventory &amp; topology</td>
+        <td>Normalized context sounds like a data platform</td>
+        <td><strong>Cloud Control is where you operate Cisco.</strong> Live state, not enterprise data lake.</td>
+      </tr>
+      <tr>
+        <td>Data Fabric analytics &amp; intelligence</td>
+        <td>Analytics can sound like an operations platform</td>
+        <td><strong>Data Fabric is where data is retained, correlated, and analyzed at scale.</strong></td>
+      </tr>
+      <tr>
+        <td>AI Canvas uses both</td>
+        <td>Customers think CCC and CDF are interchangeable</td>
+        <td><strong>AI Canvas is where people and AI work through issues using both live state and historical context.</strong></td>
+      </tr>
+      <tr>
+        <td>Splunk "single pane" history</td>
+        <td>Prior conversations blur operational vs. data layers</td>
+        <td>CCC = operational front door. CDF = intelligence backbone. Different jobs.</td>
+      </tr>
+      <tr>
+        <td>Security Cloud Control naming</td>
+        <td>Customers conflate CCC with security-only control plane</td>
+        <td>Security Cloud Control = specialized security ops. CCC = broader cross-portfolio control plane.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="comparison">
+  <h2>Side-by-side comparison</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Area</th>
+        <th class="ccc">Cisco Cloud Control</th>
+        <th class="cdf">Cisco Data Fabric</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Primary role</strong></td>
+        <td>Unified operations and control plane</td>
+        <td>Data, analytics, and intelligence fabric</td>
+      </tr>
+      <tr>
+        <td><strong>Main question answered</strong></td>
+        <td><em>What is happening in my Cisco environment now, and what should I do next?</em></td>
+        <td><em>What has happened across my environment over time, and how does it correlate?</em></td>
+      </tr>
+      <tr>
+        <td><strong>Data model</strong></td>
+        <td>Unified inventory, topology, live controller state, cross-domain workflows</td>
+        <td>High-volume ingestion, retention, analytics, and correlation</td>
+      </tr>
+      <tr>
+        <td><strong>Scope</strong></td>
+        <td>Cisco portfolio first</td>
+        <td>Cisco plus third-party, multi-domain, historical</td>
+      </tr>
+      <tr>
+        <td><strong>User experience</strong></td>
+        <td>Front door where operators work</td>
+        <td>Foundational data layer that powers analytics and context</td>
+      </tr>
+      <tr>
+        <td><strong>Action model</strong></td>
+        <td>Orchestrates guided, governed operational action</td>
+        <td>Provides the data and intelligence to inform action</td>
+      </tr>
+      <tr>
+        <td><strong>Replacement claim</strong></td>
+        <td>Does not replace Splunk, SIEM, ITSM, or Cisco controllers</td>
+        <td>Does not replace Cloud Control or domain controllers</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="cdf-benefits">
+  <h2>Core benefits — Cisco Data Fabric</h2>
+  <p>Data Fabric is the <strong>enterprise data and intelligence backbone</strong> — built to ingest, retain, correlate, and analyze data at scale across Cisco and non-Cisco environments.</p>
+
+  <div class="workflow">
+    <div class="workflow-step cdf">
+      <div class="step-num">1</div>
+      <strong>Ingest &amp; retain</strong>
+      <span>High-volume data across Cisco and third-party sources</span>
+    </div>
+    <div class="workflow-step cdf">
+      <div class="step-num">2</div>
+      <strong>Correlate</strong>
+      <span>Cross-domain, multi-vendor analytics at scale</span>
+    </div>
+    <div class="workflow-step cdf">
+      <div class="step-num">3</div>
+      <strong>Investigate</strong>
+      <span>Historical lookback and long-term retention</span>
+    </div>
+    <div class="workflow-step cdf">
+      <div class="step-num">4</div>
+      <strong>Inform action</strong>
+      <span>Intelligence that makes Cloud Control and AI workflows smarter</span>
+    </div>
+  </div>
+
+  <div class="pillars">
+    <div class="pillar cdf">
+      <strong>Historical intelligence</strong>
+      <span>Enables long-term analytics, historical investigation, and multi-vendor correlation — not just current-state visibility.</span>
+    </div>
+    <div class="pillar cdf">
+      <strong>Cross-domain context</strong>
+      <span>Connects security, infrastructure, applications, and cloud across agencies, campuses, and research environments.</span>
+    </div>
+    <div class="pillar cdf">
+      <strong>Enterprise scale</strong>
+      <span>Retains and analyzes data at volumes that operational control planes are not designed to store.</span>
+    </div>
+    <div class="pillar cdf">
+      <strong>Compliance &amp; audit</strong>
+      <span>Long-term retention supports legislative mandates, public records, and forensic lookback for SLED.</span>
+    </div>
+    <div class="pillar cdf">
+      <strong>AI-ready foundation</strong>
+      <span>Governed data slices, lineage, and open formats that ground agentic workflows in truth.</span>
+    </div>
+  </div>
+
+  <div class="quote-block">
+    "Use Data Fabric to connect data across agencies, domains, vendors, and time for stronger investigations and better prioritization."
+    <br><em>State government messaging</em>
+  </div>
+</section>
+
+<section id="ccc-benefits">
+  <h2>Core benefits — Cisco Cloud Control</h2>
+  <p>Cloud Control is the <strong>operational front door</strong> for the Cisco portfolio — one login, one inventory, one topology, and one operational starting point. It preserves domain depth by linking to specialized controllers instead of replacing them.</p>
+
+  <div class="pillars">
+    <div class="pillar ccc">
+      <strong>Unified control plane</strong>
+      <span>One front door across networking, security, observability, compute, collaboration, and related domains — not a portal facade.</span>
+    </div>
+    <div class="pillar ccc">
+      <strong>Live operational context</strong>
+      <span>Unified inventory, topology, alerts, and cross-domain workflows grounded in current Cisco controller state.</span>
+    </div>
+    <div class="pillar ccc">
+      <strong>Operational simplification</strong>
+      <span>Eliminates console hopping, bridge calls, and lost context. Helps Cisco products behave like one system.</span>
+    </div>
+    <div class="pillar ccc">
+      <strong>Governed action</strong>
+      <span>Least-privilege RBAC, human-in-the-loop gates, and full auditability across product boundaries.</span>
+    </div>
+    <div class="pillar ccc">
+      <strong>AI-assisted operations</strong>
+      <span>AI Canvas and Cloud Control Studio turn SOPs into bounded agent skills with runtime policy shields.</span>
+    </div>
+  </div>
+
+  <h3>AI Canvas — inside Cloud Control</h3>
+  <div class="pillars">
+    <div class="pillar canvas">
+      <strong>Collaborative workspace</strong>
+      <span>Multiplayer investigation where operators and AI work together in real time.</span>
+    </div>
+    <div class="pillar canvas">
+      <strong>Combined context</strong>
+      <span>Live Cisco operational state from Cloud Control plus historical and correlated context from CDF/Splunk where applicable.</span>
+    </div>
+    <div class="pillar canvas">
+      <strong>Understanding to action</strong>
+      <span>The place where teams move from triage to governed, approved remediation.</span>
+    </div>
+  </div>
+
+  <div class="quote-block">
+    "Use Cloud Control to unify operational visibility and simplify Cisco operations across agencies."
+    <br><em>State government messaging</em>
+  </div>
+</section>
+
+<section id="together">
+  <h2>The stronger-together story</h2>
+
+  <div class="stack-diagram">
+    <div class="stack-layer cdf">
+      <h3>Data Fabric — Intelligence Plane</h3>
+      <ul style="margin:0;padding-left:1.1rem;font-size:0.9rem;">
+        <li>Breadth, history, and scale</li>
+        <li>Multi-vendor correlation</li>
+        <li>Long-term retention &amp; analytics</li>
+      </ul>
+    </div>
+    <div class="stack-arrow">→</div>
+    <div class="stack-layer ccc">
+      <h3>Cloud Control — Control Plane</h3>
+      <ul style="margin:0;padding-left:1.1rem;font-size:0.9rem;">
+        <li>Live inventory &amp; topology</li>
+        <li>Operational experience</li>
+        <li>Governance &amp; workflows</li>
+      </ul>
+    </div>
+    <div class="stack-arrow">→</div>
+    <div class="stack-layer canvas">
+      <h3>AI Canvas — Action Workspace</h3>
+      <ul style="margin:0;padding-left:1.1rem;font-size:0.9rem;">
+        <li>Collaborative investigation</li>
+        <li>Live + historical context</li>
+        <li>Governed remediation</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout accent">
+    <h3>Best combined positioning statement</h3>
+    <p style="margin:0;">
+      <strong>Cisco Cloud Control simplifies how customers operate Cisco environments, while Cisco Data Fabric adds the historical, cross-domain, and multi-vendor intelligence that makes those operations smarter.</strong>
+    </p>
+  </div>
+
+  <h4>Recommended operating model</h4>
+  <div class="workflow">
+    <div class="workflow-step cdf">
+      <div class="step-num">1</div>
+      <strong>Data Fabric</strong>
+      <span>Ingests, retains, and correlates data across Cisco and third-party systems</span>
+    </div>
+    <div class="workflow-step ccc">
+      <div class="step-num">2</div>
+      <strong>Cloud Control</strong>
+      <span>Normalizes Cisco inventory, topology, identities, and operational context</span>
+    </div>
+    <div class="workflow-step canvas">
+      <div class="step-num">3</div>
+      <strong>AI Canvas</strong>
+      <span>Pulls relevant live and historical context into one workspace</span>
+    </div>
+    <div class="workflow-step ccc">
+      <div class="step-num">4</div>
+      <strong>Act</strong>
+      <span>Investigate, collaborate, and take approved action through Cloud Control and connected controllers</span>
+    </div>
+  </div>
+
+  <div class="quote-block">
+    "For State Government, Cisco Cloud Control gives your central teams one place to manage and understand the live Cisco environment, while Cisco Data Fabric gives you the historical and multi-vendor data context needed to investigate issues across agencies and act with confidence."
+    <br><em>State Government talk track</em>
+  </div>
+</section>
+
+<section id="discovery">
+  <h2>When to lead with which</h2>
+
+  <div class="audience-grid">
+    <div class="audience-card">
+      <h3>Lead with Cloud Control</h3>
+      <ul>
+        <li>"We have too many Cisco consoles."</li>
+        <li>"Our teams keep jumping between tools."</li>
+        <li>"We need one operational front door."</li>
+        <li>"We want live inventory, topology, alerts, and guided operations in one place."</li>
+        <li>"We want to simplify Cisco operations without losing domain depth."</li>
+      </ul>
+    </div>
+    <div class="audience-card" style="border-left-color: var(--cdf);">
+      <h3 style="color: var(--cdf);">Lead with Data Fabric</h3>
+      <ul>
+        <li>"We need historical retention and correlation."</li>
+        <li>"We need a cross-vendor view."</li>
+        <li>"We need analytics across security, infrastructure, and applications."</li>
+        <li>"We need to investigate issues over time, not just see the current state."</li>
+        <li>"We already have lots of data, but not enough intelligence."</li>
+      </ul>
+    </div>
+    <div class="audience-card" style="border-left-color: var(--accent);">
+      <h3 style="color: var(--accent);">Land both</h3>
+      <ul>
+        <li>"We need a single operational experience and better analytics."</li>
+        <li>"We need both current-state visibility and historical context."</li>
+        <li>"We want to reduce silos and improve actionability."</li>
+        <li>"We want to move from fragmented tools to governed AI-assisted operations."</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout warn">
+    <h3>Strongest fit</h3>
+    <p style="margin:0;">
+      Customers who want <strong>Cisco operational unification plus richer enterprise context</strong>. Not every Cloud Control workflow requires Data Fabric — but together they deliver the fullest SLED value.
+    </p>
+  </div>
+</section>
+
+<section id="personas">
+  <h2>Positioning — what to say and what not to position as</h2>
+
+  <h4>Position Cisco Cloud Control as</h4>
+  <div class="do-say">
+    <ul style="margin:0;">
+      <li>The <strong>unified operational control plane</strong> for Cisco</li>
+      <li>The <strong>single front door</strong> for Cisco operations</li>
+      <li>The place to access <strong>live Cisco inventory, topology, alerts, workflows, and AI-assisted operations</strong></li>
+      <li>The operational layer that helps Cisco products behave like <strong>one system</strong></li>
+    </ul>
+  </div>
+
+  <h4>Do not position Cisco Cloud Control as</h4>
+  <div class="dont-say">
+    <ul style="margin:0;">
+      <li>A SIEM or replacement for Splunk</li>
+      <li>A full enterprise data fabric</li>
+      <li>A replacement for ServiceNow, Jira, or specialized Cisco domain controllers</li>
+      <li>Security Cloud Control (they are different products)</li>
+    </ul>
+  </div>
+
+  <h4>Position Cisco Data Fabric as</h4>
+  <div class="do-say">
+    <ul style="margin:0;">
+      <li>The <strong>enterprise data and intelligence layer</strong> that improves context and correlation</li>
+      <li>The system for <strong>historical retention, multi-vendor analytics, and large-scale correlation</strong></li>
+      <li>The data foundation that helps Cloud Control and AI workflows become more intelligent</li>
+    </ul>
+  </div>
+
+  <h4>Do not position Cisco Data Fabric as</h4>
+  <div class="dont-say">
+    <ul style="margin:0;">
+      <li>Another management console or unified Cisco control plane</li>
+      <li>A replacement for Cisco controllers</li>
+      <li>A standalone substitute for Cloud Control's operational experience</li>
+    </ul>
+  </div>
+</section>
+
+<section id="sled">
+  <h2>SLED-specific messaging</h2>
+
+  <h3>State Government</h3>
+  <p>State environments are highly distributed across agencies, departments, and regions. Teams are often lean, operate across mixed Cisco and third-party environments, and need central governance with agency autonomy. Historical evidence, auditability, and cross-agency correlation matter.</p>
+
+  <div class="pillars">
+    <div class="pillar ccc">
+      <strong>Cloud Control</strong>
+      <span>Single operational front door across Cisco infrastructure and services — central teams manage and understand the live environment.</span>
+    </div>
+    <div class="pillar cdf">
+      <strong>Data Fabric</strong>
+      <span>Cross-domain and historical intelligence layer for correlation, analytics, and broader investigations across agencies.</span>
+    </div>
+    <div class="pillar canvas">
+      <strong>AI Canvas</strong>
+      <span>Turn live and historical context into governed, cross-team action without losing agency execution autonomy.</span>
+    </div>
+  </div>
+
+  <div class="quote-block">
+    "For State Government, Cisco Cloud Control gives your central teams one place to manage and understand the live Cisco environment, while Cisco Data Fabric gives you the historical and multi-vendor data context needed to investigate issues across agencies and act with confidence."
+    <br><em>State Government talk track</em>
+  </div>
+
+  <p><strong>Outcome message:</strong> Better statewide visibility · Faster cross-agency troubleshooting · Lower operational burden on lean teams · Improved governance and auditability</p>
+
+  <h3>Higher Education</h3>
+  <p>Higher Education is decentralized by design. Campuses, colleges, research groups, and departments operate with significant autonomy. Central IT needs visibility and resilience without forcing a single operating model on every group.</p>
+
+  <div class="pillars">
+    <div class="pillar ccc">
+      <strong>Cloud Control</strong>
+      <span>Common Cisco operating layer across campuses and domains — consistent operations with delegated administration.</span>
+    </div>
+    <div class="pillar cdf">
+      <strong>Data Fabric</strong>
+      <span>Broader telemetry correlation, historical context, and multi-vendor insight across research, cloud, campus, and third-party platforms.</span>
+    </div>
+    <div class="pillar canvas">
+      <strong>AI Canvas</strong>
+      <span>Investigate institutional issues collaboratively without losing context across departmental handoffs.</span>
+    </div>
+  </div>
+
+  <div class="quote-block">
+    "For Higher Education, Cisco Cloud Control helps central IT operate Cisco as one environment, while Cisco Data Fabric provides the broader cross-campus and multi-vendor context needed to investigate problems that span departments, research, cloud, and core infrastructure."
+    <br><em>Higher Education talk track</em>
+  </div>
+
+  <p><strong>Outcome message:</strong> Better coordination across decentralized teams · Faster issue isolation across campus and cloud · More context for protecting research and student services · Stronger governance without reducing local flexibility</p>
+
+  <h3>Qualification notes for SLED sellers</h3>
+  <div class="callout warn">
+    <ul style="margin-bottom:0;">
+      <li>Controlled Availability is <strong>US-hosted</strong>, which can matter for State Government accounts with sovereignty requirements.</li>
+      <li>FedRAMP, expanded regional availability, and some on-prem paths remain <strong>roadmap discussions</strong>.</li>
+      <li>Splunk Cloud integration is part of the story; some on-prem Splunk scenarios are <strong>fast-follow</strong>.</li>
+      <li>Strongest fit: customer wants <strong>Cisco operational unification plus richer enterprise context</strong>.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="dont-say">
+  <h2>What not to say</h2>
+
+  <div class="dont-say">
+    <strong>Don't:</strong> "Cloud Control replaces Splunk."<br>
+    <strong>Say instead:</strong> "Cloud Control is the operational control plane; Data Fabric and Splunk provide the intelligence layer beneath it."
+  </div>
+  <div class="dont-say">
+    <strong>Don't:</strong> "Cloud Control is a SIEM."<br>
+    <strong>Say instead:</strong> "Cloud Control is where you operate Cisco — not where you store and correlate enterprise telemetry at scale."
+  </div>
+  <div class="dont-say">
+    <strong>Don't:</strong> "Data Fabric is just another Cisco dashboard."<br>
+    <strong>Say instead:</strong> "Data Fabric is the enterprise data and intelligence backbone — historical, cross-domain, and multi-vendor."
+  </div>
+  <div class="dont-say">
+    <strong>Don't:</strong> "Data Fabric replaces Cloud Control."<br>
+    <strong>Say instead:</strong> "Data Fabric deepens the intelligence; Cloud Control delivers the operational experience."
+  </div>
+  <div class="dont-say">
+    <strong>Don't:</strong> "Every Cloud Control workflow requires Data Fabric."<br>
+    <strong>Say instead:</strong> "Cloud Control stands on its own for Cisco operations; Data Fabric makes those operations smarter with historical and cross-vendor context."
+  </div>
+  <div class="dont-say">
+    <strong>Don't:</strong> "Cloud Control stores all operational telemetry like an enterprise data lake."<br>
+    <strong>Say instead:</strong> "Cloud Control holds live operational state. Data Fabric retains and analyzes data at enterprise scale over time."
+  </div>
+  <div class="dont-say">
+    <strong>Don't:</strong> Conflate <strong>Cisco Cloud Control</strong> with <strong>Security Cloud Control</strong>.<br>
+    <strong>Say instead:</strong> "Security Cloud Control is the specialized security operating plane. Cisco Cloud Control is the broader cross-portfolio front door."
+  </div>
+</section>
+
+<section id="bottom-line">
+  <h2>Bottom line</h2>
+  <div class="callout dark">
+    <p style="margin:0;font-size:1.02rem;">
+      <strong>Cisco Cloud Control</strong> is Cisco's unified operational control plane for the portfolio.<br><br>
+      <strong>Cisco Data Fabric</strong> is the scalable data and intelligence layer that adds historical, cross-domain, and multi-vendor context.<br><br>
+      <strong>AI Canvas</strong>, inside Cloud Control, is where operators and AI use both to investigate and resolve issues together.<br><br>
+      For State Government and Higher Education, the best message is that <strong>Cloud Control simplifies operations and Data Fabric deepens intelligence</strong>, so distributed teams can move faster with better context and stronger governance.
+    </p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p>
+    <strong>Cisco Cloud Control &amp; Cisco Data Fabric — SLED Seller Brief.</strong>
+    Internal sales enablement. Treat Cloud Control roadmap items (FedRAMP, regional availability, on-prem paths) as forward-looking in procurement discussions.
+    Pair with the Cisco Data Fabric &amp; Machine Data Lake SLED customer brief for product-depth conversations.
+  </p>
+</footer>
+
+</body>
+</html>
