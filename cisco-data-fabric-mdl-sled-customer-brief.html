@@ -194,6 +194,9 @@
     .tag.success { background: var(--success-bg); color: var(--success); }
     .tag.warn { background: var(--warn-bg); color: #8a5a00; }
     .tag.muted { background: #eef1f4; color: var(--muted); }
+    .bool-yes { color: var(--success); font-weight: 600; }
+    .bool-no { color: var(--muted); font-weight: 600; }
+    .bool-partial { color: #8a5a00; font-weight: 600; }
     .stat-row {
       display: flex;
       flex-wrap: wrap;
@@ -552,6 +555,9 @@
 
 <section id="products">
   <h2>CDF product &amp; availability mapping</h2>
+  <p>
+    Updated per Cisco Live 2026 platform announcements. Licensing metrics reference Splunk Licensed Capacity (June 2026). Validate entitlements with your Cisco account team before procurement.
+  </p>
   <table>
     <thead>
       <tr>
@@ -560,6 +566,8 @@
         <th>Capability</th>
         <th>Tier</th>
         <th>Status</th>
+        <th>Licensing required</th>
+        <th>License metrics</th>
       </tr>
     </thead>
     <tbody>
@@ -569,13 +577,17 @@
         <td>Unifies lifecycle, AI data management, AI-native experiences, federation</td>
         <td>All</td>
         <td><span class="tag success">GA</span></td>
+        <td><span class="bool-no">No</span></td>
+        <td>N/A — architecture spanning underlying product entitlements</td>
       </tr>
       <tr>
         <td>Data foundation</td>
         <td>Splunk Machine Data Lake (MDL)</td>
-        <td>Central economic landing zone; structured &amp; unstructured data</td>
+        <td>Central economic landing zone; structured &amp; unstructured data; built-in Data Catalog</td>
         <td>B / C</td>
-        <td><span class="tag success">GA</span> <span class="tag warn">features in dev</span></td>
+        <td><span class="tag success">GA</span> <span class="tag warn">controlled availability</span></td>
+        <td><span class="bool-yes">Yes</span></td>
+        <td>Landed data storage (TB); no upfront index cost to land — pay on promote, scan, or query</td>
       </tr>
       <tr>
         <td>Mid-tier analytics</td>
@@ -583,65 +595,93 @@
         <td>Enriched search, OCSF batch detections, ML training, agentic investigation</td>
         <td>B</td>
         <td><span class="tag success">GA</span></td>
+        <td><span class="bool-yes">Yes</span></td>
+        <td>Analytics table storage (TB) + query/compute entitlements (MDL)</td>
       </tr>
       <tr>
         <td>Long-term retention</td>
         <td>MDL Raw Tier / Long-Term Retention</td>
-        <td>Audit, compliance, historical IOC hunting, raw scans</td>
+        <td>Audit, compliance, historical IOC hunting, raw scans, promotion on demand</td>
         <td>C</td>
         <td><span class="tag success">GA</span></td>
+        <td><span class="bool-yes">Yes</span></td>
+        <td>Long-term retention storage (TB); raw-scan / search-in-place usage on query</td>
       </tr>
       <tr>
         <td>High-performance ops</td>
-        <td>Splunk Index (Hot), Enterprise, Splunk Cloud</td>
-        <td>Real-time CIM detections, active investigation</td>
+        <td>Splunk Index (Hot), Splunk Enterprise, Splunk Cloud Platform</td>
+        <td>Real-time CIM detections, active investigation, monitoring</td>
         <td>A</td>
         <td><span class="tag success">GA</span></td>
+        <td><span class="bool-yes">Yes</span></td>
+        <td>Daily Indexing Volume (GB/day) <em>or</em> Splunk Virtual Compute (SVC) / vCPU</td>
       </tr>
       <tr>
         <td>Security operations</td>
         <td>Splunk Enterprise Security</td>
-        <td>CIM detections, active investigations, guided workflows</td>
+        <td>CIM detections, active investigations, guided workflows, risk-based alerting</td>
         <td>A / B</td>
         <td><span class="tag success">GA</span></td>
+        <td><span class="bool-yes">Yes</span></td>
+        <td>Daily Indexing Volume or vCPU/SVC — must match core platform license type</td>
       </tr>
       <tr>
         <td>Observability</td>
         <td>Splunk Observability (O11y) Cloud</td>
-        <td>Monitoring, exploration, troubleshooting, historical analysis</td>
+        <td>Monitoring, exploration, troubleshooting, historical analysis, APM/RUM/IM</td>
         <td>A</td>
         <td><span class="tag success">GA</span></td>
+        <td><span class="bool-yes">Yes</span></td>
+        <td>Hosts; MTS (metrics); TAPM (traces); Sessions (RUM) — per module</td>
       </tr>
       <tr>
         <td>Ingest &amp; routing</td>
-        <td>Edge Processor / Ingest Processor</td>
-        <td>Data routing, real-time detection feeds; streaming detections (future)</td>
+        <td>Edge Processor / Ingest Processor; SPL2 Pipelines</td>
+        <td>Data routing, filtering, masking, enrichment; real-time detection feeds; streaming detections (roadmap)</td>
         <td>—</td>
         <td><span class="tag success">GA</span> <span class="tag warn">streaming roadmap</span></td>
+        <td><span class="bool-yes">Yes</span></td>
+        <td>Ingest Processor: Daily Processing Volume (500 GB/day max, Essentials tier); Edge Processor: platform/data-management entitlement</td>
+      </tr>
+      <tr>
+        <td>AI data management</td>
+        <td>Auto data schematization; Self-Healing Pipeline</td>
+        <td>AI-driven CIM normalization, pipeline remediation, automated field extraction</td>
+        <td>—</td>
+        <td><span class="tag warn">Alpha</span></td>
+        <td><span class="bool-yes">Yes</span></td>
+        <td>Splunk Cloud Platform / data-management entitlement (included with platform at GA)</td>
       </tr>
       <tr>
         <td>Cross-silo search</td>
-        <td>Federated Search</td>
-        <td>Search-in-place across Splunk + third-party lakes</td>
+        <td>Federated Search &amp; Analytics</td>
+        <td>Search-in-place across Splunk deployments, S3, Security Lake, and expanding external lakes</td>
         <td>All</td>
         <td><span class="tag success">GA</span> <span class="tag warn">mixed</span></td>
+        <td><span class="bool-partial">Partial</span></td>
+        <td>Native Splunk sources: platform entitlement; 3rd-party object stores: Data Scan Units (10 TB per DSU)</td>
       </tr>
       <tr>
         <td>AI / agent experiences</td>
-        <td>Triage Agent, Guided Response, Malware Reversing, Incident Analysis &amp; Response</td>
-        <td>Agentic investigation &amp; response</td>
+        <td>Agent Builder; Triage, Guided Response, Malware Reversing, Incident Analysis &amp; Response</td>
+        <td>Agentic investigation, no-code agent build, guided response workflows</td>
         <td>—</td>
-        <td><span class="tag warn">Roadmap</span></td>
+        <td><span class="tag warn">Roadmap</span> <span class="tag">Fall 2026 GA</span></td>
+        <td><span class="bool-yes">Yes</span></td>
+        <td>Splunk AI Toolkit + platform/ES entitlements; per-agent usage TBD at GA</td>
       </tr>
       <tr>
         <td>Open AI / data tooling</td>
-        <td>Parquet export, GenAI APIs, vector indexes, MCP</td>
+        <td>Parquet export, GenAI APIs, vector indexes, MCP Server</td>
         <td>ML training, semantic search, AI reasoning, zero data prep</td>
         <td>B</td>
         <td><span class="tag success">GA</span> <span class="tag">emerging</span></td>
+        <td><span class="bool-yes">Yes</span></td>
+        <td>MDL + platform entitlements; API and export usage per product terms</td>
       </tr>
     </tbody>
   </table>
+  <p><em>Federated Search source availability: Splunk Enterprise/Cloud/O11y, Amazon S3, and Amazon Security Lake available now; MDL, Azure Data Lakes, Snowflake, and Splunk DDSS under development (GA targeted summer–fall 2026).</em></p>
 </section>
 
 <section id="federation">
