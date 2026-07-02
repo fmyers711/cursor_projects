@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FTB — Executive Assessment: Splunk ES vs. Google SecOps Migration</title>
+  <style>
+    :root {
+      --bg: #f4f6f8;
+      --surface: #ffffff;
+      --text: #1a2332;
+      --muted: #5a6578;
+      --accent: #003366;
+      --accent-light: #005599;
+      --accent-soft: #e6eef5;
+      --success: #0d6b4a;
+      --success-soft: #e6f4ef;
+      --warning: #8a5b00;
+      --warning-soft: #fef6e6;
+      --danger: #b0121a;
+      --danger-soft: #ffe8ea;
+      --border: #d0d7e0;
+      --radius: 10px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      font-size: 16px;
+      line-height: 1.55;
+      color: var(--text);
+      background: var(--bg);
+    }
+    .wrap {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 3rem;
+    }
+    header {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 5px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 1.75rem 1.75rem 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,.06);
+    }
+    header h1 {
+      margin: 0 0 0.35rem;
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1.25;
+    }
+    .org {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--accent-light);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin: 0 0 0.5rem;
+    }
+    .audience {
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin: 0 0 0.75rem;
+    }
+    .meta {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin: 0;
+    }
+    .lede {
+      margin: 1rem 0 0;
+      font-size: 1.05rem;
+    }
+    section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 1px 2px rgba(0,0,0,.04);
+    }
+    section h2 {
+      margin: 0 0 1rem;
+      font-size: 1.15rem;
+      color: var(--accent);
+      border-bottom: 2px solid var(--accent-soft);
+      padding-bottom: 0.5rem;
+    }
+    section h3 {
+      margin: 1.25rem 0 0.5rem;
+      font-size: 1rem;
+      color: var(--text);
+    }
+    section h3:first-of-type { margin-top: 0; }
+    section h4 {
+      margin: 1rem 0 0.35rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--accent-light);
+    }
+    ul {
+      margin: 0.5rem 0 0;
+      padding-left: 1.25rem;
+    }
+    li { margin-bottom: 0.4rem; }
+    p { margin: 0.5rem 0 0; }
+    p:first-of-type { margin-top: 0; }
+
+    /* Rating badges */
+    .rating {
+      display: inline-block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+    .rating--high { background: var(--danger-soft); color: var(--danger); }
+    .rating--moderate { background: var(--warning-soft); color: var(--warning); }
+    .rating--low { background: var(--success-soft); color: var(--success); }
+
+    /* Summary scorecard */
+    .scorecard {
+      display: grid;
+      gap: 0.65rem;
+      margin-top: 1rem;
+    }
+    @media (min-width: 560px) {
+      .scorecard { grid-template-columns: 1fr 1fr; }
+    }
+    .scorecard-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.65rem 0.85rem;
+      background: #fafbfc;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+    .scorecard-item strong { color: var(--text); }
+
+    /* Callouts */
+    .callout {
+      border-radius: 8px;
+      padding: 1rem 1.15rem;
+      margin: 1rem 0 0;
+      font-size: 0.95rem;
+    }
+    .callout--danger {
+      background: var(--danger-soft);
+      border: 1px solid #ffb0b4;
+    }
+    .callout--warning {
+      background: var(--warning-soft);
+      border: 1px solid #ffd7a6;
+    }
+    .callout--success {
+      background: var(--success-soft);
+      border: 1px solid #a7e58a;
+    }
+    .callout strong { display: block; margin-bottom: 0.35rem; color: var(--text); }
+
+    /* Tables */
+    .table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-top: 0.75rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.65rem 0.75rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-weight: 600;
+    }
+    tr:nth-child(even) td { background: #fafbfc; }
+
+    /* Workflow diagram */
+    .flow {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.35rem;
+      margin: 1rem 0;
+      padding: 1rem;
+      background: var(--accent-soft);
+      border-radius: 8px;
+      border: 1px solid #c5d9eb;
+      font-size: 0.82rem;
+    }
+    .flow-step {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.4rem 0.6rem;
+      font-weight: 500;
+      text-align: center;
+      flex: 1 1 auto;
+      min-width: 90px;
+    }
+    .flow-arrow {
+      color: var(--accent-light);
+      font-weight: bold;
+      flex: 0 0 auto;
+    }
+
+    /* Maturity bars */
+    .maturity-grid {
+      display: grid;
+      gap: 0.85rem;
+      margin-top: 0.75rem;
+    }
+    @media (min-width: 640px) {
+      .maturity-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .maturity-item label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+    .maturity-item label span { color: var(--accent-light); }
+    .bar-track {
+      height: 10px;
+      background: #e8ecf0;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 5px;
+      background: linear-gradient(90deg, var(--accent-light), var(--accent));
+    }
+    .bar-fill--gap { background: linear-gradient(90deg, #c2410c, #e5ac00); }
+
+    /* Two-column cards */
+    .grid-2 {
+      display: grid;
+      gap: 1rem;
+      margin-top: 0.75rem;
+    }
+    @media (min-width: 640px) {
+      .grid-2 { grid-template-columns: 1fr 1fr; }
+    }
+    .card {
+      background: var(--accent-soft);
+      border-radius: 8px;
+      padding: 1rem 1.1rem;
+      border: 1px solid #c5d9eb;
+    }
+    .card h3 {
+      margin: 0 0 0.5rem;
+      font-size: 0.95rem;
+      color: var(--accent);
+    }
+    .card ul { margin-top: 0.35rem; font-size: 0.9rem; }
+
+    /* Recommendation box */
+    .recommendation {
+      background: var(--accent);
+      color: #fff;
+      border-radius: var(--radius);
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .recommendation h2 {
+      color: #fff;
+      border-bottom-color: rgba(255,255,255,0.25);
+      margin-bottom: 0.75rem;
+    }
+    .recommendation p, .recommendation li { color: rgba(255,255,255,0.92); }
+    .recommendation ol {
+      margin: 0.75rem 0 0;
+      padding-left: 1.25rem;
+    }
+    .recommendation li { margin-bottom: 0.5rem; }
+
+    footer {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 1.5rem;
+      text-align: center;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+    .toc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin: 0.75rem 0 0;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem 1rem;
+    }
+    .toc a { color: var(--accent-light); text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <header>
+      <p class="org">State of California · Franchise Tax Board</p>
+      <h1>Executive Assessment: Potential Migration from Splunk Enterprise Security to Google SecOps</h1>
+      <p class="audience">For CISO, CIO, Executive Leadership, and Security Governance Board</p>
+      <p class="meta">Assessment date: June 2026</p>
+      <p class="lede">This potential transition should be viewed as a <strong>major security transformation initiative</strong> rather than a software replacement project — one that carries <strong>high levels of risk</strong> for a potentially <strong>moderate cost benefit</strong>.</p>
+      <ul class="toc" aria-label="Document sections">
+        <li><a href="#summary">Summary</a></li>
+        <li><a href="#integration">Platform Integration</a></li>
+        <li><a href="#cost">Cost</a></li>
+        <li><a href="#operational">Operational Risk</a></li>
+        <li><a href="#capability">Capability Loss</a></li>
+        <li><a href="#maturity">Maturity Impact</a></li>
+        <li><a href="#matrix">Decision Matrix</a></li>
+        <li><a href="#recommendation">Recommendation</a></li>
+      </ul>
+    </header>
+
+    <section id="summary" aria-labelledby="summary-heading">
+      <h2 id="summary-heading">Executive Summary</h2>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Category</th>
+              <th scope="col">Assessment</th>
+              <th scope="col">Executive Rating</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Software Cost</td>
+              <td>Potential Reduction</td>
+              <td><span class="rating rating--moderate">🟡 Moderate Benefit</span></td>
+            </tr>
+            <tr>
+              <td>Transition Cost</td>
+              <td>High</td>
+              <td><span class="rating rating--high">🔴 Significant Risk</span></td>
+            </tr>
+            <tr>
+              <td>Operational Risk</td>
+              <td>High</td>
+              <td><span class="rating rating--high">🔴 Significant Risk</span></td>
+            </tr>
+            <tr>
+              <td>Detection Maturity</td>
+              <td>Current Platform Advantage</td>
+              <td><span class="rating rating--high">🔴 High Risk</span></td>
+            </tr>
+            <tr>
+              <td>SOC Productivity</td>
+              <td>Current Platform Advantage</td>
+              <td><span class="rating rating--high">🔴 High Risk</span></td>
+            </tr>
+            <tr>
+              <td>Data Migration Complexity</td>
+              <td>Very High</td>
+              <td><span class="rating rating--high">🔴 High Risk</span></td>
+            </tr>
+            <tr>
+              <td>Future AI/Automation Flexibility</td>
+              <td>Slight Advantage to Splunk</td>
+              <td><span class="rating rating--moderate">🟡 Moderate</span></td>
+            </tr>
+            <tr>
+              <td><strong>Overall Business Risk</strong></td>
+              <td><strong>High</strong></td>
+              <td><span class="rating rating--high">🔴 High</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout callout--danger">
+        <strong>Bottom line</strong>
+        Splunk Enterprise Security is deeply integrated into FTB's cyber operations. A migration would affect detection maturity, SOC productivity, fraud analytics, and cross-functional investigations — while potentially forfeiting strategic expansion into observability, IT service delivery, and compliance modernization on a unified platform.
+      </div>
+    </section>
+
+    <section id="integration" aria-labelledby="integration-heading">
+      <h2 id="integration-heading">Splunk ES Integration &amp; Strategic Opportunity</h2>
+      <p>Splunk Enterprise Security supports not only SIEM capabilities but also:</p>
+      <ul>
+        <li>Risk-Based Alerting (RBA)</li>
+        <li>Fraud analytics</li>
+        <li>Custom detections</li>
+        <li>Executive dashboards</li>
+        <li>SOC workflows</li>
+        <li>Multi-source data correlation</li>
+        <li>Cloud monitoring</li>
+        <li>Future automation initiatives</li>
+        <li>Potential Asset Risk Intelligence (ARI) expansion</li>
+        <li>Cross-functional investigations</li>
+      </ul>
+
+      <h3>Opportunity loss from platform consolidation limits</h3>
+      <p>Potentially losing the ability to expand Splunk into non-security domains presents a significant opportunity loss for FTB to modernize IT service delivery and enhance compliance effectiveness:</p>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Operational &amp; IT</h3>
+          <ul>
+            <li>Full-Stack Observability (FSO)</li>
+            <li>Predictive IT Health</li>
+            <li>Cyber and IT Ops seamless collaboration</li>
+            <li>Operational Efficiency</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Business &amp; Compliance</h3>
+          <ul>
+            <li>Adaptive Fraud Detection</li>
+            <li>Agile Compliance Operations</li>
+            <li>Data-Driven Decision Making</li>
+            <li>Improved Taxpayer Experience</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="cost" aria-labelledby="cost-heading">
+      <h2 id="cost-heading">1. Cost Perspective</h2>
+
+      <h3>Potential benefits</h3>
+      <p>Google SecOps licensing may reduce annual platform costs depending on:</p>
+      <ul>
+        <li>Google Cloud commitments</li>
+        <li>Existing Chronicle licensing</li>
+        <li>Existing Google ecosystem discounts</li>
+        <li>Included threat intelligence</li>
+        <li>Native Gemini AI capabilities</li>
+      </ul>
+      <p>Software licensing alone may appear attractive. However, software licensing represents only a portion of Total Cost of Ownership (TCO). For organizations similar to FTB, the larger costs are often associated with migration, validation, and operational disruption.</p>
+
+      <h3>Estimated migration cost components</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Cost Category</th>
+              <th scope="col">Relative Cost</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Detection migration</td><td><span class="rating rating--high">High</span></td></tr>
+            <tr><td>Dashboard recreation</td><td><span class="rating rating--moderate">Medium</span></td></tr>
+            <tr><td>Parser normalization</td><td><span class="rating rating--high">High</span></td></tr>
+            <tr><td>Use case validation</td><td><span class="rating rating--high">High</span></td></tr>
+            <tr><td>Professional services</td><td><span class="rating rating--high">High</span></td></tr>
+            <tr><td>SOC analyst retraining</td><td><span class="rating rating--moderate">Medium</span></td></tr>
+            <tr><td>Engineering labor</td><td><span class="rating rating--high">High</span></td></tr>
+            <tr><td>Parallel operations</td><td><span class="rating rating--high">High</span></td></tr>
+            <tr><td>Governance testing</td><td><span class="rating rating--moderate">Medium</span></td></tr>
+            <tr><td>Executive reporting recreation</td><td><span class="rating rating--moderate">Medium</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Hidden costs</h3>
+      <p>Organizations frequently underestimate:</p>
+      <ul>
+        <li>Thousands of engineering hours</li>
+        <li>Detection validation</li>
+        <li>False positive tuning</li>
+        <li>Incident response workflow changes</li>
+        <li>Audit evidence recreation</li>
+        <li>Compliance reporting updates</li>
+      </ul>
+      <p>These costs frequently exceed first-year licensing savings.</p>
+
+      <h3>Cost observation — optimize before migrating</h3>
+      <p>If Splunk licensing can instead be optimized using:</p>
+      <ul>
+        <li>Workload Pricing</li>
+        <li>Entity Pricing</li>
+        <li>Architecture optimization</li>
+        <li>Data lifecycle optimization</li>
+      </ul>
+      <p>then much of the expected financial benefit may be achieved <strong>without incurring migration costs</strong>.</p>
+
+      <div class="callout callout--warning">
+        <strong>Cost risk rating: <span class="rating rating--high">🔴 High</span></strong>
+        License savings alone rarely justify the full TCO of a SIEM replacement for a mature deployment.
+      </div>
+    </section>
+
+    <section id="operational" aria-labelledby="operational-heading">
+      <h2 id="operational-heading">2. Operational Risk Perspective</h2>
+      <p>Operational risk is the largest concern. A SIEM migration affects every stage of the SOC lifecycle.</p>
+
+      <h3>Current workflow</h3>
+      <div class="flow" role="img" aria-label="SOC workflow: Data Sources to Splunk to Normalization to Correlation Searches to Risk Based Alerting to SOC Investigation to Response to Metrics">
+        <span class="flow-step">Data Sources</span>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <span class="flow-step">Splunk</span>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <span class="flow-step">Normalization</span>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <span class="flow-step">Correlation Searches</span>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <span class="flow-step">Risk-Based Alerting</span>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <span class="flow-step">SOC Investigation</span>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <span class="flow-step">Response</span>
+        <span class="flow-arrow" aria-hidden="true">→</span>
+        <span class="flow-step">Metrics</span>
+      </div>
+      <p><strong>Replacing the SIEM affects every box.</strong></p>
+
+      <h3>Operational risks</h3>
+
+      <h4>Detection regression</h4>
+      <p>Every custom analytic must be rebuilt, including SPL searches, RBA scoring, threat models, correlation logic, and dashboards. Even if migrated successfully, behavior often changes.</p>
+
+      <h4>Analyst productivity</h4>
+      <p>Analysts know Splunk search language, dashboards, investigation workflows, and existing playbooks. Switching platforms typically causes slower investigations, longer onboarding, and reduced productivity for months.</p>
+
+      <h4>MTTR risk</h4>
+      <ul>
+        <li>↑ Mean Time to Detect</li>
+        <li>↑ Mean Time to Respond</li>
+        <li>↓ Analyst efficiency</li>
+        <li>↓ Operational confidence</li>
+      </ul>
+
+      <h4>Governance risk</h4>
+      <p>During migration, two SIEMs may run simultaneously — creating duplicate investigations, inconsistent alerting, duplicate tuning, and reporting discrepancies.</p>
+
+      <h4>Change fatigue</h4>
+      <p>FTB is simultaneously considering cloud modernization, FedRAMP initiatives, cost optimization, and architecture modernization. Adding a SIEM replacement compounds organizational risk.</p>
+
+      <div class="callout callout--danger">
+        <strong>Operational risk rating: <span class="rating rating--high">🔴 Very High</span></strong>
+      </div>
+    </section>
+
+    <section id="capability" aria-labelledby="capability-heading">
+      <h2 id="capability-heading">3. Loss of Capability Perspective</h2>
+      <p>This is where leadership should perform the deepest due diligence. Google SecOps is a capable cloud-native SIEM; however, <strong>capability parity is not guaranteed</strong>.</p>
+
+      <h3>A. Risk-Based Alerting (RBA)</h3>
+      <p>Splunk ES has mature RBA capabilities: multiple risk objects, weighted scoring, adaptive thresholds, accumulated risk, and threat object correlation. Google SecOps has entity-based detections and risk scoring, but organizations frequently need to <strong>redesign</strong> mature Splunk RBA implementations rather than migrate them directly.</p>
+      <p><strong>Risk:</strong> <span class="rating rating--high">🔴 Medium–High</span></p>
+
+      <h3>B. Detection content</h3>
+      <p>FTB's current Splunk environment likely contains years of tuning, custom SPL, fraud detections, insider threat logic, correlation searches, and MITRE mappings — representing institutional knowledge requiring rewrite, validation, and retesting.</p>
+      <p><strong>Risk:</strong> <span class="rating rating--high">🔴 High</span></p>
+
+      <h3>C. Investigation experience</h3>
+      <p>Splunk ES provides Event Timeline, Risk Timeline, asset context, identity context, drilldowns, and Enterprise Security dashboards. Equivalent workflows in Google SecOps often require redesign.</p>
+      <p><strong>Risk:</strong> <span class="rating rating--moderate">🟡 Medium</span></p>
+
+      <h3>D. Data integrations</h3>
+      <p>Current integrations appear to include CrowdStrike, Zscaler, Microsoft, Windows, AWS, fraud systems, and infrastructure telemetry. Migration requires parser validation, field normalization, and schema mapping.</p>
+      <p><strong>Risk:</strong> <span class="rating rating--high">🔴 High</span></p>
+
+      <h3>E. Splunk ecosystem</h3>
+      <p>Current or future investments may include SOAR, ITSI, Observability, Asset Risk Intelligence (ARI), and Mission Control. If those are strategic initiatives, Google SecOps reduces platform consolidation opportunities.</p>
+      <p>For example, Splunk Asset Risk Intelligence can consolidate portions of several third-party asset risk management capabilities (such as Axonius, Kenna, Panaseer, Rapid7, Qualys, and others), though specialized scanning and remediation functions typically remain external.</p>
+
+      <h3>Capability loss assessment</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Capability</th>
+              <th scope="col">Risk</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Risk-Based Alerting</td><td><span class="rating rating--high">🔴 High</span></td></tr>
+            <tr><td>Custom Detections</td><td><span class="rating rating--high">🔴 High</span></td></tr>
+            <tr><td>Fraud Analytics</td><td><span class="rating rating--high">🔴 High</span></td></tr>
+            <tr><td>Dashboards</td><td><span class="rating rating--moderate">🟡 Medium</span></td></tr>
+            <tr><td>Search Language</td><td><span class="rating rating--high">🔴 High</span></td></tr>
+            <tr><td>SOC Workflow</td><td><span class="rating rating--high">🔴 High</span></td></tr>
+            <tr><td>Automation Integration</td><td><span class="rating rating--moderate">🟡 Medium</span></td></tr>
+            <tr><td>Threat Hunting</td><td><span class="rating rating--moderate">🟡 Medium</span></td></tr>
+            <tr><td>Existing Knowledge Base</td><td><span class="rating rating--high">🔴 Very High</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="maturity" aria-labelledby="maturity-heading">
+      <h2 id="maturity-heading">Maturity Impact</h2>
+      <p>The current technology maturity provides a stable foundation for data normalization and visibility, which is difficult and time-consuming to rebuild.</p>
+
+      <h3>Technology maturity</h3>
+      <p>The gaps in <strong>Proactive Response (25%)</strong> and <strong>Unified Workflows (21%)</strong> represent specific functional deficiencies rather than a failure of the entire architecture. A "start over" strategy would necessitate re-tuning, re-normalizing data, and re-training personnel, leading to significant operational downtime.</p>
+
+      <h3>Process maturity (55% overall)</h3>
+      <div class="maturity-grid">
+        <div class="maturity-item">
+          <label>Foundational Visibility <span>77%</span></label>
+          <div class="bar-track"><div class="bar-fill" style="width:77%"></div></div>
+        </div>
+        <div class="maturity-item">
+          <label>Proactive Response <span>73%</span></label>
+          <div class="bar-track"><div class="bar-fill" style="width:73%"></div></div>
+        </div>
+        <div class="maturity-item">
+          <label>Guided Insights <span>46%</span></label>
+          <div class="bar-track"><div class="bar-fill bar-fill--gap" style="width:46%"></div></div>
+        </div>
+        <div class="maturity-item">
+          <label>Unified Workflows <span>25%</span></label>
+          <div class="bar-track"><div class="bar-fill bar-fill--gap" style="width:25%"></div></div>
+        </div>
+      </div>
+
+      <ul style="margin-top:1rem">
+        <li><strong>Foundational Visibility (77%)</strong> — Strong asset, identity, and data governance visibility.</li>
+        <li><strong>Proactive Response (73%)</strong> — Effective incident handling with established templates and formal risk management frameworks.</li>
+        <li><strong>Guided Insights (46%)</strong> — Basic MTTR/MTTD tracking exists; opportunity to better leverage insights for tactical decisions.</li>
+        <li><strong>Unified Workflows (25%)</strong> — Siloed processes prevent fully automated, cross-functional security operations.</li>
+      </ul>
+      <p>Overall, this capability level provides a reliable reactive and semi-proactive posture, but limits the organization's ability to scale through seamless, automated, and continuous improvement workflows.</p>
+
+      <h3>Impact of starting over</h3>
+      <ul>
+        <li>Loss of years of custom use cases, alert history, and tuned detection logic</li>
+        <li>Loss of established data normalization (CIM/OCSF), creating a massive blind spot during transition</li>
+        <li>Significant productivity loss while learning new interfaces and workflows</li>
+        <li>Financial resources diverted toward procurement and implementation rather than optimizing current security gaps</li>
+        <li>Degradation of "People" maturity — existing certifications and role-based training are often vendor-specific</li>
+      </ul>
+
+      <h3>Conclusion on maturity</h3>
+      <ul>
+        <li>Prioritize <strong>maturing the current technology stack</strong> by targeting gaps in Proactive Response and Unified Workflows</li>
+        <li>Investing in automation and orchestration on top of the existing foundation is more cost-effective and less risky than a complete technology replacement</li>
+        <li>Primary focus: bridge the gap between <strong>Guided Insights</strong> and <strong>Proactive Response</strong> to maximize ROI of existing infrastructure</li>
+      </ul>
+    </section>
+
+    <section id="matrix" aria-labelledby="matrix-heading">
+      <h2 id="matrix-heading">Executive Decision Matrix</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Factor</th>
+              <th scope="col">Stay &amp; Optimize Splunk</th>
+              <th scope="col">Migrate to Google SecOps</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Immediate Cost Reduction</td>
+              <td><span class="rating rating--moderate">Moderate</span></td>
+              <td><span class="rating rating--high">High</span></td>
+            </tr>
+            <tr>
+              <td>Transition Cost</td>
+              <td><span class="rating rating--low">Low</span></td>
+              <td><span class="rating rating--high">Very High</span></td>
+            </tr>
+            <tr>
+              <td>Operational Risk</td>
+              <td><span class="rating rating--low">Low</span></td>
+              <td><span class="rating rating--high">High</span></td>
+            </tr>
+            <tr>
+              <td>Capability Loss</td>
+              <td><span class="rating rating--low">None</span></td>
+              <td><span class="rating rating--high">Moderate to High</span></td>
+            </tr>
+            <tr>
+              <td>Migration Complexity</td>
+              <td><span class="rating rating--low">Low</span></td>
+              <td><span class="rating rating--high">Very High</span></td>
+            </tr>
+            <tr>
+              <td>Time to Value</td>
+              <td><span class="rating rating--low">Immediate</span></td>
+              <td>12–24 Months</td>
+            </tr>
+            <tr>
+              <td>Detection Stability</td>
+              <td><span class="rating rating--low">High</span></td>
+              <td><span class="rating rating--moderate">Moderate</span></td>
+            </tr>
+            <tr>
+              <td>Analyst Productivity</td>
+              <td><span class="rating rating--low">High</span></td>
+              <td>Lower During Transition</td>
+            </tr>
+            <tr>
+              <td><strong>Executive Risk</strong></td>
+              <td><span class="rating rating--low">Low</span></td>
+              <td><span class="rating rating--high">High</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 style="margin-top:1.25rem">Overall executive assessment</h3>
+      <div class="scorecard">
+        <div class="scorecard-item"><strong>Cost Benefit</strong> <span class="rating rating--moderate">🟡 Moderate</span></div>
+        <div class="scorecard-item"><strong>Operational Risk</strong> <span class="rating rating--high">🔴 High</span></div>
+        <div class="scorecard-item"><strong>Loss of Capability Risk</strong> <span class="rating rating--high">🔴 Moderate to High</span></div>
+        <div class="scorecard-item"><strong>Business Transformation Required</strong> <span class="rating rating--high">🔴 Very High</span></div>
+      </div>
+    </section>
+
+    <div class="recommendation" id="recommendation">
+      <h2>Executive Recommendation</h2>
+      <p>Before approving a migration, leadership should require objective evidence that Google SecOps can achieve functional parity for FTB's highest-value use cases without introducing unacceptable operational risk.</p>
+      <p>Specifically, the decision should be based on:</p>
+      <ol>
+        <li>A <strong>side-by-side capability assessment</strong> covering custom detections, Risk-Based Alerting, fraud monitoring, investigative workflows, and all critical integrations.</li>
+        <li>A comprehensive <strong>Total Cost of Ownership (TCO) analysis</strong> that includes software licensing, engineering effort, professional services, retraining, dual-platform operations, validation, and change management — not just subscription costs.</li>
+        <li>An <strong>optimization review</strong> of the existing Splunk deployment, including evaluation of Workload, Entity, and Ingest pricing models, architectural rationalization, and opportunities to modernize existing workflows before pursuing a platform replacement.</li>
+      </ol>
+      <p style="margin-top:1rem"><strong>Recommended near-term strategy:</strong> Optimize and modernize the existing Splunk deployment before committing to a full SIEM replacement.</p>
+    </div>
+
+    <footer>
+      <p><strong>Prepared for:</strong> State of California Franchise Tax Board — CISO, CIO, Executive Leadership, Security Governance Board</p>
+      <p><strong>Assessment date:</strong> June 2026 · <strong>Classification:</strong> Internal executive briefing</p>
+    </footer>
+
+  </div>
+</body>
+</html>
