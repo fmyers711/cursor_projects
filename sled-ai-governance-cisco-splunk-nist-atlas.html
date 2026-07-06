@@ -184,15 +184,6 @@
       font-size: 0.84rem;
       color: var(--muted);
     }
-    .stack-card {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-left: 4px solid var(--blue);
-      border-radius: 0 8px 8px 0;
-      padding: 1rem 1.15rem;
-      margin: 0.85rem 0;
-    }
-    .stack-card strong { color: var(--blue); }
     .framework-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -256,12 +247,9 @@
     <li><a href="#challenge">Governance challenge</a></li>
     <li><a href="#compliance-standards">Compliance standards</a></li>
     <li><a href="#barriers-adoption">Barriers to adoption</a></li>
-    <li><a href="#stack">Five-asset stack</a></li>
-    <li><a href="#framework-narrative">RMF + ATLAS narrative</a></li>
-    <li><a href="#nist-rmf">NIST AI RMF mapping</a></li>
-    <li><a href="#mitre-atlas">MITRE ATLAS mapping</a></li>
+    <li><a href="#nist-rmf">Cisco Coverage of NIST AI RMF</a></li>
+    <li><a href="#mitre-atlas">Cisco Coverage of MITRE ATLAS Tactics</a></li>
     <li><a href="#differentiators">Differentiators</a></li>
-    <li><a href="#questions">Discovery questions</a></li>
     <li><a href="#bottom-line">Bottom line</a></li>
   </ul>
 </nav>
@@ -446,59 +434,8 @@
   </div>
 </section>
 
-<section id="stack">
-  <h2>The five-asset Cisco + Splunk stack</h2>
-  <p>Coverage across governance, risk measurement, and the full AI kill chain:</p>
-
-  <div class="stack-card">
-    <strong>Splunk AI Observability</strong> (formerly Galileo)<br>
-    <em>"Is the AI producing good, accurate output?"</em> — evaluation, monitoring, integrity. <span class="tag">RMF MEASURE</span> <span class="tag">ATLAS Discovery</span> <span class="tag">ATLAS Impact</span>
-  </div>
-  <div class="stack-card">
-    <strong>Cisco AI Defense</strong><br>
-    <em>"Is the model, app, or agent safe and secure?"</em> — supply-chain scanning, red teaming, runtime protection. <span class="tag">RMF Secure &amp; Resilient</span> <span class="tag">13 of 16 ATLAS tactics</span>
-  </div>
-  <div class="stack-card">
-    <strong>Astrix (Cisco)</strong><br>
-    <em>"What agents and NHIs exist, who owns them, are they governed?"</em> — identity discovery and governance. <span class="tag">RMF GOVERN</span> <span class="tag">ATLAS Discovery</span> <span class="tag">Credential Access</span>
-  </div>
-  <div class="stack-card">
-    <strong>WideField (Cisco)</strong><br>
-    <em>"Is that identity behaving correctly right now?"</em> — identity runtime monitoring. <span class="tag">RMF MEASURE</span> <span class="tag">ATLAS Credential Access</span> <span class="tag">Lateral Movement</span> <span class="tag">Exfiltration</span>
-  </div>
-  <div class="stack-card">
-    <strong>Backbone: Splunk (ES / ITSI / SOAR / Platform) + Cisco (Duo / ISE / Secure Workload / Firewall / XDR)</strong><br>
-    <em>"Prove, correlate, enforce, respond."</em> <span class="tag">RMF MANAGE</span> <span class="tag">ATLAS Defense Evasion</span> <span class="tag">C2</span> <span class="tag">Impact response</span>
-  </div>
-
-  <div class="callout success">
-    <h3>Why the acquisitions matter</h3>
-    <p>
-      They close the biggest gaps in enterprise AI governance: GenAI/agent evaluation (Splunk AI Observability), model/MCP/supply-chain security (Cisco AI Defense), and AI-agent/non-human identity (Astrix + WideField). The result is coverage of <strong>all 16 ATLAS tactics</strong>—including agentic techniques (Agent Context/Tool/RAG Poisoning, Agent Clickbait, Agent Tool Credential Harvesting, Exfiltration via Agent) that most competitors cannot address end-to-end.
-    </p>
-  </div>
-</section>
-
-<section id="framework-narrative">
-  <h2>NIST AI RMF and MITRE ATLAS — one integrated story</h2>
-  <ul>
-    <li><strong>NIST AI RMF</strong> — "Are we managing AI risk well?" — the risk-management playbook (Govern, Map, Measure, Manage) for compliance, audits, and mandates.</li>
-    <li><strong>MITRE ATLAS</strong> — "How is AI attacked, and can we defend it?" — the adversarial kill chain (16 tactics, ATT&amp;CK-style for AI) for security-driven defense.</li>
-  </ul>
-
-  <div class="callout accent">
-    <h3>One narrative, two audiences</h3>
-    <p>
-      <strong>NIST AI RMF</strong> satisfies auditors, regulators, and AI mandates. <strong>MITRE ATLAS</strong> proves concrete defense against real adversary techniques. Together they deliver risk + threat in a single, credible story—without requiring separate point solutions for governance and security.
-    </p>
-    <p>
-      <em>NIST RMF tells you how to manage AI risk; MITRE ATLAS shows you the adversary techniques you must defend against. Cisco and Splunk map to both—covering all 16 ATLAS tactics across models, agents, and identities, while supplying the audit-ready evidence your mandates require.</em>
-    </p>
-  </div>
-</section>
-
 <section id="nist-rmf">
-  <h2>NIST AI RMF mapping</h2>
+  <h2>Cisco Coverage of NIST AI RMF</h2>
   <p>Indicative product alignment across Govern, Map, Measure, and Manage. Validate against current product documentation before deployment decisions.</p>
 
   <h3>GOVERN</h3>
@@ -578,7 +515,7 @@
 </section>
 
 <section id="mitre-atlas">
-  <h2>MITRE ATLAS mapping</h2>
+  <h2>Cisco Coverage of MITRE ATLAS Tactics</h2>
   <p>Full kill-chain coverage across 16 tactics. Technique names align with the MITRE ATLAS matrix (validate at atlas.mitre.org).</p>
 
   <h3>Tactic-by-tactic capability mapping</h3>
@@ -687,35 +624,13 @@
   </table>
 </section>
 
-<section id="questions">
-  <h2>Discovery questions for leadership conversations</h2>
-
-  <h3>Governance &amp; risk (NIST AI RMF)</h3>
-  <ul>
-    <li>Do you have a statewide or system-wide inventory of AI systems, models, agents, and NHIs?</li>
-    <li>Can you produce audit-ready evidence mapping controls to NIST AI RMF subcategories?</li>
-    <li>How do you evaluate AI output quality, bias, and drift in production—not just at deployment?</li>
-    <li>What is your process for safe decommissioning of AI systems and retiring agent identities?</li>
-  </ul>
-
-  <h3>Threat defense (MITRE ATLAS)</h3>
-  <ul>
-    <li><strong>Resource Development:</strong> Do you scan for poisoned models, datasets, and agent tools before production?</li>
-    <li><strong>Persistence:</strong> Can you detect agent context, RAG, and tool-data poisoning at runtime?</li>
-    <li><strong>Credential Access:</strong> Do you monitor AI-agent credential harvesting and secret exposure?</li>
-    <li><strong>Defense Evasion:</strong> Is AI-related activity correlated for incident response across the SOC?</li>
-    <li><strong>Exfiltration:</strong> Can you prevent LLM data leakage and exfiltration via agent tool invocation?</li>
-    <li><strong>AI Attack Staging:</strong> Do you red-team models against adversarial data and proxy-model attacks?</li>
-  </ul>
-</section>
-
 <section id="bottom-line">
   <h2>Bottom line for CISO and CIO leadership</h2>
 
   <div class="callout accent">
     <h3>The leadership decision</h3>
     <ul>
-      <li><strong>Harvard-scale AI adoption requires more than policy.</strong> Statewide and system-wide programs need continuous inventory, evaluation, runtime protection, identity governance, and audit-ready evidence.</li>
+      <li><strong>AI adoption requires more than policy.</strong> Statewide and system-wide programs need continuous inventory, evaluation, runtime protection, identity governance, and audit-ready evidence.</li>
       <li><strong>Cisco</strong> owns the access, identity, supply-chain, and AI-guardrail layers. <strong>Splunk</strong> owns curation, risk scoring, evaluation, and AI-accelerated response—together covering every MITRE ATLAS tactic while supplying NIST AI RMF evidence.</li>
       <li><strong>Agentic AI is the differentiator.</strong> The techniques that matter most in 2026—agent poisoning, tool misuse, credential harvesting, exfiltration via agents—require AI Defense + Astrix + WideField working together. Most competitors cannot tell this story.</li>
       <li><strong>Build on what you own.</strong> For organizations already running Splunk and Cisco, this is risk reduction and governance acceleration—not a parallel security stack.</li>
