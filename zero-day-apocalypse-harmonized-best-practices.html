@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Preparing for the Zero-Day Era — Best Practices for Higher Education &amp; Public Sector</title>
+  <style>
+    :root {
+      --bg: #f2f5f7;
+      --panel: #ffffff;
+      --text: #07182d;
+      --muted: #536070;
+      --accent: #ff007f;
+      --blue: #0a60ff;
+      --blue-light: #e0eeff;
+      --border: #ced4db;
+      --success: #2d6a1e;
+      --success-bg: #eef8ea;
+      --warn-bg: #fff8f0;
+      --warn-border: #e8a020;
+      --danger-bg: #fff1f1;
+      --danger-border: #c53030;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      font-size: 15px;
+    }
+    header {
+      background: linear-gradient(135deg, #07182d 0%, #12275c 55%, #0f214d 100%);
+      color: #fff;
+      padding: 1.75rem 2rem 2rem;
+    }
+    header .inner { max-width: 1100px; margin: 0 auto; }
+    header .eyebrow {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #7ae2ff;
+      margin: 0 0 0.5rem;
+    }
+    header h1 {
+      margin: 0;
+      font-size: clamp(1.35rem, 3vw, 1.85rem);
+      font-weight: 700;
+      line-height: 1.25;
+      max-width: 54rem;
+    }
+    header .subtitle {
+      margin: 0.75rem 0 0;
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.95rem;
+      max-width: 50rem;
+    }
+    header .meta {
+      margin-top: 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.65);
+    }
+    header .meta span {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 0.25rem 0.65rem;
+      border-radius: 4px;
+    }
+    nav.toc {
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      overflow-x: auto;
+    }
+    nav.toc ul {
+      list-style: none;
+      margin: 0 auto;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem 1.25rem;
+      max-width: 1100px;
+      font-size: 0.85rem;
+    }
+    nav.toc a { color: var(--blue); text-decoration: none; white-space: nowrap; }
+    nav.toc a:hover { text-decoration: underline; }
+    main { max-width: 1100px; margin: 0 auto; padding: 2rem 2rem 3rem; }
+    section { margin-bottom: 2.5rem; }
+    h2 {
+      font-size: 1.35rem;
+      margin: 0 0 1rem;
+      color: var(--text);
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 0.4rem;
+    }
+    h3 {
+      font-size: 1.05rem;
+      margin: 1.25rem 0 0.5rem;
+      color: var(--text);
+    }
+    h4 {
+      font-size: 0.95rem;
+      margin: 1rem 0 0.4rem;
+      color: var(--muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    p { margin: 0.65rem 0; }
+    ul, ol { margin: 0.5rem 0 0.75rem 1.25rem; padding: 0; }
+    li { margin: 0.35rem 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      margin: 1rem 0;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.55rem 0.7rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: var(--blue-light);
+      color: var(--text);
+      font-weight: 600;
+    }
+    tr:nth-child(even) td { background: #f8fafc; }
+    .callout {
+      background: var(--success-bg);
+      border: 1px solid #b8ddb0;
+      border-left: 4px solid var(--success);
+      padding: 1.1rem 1.25rem;
+      margin: 1.25rem 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .callout.warn {
+      background: var(--warn-bg);
+      border-color: #f0d9b8;
+      border-left-color: var(--warn-border);
+    }
+    .callout.danger {
+      background: var(--danger-bg);
+      border-color: #f5c6c6;
+      border-left-color: var(--danger-border);
+    }
+    .callout.accent {
+      background: #fff0f7;
+      border-color: #ffb8d9;
+      border-left-color: var(--accent);
+    }
+    .callout h3 {
+      margin-top: 0;
+      border: none;
+      padding: 0;
+      font-size: 1.1rem;
+      color: var(--success);
+    }
+    .callout.warn h3 { color: #8a5a00; }
+    .callout.danger h3 { color: var(--danger-border); }
+    .callout.accent h3 { color: var(--accent); }
+    .pillars {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .pillar {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.1rem;
+      border-top: 3px solid var(--accent);
+    }
+    .pillar strong {
+      display: block;
+      font-size: 0.95rem;
+      margin-bottom: 0.35rem;
+    }
+    .pillar span {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .stat-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem 2.5rem;
+      margin: 1.25rem 0;
+    }
+    .stat-item { min-width: 140px; }
+    .metric-highlight {
+      display: inline-block;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1.2;
+    }
+    .metric-label {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 400;
+      margin-top: 0.15rem;
+    }
+    .practice-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem 1.35rem;
+      margin: 1.25rem 0;
+      border-left: 4px solid var(--blue);
+    }
+    .practice-card h3 {
+      margin-top: 0;
+      color: var(--blue);
+    }
+    .checklist {
+      list-style: none;
+      margin-left: 0;
+      padding: 0;
+    }
+    .checklist li {
+      position: relative;
+      padding-left: 1.6rem;
+      margin: 0.5rem 0;
+    }
+    .checklist li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--success);
+      font-weight: 700;
+    }
+    .phase {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 1rem 1.15rem;
+      margin: 1rem 0;
+    }
+    .phase h4 {
+      margin: 0 0 0.35rem;
+      color: var(--text);
+      font-size: 1rem;
+      font-weight: 600;
+      text-transform: none;
+      letter-spacing: normal;
+    }
+    .phase .phase-meta {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin: 0 0 0.65rem;
+      font-style: italic;
+    }
+    .phase ul { margin-bottom: 0; }
+    blockquote {
+      margin: 1rem 0;
+      padding: 0.75rem 1rem;
+      border-left: 3px solid var(--blue);
+      background: var(--blue-light);
+      color: var(--text);
+      font-style: italic;
+    }
+    footer {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1rem 2rem 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    @media print {
+      nav.toc { position: static; }
+      header { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <p class="eyebrow">Harmonized best practices · Higher education &amp; public sector</p>
+    <h1>Preparing for the Zero-Day Era: A Practical Operating Model</h1>
+    <p class="subtitle">
+      A customer-facing synthesis of leading-practice guidance on surviving the wave of zero-day and near-zero-day exploitation—when patching alone is no longer enough and AI is accelerating adversary speed at scale.
+    </p>
+    <div class="meta">
+      <span>Synthesized from three independent analyses</span>
+      <span>Audience: CISOs, security leaders, IT &amp; research operations</span>
+      <span>Source context: Ivy League security program presentation</span>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Table of contents">
+  <ul>
+    <li><a href="#executive">Executive summary</a></li>
+    <li><a href="#why">Why the threat changed</a></li>
+    <li><a href="#strategy">Three-part strategy</a></li>
+    <li><a href="#vuln-mgmt">Risk-based vulnerability management</a></li>
+    <li><a href="#identity">Identity &amp; authentication</a></li>
+    <li><a href="#case-study">Case study lessons</a></li>
+    <li><a href="#culture">Culture &amp; governance</a></li>
+    <li><a href="#ai-secops">AI for security operations</a></li>
+    <li><a href="#cisco-splunk">Cisco + Splunk mapping</a></li>
+    <li><a href="#action-plan">90-day action plan</a></li>
+    <li><a href="#bottom-line">Bottom line</a></li>
+  </ul>
+</nav>
+
+<main>
+
+<section id="executive">
+  <h2>Executive summary</h2>
+  <p>
+    All three analyses converge on a single conclusion: <strong>patching remains necessary, but it is no longer sufficient.</strong> Traditional defense-in-depth—patch management, perimeter firewalls, WAF, EDR, and network segmentation—still matters, but it cannot reliably stop application-layer zero-day exploitation when attackers can reach vulnerable services at machine speed.
+  </p>
+  <p>
+    AI is not inventing wholly new attack classes. It is acting as a <strong>force multiplier</strong>, enabling adversaries to discover, weaponize, and exploit vulnerabilities at unprecedented scale. Near-zero-day windows—sometimes measured in hours, not weeks—are functionally equivalent to zero days for most organizations.
+  </p>
+
+  <div class="callout accent">
+    <h3>The operating model that all three analyses recommend</h3>
+    <ul>
+      <li><strong>Reduce what attackers can reach</strong> — exposure control through Zero Trust and authenticated access</li>
+      <li><strong>Reduce what they can steal</strong> — data minimization and lifecycle hygiene</li>
+      <li><strong>Prioritize what must be fixed first</strong> — contextual, risk-based vulnerability management</li>
+      <li><strong>Strengthen identity</strong> — passwordless and strong authentication as a core defensive layer</li>
+      <li><strong>Prepare to respond fast</strong> — mature incident response and AI-augmented SecOps when prevention fails</li>
+    </ul>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-item">
+      <span class="metric-highlight">~2.3 years → ~10 hrs</span>
+      <span class="metric-label">Average patch window collapse (decade trend)</span>
+    </div>
+    <div class="stat-item">
+      <span class="metric-highlight">Top ~5%</span>
+      <span class="metric-label">Vulnerabilities to prioritize first (contextual scoring)</span>
+    </div>
+    <div class="stat-item">
+      <span class="metric-highlight">1–2 hrs → ~30 sec</span>
+      <span class="metric-label">Initial alert investigation time (AI-augmented SecOps)</span>
+    </div>
+  </div>
+</section>
+
+<section id="why">
+  <h2>Why the threat has changed</h2>
+
+  <h3>AI as adversary force multiplier</h3>
+  <p>
+    Vulnerabilities are being discovered and exploited faster than most security teams can assess, patch, and validate—especially in higher education and public sector environments with legacy infrastructure, complex application dependencies, decentralized user populations, BYOD, research data, and slow patch validation cycles.
+  </p>
+
+  <h3>Why higher education and public sector are especially exposed</h3>
+  <ul>
+    <li>Legacy and research systems that cannot be patched on aggressive timelines</li>
+    <li>Internet-facing administrative and collaboration platforms (ERP, identity, file sharing)</li>
+    <li>Large, distributed user populations and bring-your-own-device environments</li>
+    <li>Sensitive student, citizen, research, and financial data with long retention histories</li>
+    <li>Resource constraints that make "patch everything" operationally impossible</li>
+  </ul>
+
+  <div class="callout warn">
+    <h3>The "outrun your neighbor" myth is dead</h3>
+    <p>
+      Security is no longer about being slightly safer than the organization next door. Large-scale threat groups (e.g., Clop, Shiny Hunters) systematically exploit known, reachable vulnerabilities. <strong>If a vulnerability exists on a system attackers can reach, assume it will eventually be exploited.</strong> The goal is to outrun the vulnerabilities—not merely other institutions.
+    </p>
+  </div>
+
+  <div class="callout danger">
+    <h3>What a real zero-day breach proved</h3>
+    <p>
+      A major Oracle EBS incident (3 TB data breach) demonstrated that standard controls failed in sequence: patch management could not address an unknown zero day; WAF and perimeter controls were insufficient because the service had to remain exposed; EDR had limited application-layer visibility; threat intelligence was unavailable because the exploit was not yet known; SSO helped authenticated users but did not protect unauthenticated server-level vulnerabilities; segmentation limited lateral movement but not data already on the compromised host.
+    </p>
+    <p><strong>Defense-in-depth is necessary—but not sufficient.</strong></p>
+  </div>
+</section>
+
+<section id="strategy">
+  <h2>Three-part strategy</h2>
+  <p>
+    The harmonized recommendation rests on three principles that work together: <strong>reduce exposure, reduce impact, and build resilience.</strong>
+  </p>
+
+  <div class="pillars">
+    <div class="pillar">
+      <strong>1. Reduce exposure</strong>
+      <span>Make it harder for attackers to reach vulnerable systems—authentication before access, ZTNA, and immediate "tiger team" mitigations.</span>
+    </div>
+    <div class="pillar">
+      <strong>2. Reduce impact</strong>
+      <span>Shrink blast radius through data minimization—remove stale sensitive data before it becomes breach evidence.</span>
+    </div>
+    <div class="pillar">
+      <strong>3. Build resilience</strong>
+      <span>Assume compromise will occur; exercise IR plans and accelerate detection, triage, and response.</span>
+    </div>
+  </div>
+
+  <div class="practice-card">
+    <h3>1. Reduce exposure — the "moat" strategy</h3>
+    <p><strong>Goal:</strong> Buy time when patch windows collapse from weeks to hours.</p>
+    <h4>Best practices (consensus across all three analyses)</h4>
+    <ul>
+      <li><strong>Adopt Zero Trust Network Access (ZTNA).</strong> Require users and devices to authenticate before traffic can reach protected systems. ZTNA is positioned as a more granular, better user-experience replacement for traditional VPNs—not merely a strategic architecture discussion, but a practical near-zero-day mitigation.</li>
+      <li><strong>Move critical internet-facing systems behind authentication immediately.</strong> For systems that cannot be patched quickly, deploy an emergency "tiger team" operation: place them behind a VPN or load balancer that mandates authentication—even if full ZTNA rollout will take 1–2 years.</li>
+      <li><strong>Prioritize internet-facing systems first.</strong> Non-public systems that do not truly need anonymous internet access should not have it.</li>
+      <li><strong>Assume reachability equals exploitability.</strong> If attackers can see it, scan it, and reach it, they can exploit it faster than most teams can patch it.</li>
+    </ul>
+    <blockquote>
+      "Zero Trust is no longer just a strategic architecture discussion; it is a practical mitigation for near-zero-day exposure."
+    </blockquote>
+  </div>
+
+  <div class="practice-card">
+    <h3>2. Reduce impact — data risk minimization</h3>
+    <p><strong>Goal:</strong> Assume some compromise will happen. Limit what attackers can exfiltrate when it does.</p>
+    <h4>Best practices</h4>
+    <ul>
+      <li><strong>Identify stale, unused, or forgotten sensitive data.</strong> Old SharePoint repositories, expired research datasets, legacy file shares, and unnecessary exports are common high-risk retention problems.</li>
+      <li><strong>Operate under the assumption that a large share of stored sensitive data is no longer needed</strong>—one analysis cites roughly 90% as a planning assumption for data that has outlived its business purpose and become liability.</li>
+      <li><strong>Treat unnecessary sensitive data as a liability, not an asset.</strong> Every major incident eventually includes the question: "Why was that file still there?"</li>
+      <li><strong>Build a multi-year data minimization program</strong> with policies, ownership, and automation—not a one-time cleanup project.</li>
+    </ul>
+    <blockquote>
+      "Data minimization is breach impact reduction."
+    </blockquote>
+  </div>
+
+  <div class="practice-card">
+    <h3>3. Build resilience — prepare for inevitable compromise</h3>
+    <p><strong>Goal:</strong> Detect faster, investigate faster, recover faster. Resilience matters as much as prevention in the zero-day era.</p>
+    <h4>Best practices</h4>
+    <ul>
+      <li><strong>Maintain a well-exercised incident response plan</strong>—not a document on a shelf, but an operationally mature capability that is tested regularly.</li>
+      <li><strong>Improve detection, triage, and response speed</strong> so analysts focus on high-value response work, not repetitive alert triage.</li>
+      <li><strong>Accept that absolute security is impossible.</strong> The objective is minimizing likelihood, blast radius, and recovery time—not eliminating all risk.</li>
+      <li><strong>Provide secure, agency- or institution-supported tools</strong> to users so they do not seek higher-risk, unvetted alternatives.</li>
+    </ul>
+    <blockquote>
+      "In the zero-day era, resilience matters as much as prevention. You need to know what happened, what was touched, what data was exposed, and what action to take—quickly."
+    </blockquote>
+  </div>
+</section>
+
+<section id="vuln-mgmt">
+  <h2>Risk-based vulnerability management</h2>
+  <p>
+    All three analyses agree: <strong>organizations cannot patch everything fast enough.</strong> The shift is from "fix everything" to "fix what matters most first."
+  </p>
+
+  <h3>Contextual prioritization</h3>
+  <p>
+    CVSS severity alone is not enough. Leading programs use a custom contextual scoring model (exemplified by approaches such as Harvard's H-VERS framework) that weighs local environmental factors:
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Factor</th>
+        <th>Why it matters</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Internet exposure</td>
+        <td>Reachable systems are exploited at scale by automated threat groups</td>
+      </tr>
+      <tr>
+        <td>System criticality</td>
+        <td>Mission-critical ERP, identity, research, and citizen-facing services warrant priority</td>
+      </tr>
+      <tr>
+        <td>Data sensitivity</td>
+        <td>Systems holding PII, research IP, or regulated data amplify breach impact</td>
+      </tr>
+      <tr>
+        <td>Known vulnerability severity</td>
+        <td>Base CVSS or vendor severity as one input—not the only input</td>
+      </tr>
+      <tr>
+        <td>Local environmental context</td>
+        <td>Compensating controls, segmentation, authentication requirements, and patch feasibility</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <h3>Operational outcome</h3>
+    <p>
+      Contextual scoring lets teams focus resources on the <strong>riskiest ~5% of vulnerabilities</strong> first—internet-facing, mission-critical systems holding sensitive data—instead of treating every finding equally.
+    </p>
+  </div>
+
+  <h3>How to operationalize prioritization</h3>
+  <ul>
+    <li>Correlate vulnerability scan data with asset inventory, network exposure, identity activity, and application ownership</li>
+    <li>Build dashboards that show exposure, patch status, critical assets, and trending risk—not just raw CVE counts</li>
+    <li>Empower internal teams with data analytics platforms rather than relying solely on generic consulting engagements for visibility</li>
+  </ul>
+</section>
+
+<section id="identity">
+  <h2>Identity and authentication</h2>
+  <p>
+    All three analyses treat <strong>identity as a critical defensive layer</strong>—often the difference between an attempted exploit and a successful breach path.
+  </p>
+
+  <h3>Passwordless authentication</h3>
+  <ul>
+    <li><strong>Move aggressively toward passwordless authentication.</strong> Leading programs report highly effective results against credential phishing—the most common first step in adversary playbooks.</li>
+    <li><strong>Require strong authentication before granting access to sensitive systems.</strong> If authentication becomes the moat, weak authentication becomes the bridge for attackers.</li>
+    <li><strong>Integrate identity telemetry into security analytics.</strong> Authentication events, anomalous access patterns, and privilege changes should feed detection and investigation workflows—not live in a separate silo.</li>
+  </ul>
+
+  <div class="callout accent">
+    <h3>Why this matters for zero-day readiness</h3>
+    <p>
+      Gaining VPN or credential access is typically the first step in most adversary playbooks. Passwordless is not just a convenience initiative—it is a <strong>zero-day readiness control</strong> that reduces the probability that exposure reduction measures can be bypassed through stolen credentials.
+    </p>
+  </div>
+</section>
+
+<section id="case-study">
+  <h2>Lessons from the case study</h2>
+  <p>
+    The Oracle EBS zero-day breach is the anchor example across all three analyses. It illustrates why layered controls failed individually and why a new operating model is required.
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Control</th>
+        <th>What happened</th>
+        <th>Lesson</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Patch management</td>
+        <td>Failed—zero-day, no patch available</td>
+        <td>Patching alone cannot save you; exposure reduction is essential</td>
+      </tr>
+      <tr>
+        <td>Firewall / WAF</td>
+        <td>Insufficient—service had to remain exposed</td>
+        <td>Perimeter controls cannot protect what must be publicly reachable without authentication</td>
+      </tr>
+      <tr>
+        <td>EDR</td>
+        <td>Limited visibility—exploitation at application layer</td>
+        <td>Endpoint tools need complementary application and identity visibility</td>
+      </tr>
+      <tr>
+        <td>Threat intelligence</td>
+        <td>Unavailable—exploit not yet known</td>
+        <td>Zero days arrive before intel feeds; assume unknown threats</td>
+      </tr>
+      <tr>
+        <td>SSO</td>
+        <td>Helped authenticated users; did not protect server-level vulns</td>
+        <td>Identity controls must be paired with authenticated network access</td>
+      </tr>
+      <tr>
+        <td>Network segmentation</td>
+        <td>Limited lateral movement; data on host still exposed</td>
+        <td>Segmentation reduces spread but not initial data loss</td>
+      </tr>
+      <tr>
+        <td>Egress controls</td>
+        <td>Helped but insufficient as final defense</td>
+        <td>Assume exfiltration attempts; minimize data at rest</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout warn">
+    <h3>Implication for your program</h3>
+    <p>
+      Security controls that worked yesterday may not stop application-layer zero-day exploitation tomorrow. Organizations need <strong>layered visibility across application, identity, endpoint, network, vulnerability, and data activity</strong>—with the ability to correlate signals and respond quickly when any single control fails.
+    </p>
+  </div>
+</section>
+
+<section id="culture">
+  <h2>Culture, governance, and supply chain</h2>
+  <p>
+    Beyond technology, all three analyses emphasize that zero-day readiness requires a <strong>cultural shift</strong>—not just new tools.
+  </p>
+
+  <h3>Shift the security culture</h3>
+  <ul>
+    <li><strong>Security is not only technology—it is operating discipline.</strong> Leadership must treat exposure reduction, data hygiene, and response speed as ongoing programs, not one-time projects.</li>
+    <li><strong>Absolute security is impossible.</strong> Adopt a posture of informed risk acceptance: minimize risk, provide sanctioned secure tools, and steer users away from high-risk alternatives.</li>
+    <li><strong>Empower internal talent.</strong> Many organizations already have skilled staff who can build custom dashboards, analytics, and AI-driven workflows faster and more cost-effectively than generic consulting engagements—when given the right data platform and executive support.</li>
+  </ul>
+
+  <h3>Address Shadow IT and supply chain risk</h3>
+  <ul>
+    <li>AI is enabling rapid "vibe-coded" applications and open-source agent tooling—creating an explosion of ungoverned Shadow IT.</li>
+    <li>Custom-built internal tools must be maintained with the same rigor as enterprise-grade software: patching, access control, logging, and lifecycle management.</li>
+    <li>Monitor and govern both internal AI models and unvetted external tools (including open-source AI agents) with guardrails appropriate to your risk tolerance.</li>
+  </ul>
+</section>
+
+<section id="ai-secops">
+  <h2>AI for security operations</h2>
+  <p>
+    All three analyses highlight AI not only as an adversary force multiplier, but as a <strong>defensive accelerator</strong> when applied to security operations with appropriate governance.
+  </p>
+
+  <h3>Automate initial alert investigation</h3>
+  <p>
+    A leading program built internal AI tooling that reduced initial security alert investigation time from <strong>1–2 hours to approximately 30 seconds</strong>—at minimal per-alert cost—freeing human analysts to focus on higher-level threats and incident response.
+  </p>
+
+  <h3>Best practices for AI-augmented SecOps</h3>
+  <ul>
+    <li>Use AI to handle repetitive triage: enrich alerts, correlate context, and produce initial investigation summaries</li>
+    <li>Keep human analysts in the loop for validation, escalation, and response decisions</li>
+    <li>Apply the same governance rigor to AI-built security tools as to any production system</li>
+    <li>Measure outcomes: time-to-triage, analyst hours saved, and mean time to contain—not just tool deployment</li>
+  </ul>
+
+  <div class="callout">
+    <h3>Unified visibility enables AI and humans alike</h3>
+    <p>
+      Whether investigations are manual or AI-assisted, teams need unified telemetry across endpoint, identity, network, cloud, application, vulnerability, and asset data. Fragmented visibility slows both human analysts and AI agents—and increases the risk of missed correlations during fast-moving zero-day events.
+    </p>
+  </div>
+</section>
+
+<section id="cisco-splunk">
+  <h2>Navigating the Bugpocalypse: A Cisco + Splunk Solution Framework</h2>
+
+  <h3>The Harvard strategic frame</h3>
+  <p>
+    Harvard's response to the zero-day apocalypse rests on a clear thesis: <strong>patching alone is insufficient</strong> when vulnerabilities go from discovery to exploitation in ~10 hours and 75%+ of reported vulnerabilities are zero days. Their model shifts defense from "outrun your neighbor" to <strong>reduce exposure, prioritize ruthlessly, and prepare for inevitable compromise</strong>.
+  </p>
+  <p>Harvard's five operating principles:</p>
+  <ul>
+    <li><strong>Reduce exposure</strong> — minimize internet-facing infrastructure (ZTNA before VPN)</li>
+    <li><strong>Strengthen authentication</strong> — go passwordless to eliminate credential-based entry</li>
+    <li><strong>Prioritize by local risk context</strong> — fix the riskiest ~5% (their HVIRS model)</li>
+    <li><strong>Minimize data liability</strong> — ~90% of sensitive data is unneeded and should be disposed</li>
+    <li><strong>Prepare for compromise</strong> — well-exercised IR plus AI-accelerated investigation (their 1–2 hour → 30-second alert triage tool)</li>
+  </ul>
+
+  <h3>Mapping Cisco + Splunk capabilities to the Harvard model</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Harvard principle</th>
+        <th>Cisco capability</th>
+        <th>Splunk capability</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Reduce exposure (ZTNA)</td>
+        <td>Cisco Secure Access / Duo ZTNA, Secure Firewall, Hypershield for east-west segmentation</td>
+        <td>Asset &amp; Identity inventory to find unmanaged internet-facing systems</td>
+      </tr>
+      <tr>
+        <td>Strengthen authentication</td>
+        <td>Duo passwordless, Identity Intelligence</td>
+        <td>RBA scoring on authentication anomalies and credential-abuse patterns</td>
+      </tr>
+      <tr>
+        <td>Risk-based prioritization</td>
+        <td>Cisco Vulnerability Management (Kenna risk scoring)</td>
+        <td>ES correlation + RBA to weight vulnerabilities by exposure, criticality, and data sensitivity (an HVIRS-equivalent)</td>
+      </tr>
+      <tr>
+        <td>Data risk minimization</td>
+        <td>—</td>
+        <td>Splunk data discovery, classification searches, stale-data identification</td>
+      </tr>
+      <tr>
+        <td>Prepare for compromise</td>
+        <td>XDR, EDR, SOAR (Secure Network/Endpoint signals)</td>
+        <td>ES notables, ITSI episodes, SOAR playbooks, AI-accelerated investigation (the 30-second triage analog)</td>
+      </tr>
+      <tr>
+        <td>AI guardrails (Galileo-style)</td>
+        <td>Cisco AI Defense for monitoring/guardrailing agentic AI and shadow-IT LLM use</td>
+        <td>Splunk visibility into AI tool usage, audit trails</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout accent">
+    <h3>Combined value</h3>
+    <p>
+      Cisco enforces the access and identity perimeter; Splunk provides the curated, risk-scored intelligence layer that tells you <em>what matters first</em> and accelerates response—directly mirroring Harvard's own in-house tooling, but as an integrated, supported platform.
+    </p>
+  </div>
+</section>
+
+<section id="action-plan">
+  <h2>Recommended 90-day action plan</h2>
+  <p>
+    The following checklist synthesizes the highest-consensus recommendations from all three analyses into an actionable starting point for higher education and public sector security programs.
+  </p>
+
+  <h3>Immediate (0–30 days)</h3>
+  <ul class="checklist">
+    <li>Inventory internet-facing systems that hold sensitive data or support critical operations</li>
+    <li>Launch a "tiger team" to move highest-risk exposed systems behind VPN or authenticated load balancers</li>
+    <li>Define a contextual vulnerability scoring model (exposure + criticality + data sensitivity + severity)</li>
+    <li>Identify top 5% of vulnerabilities for immediate remediation focus</li>
+    <li>Validate incident response plan readiness with a tabletop exercise focused on zero-day scenarios</li>
+  </ul>
+
+  <h3>Near-term (30–60 days)</h3>
+  <ul class="checklist">
+    <li>Begin ZTNA pilot for highest-risk application tiers</li>
+    <li>Launch passwordless authentication rollout for privileged and remote-access users</li>
+    <li>Start data minimization assessment: stale SharePoint, research archives, legacy exports</li>
+    <li>Build executive and operational dashboards for exposure, patch status, and critical assets</li>
+    <li>Establish governance for internal AI tools and Shadow IT applications</li>
+  </ul>
+
+  <h3>Strategic (60–90 days and beyond)</h3>
+  <ul class="checklist">
+    <li>Scale ZTNA program with phased rollout plan (accept 1–2 year full deployment timeline)</li>
+    <li>Operationalize multi-year data lifecycle and retention automation</li>
+    <li>Deploy AI-augmented alert triage for repetitive SecOps workflows</li>
+    <li>Integrate identity, vulnerability, network, and application telemetry for unified investigation</li>
+    <li>Provide secure, institution-supported collaboration and AI tools to reduce risky user workarounds</li>
+  </ul>
+
+  <h3>Cisco and Splunk's role in the plan</h3>
+
+  <div class="phase">
+    <h4>Phase 1 — Tactical / Immediate (0–90 days): Stop the bleeding</h4>
+    <p class="phase-meta">Mirrors Harvard's tiger-team move to insulate critical systems fast.</p>
+    <ul>
+      <li><strong>Inventory exposure</strong> — use Splunk Asset &amp; Identity + Cisco visibility to enumerate every internet-facing, non-public critical system</li>
+      <li><strong>Insulate fast</strong> — move top-priority systems behind Duo-authenticated access / load balancers (Harvard's PeopleSoft win)</li>
+      <li><strong>Stand up risk-based triage</strong> — deploy ES with RBA to begin scoring notables by entity risk, ending raw-alert overload</li>
+      <li><strong>Quick passwordless pilot</strong> — enable Duo passwordless for highest-privilege employee accounts first</li>
+    </ul>
+  </div>
+
+  <div class="phase">
+    <h4>Phase 2 — Operational (3–9 months): Build the moat</h4>
+    <p class="phase-meta">Mirrors Harvard's ZTNA and risk-scoring programs.</p>
+    <ul>
+      <li><strong>Roll out ZTNA</strong> — replace VPN with Cisco Secure Access for granular, authenticate-before-connect access</li>
+      <li><strong>Operationalize risk-based vulnerability management</strong> — integrate Cisco Vulnerability Management scoring with Splunk exposure/criticality/data-sensitivity context to build a local HVIRS-equivalent and focus on the riskiest ~5%</li>
+      <li><strong>Expand passwordless</strong> — drive toward two-thirds of weekly active users (Harvard's benchmark)</li>
+      <li><strong>Automate response</strong> — deploy SOAR playbooks with approval gates for the most common incident types</li>
+    </ul>
+  </div>
+
+  <div class="phase">
+    <h4>Phase 3 — Strategic / Sustaining (9–24 months): Resilience &amp; maintenance</h4>
+    <p class="phase-meta">Mirrors Harvard's data minimization and AI-assisted SOC maturity.</p>
+    <ul>
+      <li><strong>Data risk minimization program</strong> — use Splunk to find and classify stale/unneeded data; establish disposal policies and automation across the data lifecycle</li>
+      <li><strong>AI-accelerated SOC</strong> — operationalize AI-driven investigation against curated ES/Splunk objects to compress triage time (Harvard's 1–2 hr → 30 sec model)</li>
+      <li><strong>AI governance</strong> — deploy Cisco AI Defense to monitor and guardrail agentic AI and shadow-IT LLM usage</li>
+      <li><strong>Continuous IR exercising</strong> — institutionalize regular tabletop and live-fire drills so the plan stays "well-exercised"</li>
+    </ul>
+  </div>
+
+  <h3>Executive talk track (concise)</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Message</th>
+        <th>Why it resonates</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>The threat has changed—AI is collapsing time to exploit</td>
+        <td>Frames urgency without fear-mongering; grounded in observable trend data</td>
+      </tr>
+      <tr>
+        <td>Patching alone will not save you</td>
+        <td>Acknowledges reality of zero days and slow validation cycles in complex environments</td>
+      </tr>
+      <tr>
+        <td>Protect what matters most first</td>
+        <td>Actionable prioritization for resource-constrained teams</td>
+      </tr>
+      <tr>
+        <td>Put authentication in front of critical applications</td>
+        <td>Immediate, practical mitigation while longer ZTNA programs mature</td>
+      </tr>
+      <tr>
+        <td>Minimize stale sensitive data</td>
+        <td>Impact reduction that complements exposure controls</td>
+      </tr>
+      <tr>
+        <td>Prepare for compromise</td>
+        <td>Shifts mindset from prevention-only to resilience</td>
+      </tr>
+      <tr>
+        <td>Empower your own teams with data and analytics</td>
+        <td>Builds internal capability and sustainable operating model</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="bottom-line">
+  <h2>Bottom line</h2>
+
+  <div class="callout accent">
+    <h3>The practical operating model for surviving the zero-day era</h3>
+    <ol>
+      <li><strong>Reduce what attackers can reach.</strong> ZTNA, authenticated access, and immediate exposure controls buy time when patch windows collapse.</li>
+      <li><strong>Reduce what they can steal.</strong> Data minimization shrinks blast radius when prevention fails.</li>
+      <li><strong>Prioritize what must be fixed first.</strong> Contextual vulnerability scoring focuses scarce resources on the riskiest ~5%.</li>
+      <li><strong>Strengthen identity.</strong> Passwordless authentication eliminates the most common initial access path.</li>
+      <li><strong>Prepare to respond fast.</strong> Mature incident response and AI-augmented investigation are now core survival capabilities—not optional enhancements.</li>
+    </ol>
+  </div>
+
+  <p>
+    This is not a call to abandon defense-in-depth. It is a call to <strong>evolve it</strong>: complement traditional controls with exposure reduction, impact minimization, contextual prioritization, stronger identity, and faster response—because in the zero-day era, the question is not <em>if</em> your controls will be tested, but <em>how quickly</em> you can detect, contain, and recover when they are.
+  </p>
+</section>
+
+</main>
+
+<footer>
+  <p>
+    Harmonized customer-facing brief synthesized from three independent analyses of Ivy League security program guidance on zero-day preparedness.
+    Intended for higher education and public sector security leaders. Metrics and case study references reflect source presentation content; adapt to your organization's validated data.
+  </p>
+</footer>
+
+</body>
+</html>
