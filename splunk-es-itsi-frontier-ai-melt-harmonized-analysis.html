@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Splunk ES &amp; ITSI — Enabling Frontier AI Access to MELT Data</title>
+  <style>
+    :root {
+      --bg: #f2f5f7;
+      --panel: #ffffff;
+      --text: #07182d;
+      --muted: #536070;
+      --accent: #ff007f;
+      --blue: #0a60ff;
+      --blue-light: #e0eeff;
+      --border: #ced4db;
+      --success: #2d6a1e;
+      --success-bg: #eef8ea;
+      --warn-bg: #fff8f0;
+      --warn-border: #e8a020;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      font-size: 15px;
+    }
+    header {
+      background: linear-gradient(135deg, #07182d 0%, #12275c 55%, #0f214d 100%);
+      color: #fff;
+      padding: 1.75rem 2rem 2rem;
+    }
+    header .inner { max-width: 1100px; margin: 0 auto; }
+    header .eyebrow {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #7ae2ff;
+      margin: 0 0 0.5rem;
+    }
+    header h1 {
+      margin: 0;
+      font-size: clamp(1.35rem, 3vw, 1.85rem);
+      font-weight: 700;
+      line-height: 1.25;
+      max-width: 54rem;
+    }
+    header .subtitle {
+      margin: 0.75rem 0 0;
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.95rem;
+      max-width: 50rem;
+    }
+    header .meta {
+      margin-top: 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.65);
+    }
+    header .meta span {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 0.25rem 0.65rem;
+      border-radius: 4px;
+    }
+    nav.toc {
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      overflow-x: auto;
+    }
+    nav.toc ul {
+      list-style: none;
+      margin: 0 auto;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem 1.25rem;
+      max-width: 1100px;
+      font-size: 0.85rem;
+    }
+    nav.toc a { color: var(--blue); text-decoration: none; white-space: nowrap; }
+    nav.toc a:hover { text-decoration: underline; }
+    main { max-width: 1100px; margin: 0 auto; padding: 2rem 2rem 3rem; }
+    section { margin-bottom: 2.5rem; }
+    h2 {
+      font-size: 1.35rem;
+      margin: 0 0 1rem;
+      color: var(--text);
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 0.4rem;
+    }
+    h3 {
+      font-size: 1.05rem;
+      margin: 1.25rem 0 0.5rem;
+      color: var(--text);
+    }
+    h4 {
+      font-size: 0.95rem;
+      margin: 1rem 0 0.4rem;
+      color: var(--muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    p { margin: 0.65rem 0; }
+    ul, ol { margin: 0.5rem 0 0.75rem 1.25rem; padding: 0; }
+    li { margin: 0.35rem 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      margin: 1rem 0;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.55rem 0.7rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: var(--blue-light);
+      color: var(--text);
+      font-weight: 600;
+    }
+    tr:nth-child(even) td { background: #f8fafc; }
+    .callout {
+      background: var(--success-bg);
+      border: 1px solid #b8ddb0;
+      border-left: 4px solid var(--success);
+      padding: 1.1rem 1.25rem;
+      margin: 1.25rem 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .callout.warn {
+      background: var(--warn-bg);
+      border-color: #f0d9b8;
+      border-left-color: var(--warn-border);
+    }
+    .callout.accent {
+      background: #fff0f7;
+      border-color: #ffb8d9;
+      border-left-color: var(--accent);
+    }
+    .callout h3 {
+      margin-top: 0;
+      border: none;
+      padding: 0;
+      font-size: 1.1rem;
+      color: var(--success);
+    }
+    .callout.warn h3 { color: #8a5a00; }
+    .callout.accent h3 { color: var(--accent); }
+    .pillars {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .pillar {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.1rem;
+      border-top: 3px solid var(--accent);
+    }
+    .pillar strong {
+      display: block;
+      font-size: 0.95rem;
+      margin-bottom: 0.35rem;
+    }
+    .pillar span {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .formula {
+      background: #f0f4f8;
+      border: 1px solid var(--border);
+      padding: 0.85rem 1rem;
+      border-radius: 6px;
+      font-family: ui-monospace, "Cascadia Code", monospace;
+      font-size: 0.88rem;
+      margin: 0.75rem 0;
+      overflow-x: auto;
+    }
+    .tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 0.15rem 0.45rem;
+      border-radius: 3px;
+      background: var(--blue-light);
+      color: var(--blue);
+      margin-right: 0.35rem;
+    }
+    .tag.primary { background: #ffe8f3; color: var(--accent); }
+    .tag.success { background: var(--success-bg); color: var(--success); }
+    .use-case-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem 1.35rem;
+      margin: 1.25rem 0;
+      border-left: 4px solid var(--blue);
+    }
+    .use-case-card h3 {
+      margin-top: 0;
+      color: var(--blue);
+    }
+    .metric-highlight {
+      display: inline-block;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1.2;
+    }
+    .metric-label {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 400;
+      margin-top: 0.15rem;
+    }
+    .stat-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem 2.5rem;
+      margin: 1.25rem 0;
+    }
+    .stat-item { min-width: 140px; }
+    code { font-family: ui-monospace, "Cascadia Code", monospace; font-size: 0.88em; }
+    footer {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1rem 2rem 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    @media print {
+      nav.toc { position: static; }
+      header { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <p class="eyebrow">Harmonized analysis · ES &amp; ITSI for Frontier AI</p>
+    <h1>Splunk ES and ITSI as Enabling Technologies for Frontier AI Access to MELT Data</h1>
+    <p class="subtitle">
+      A synthesis of three independent analyses on why Splunk Enterprise Security and IT Service Intelligence are essential semantic curation layers between raw machine data and agentic frontier models—and the most defensible use cases and metrics that prove it.
+    </p>
+    <div class="meta">
+      <span>Synthesized from ChatGPT 5.5, Gemini 3.1 Flash Lite, and Claude Opus 4.7</span>
+      <span>Focus: defensible use cases · token efficiency · governed AI action</span>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Table of contents">
+  <ul>
+    <li><a href="#executive">Executive synthesis</a></li>
+    <li><a href="#problem">Core problem</a></li>
+    <li><a href="#use-cases">Use cases</a></li>
+    <li><a href="#metrics">Metrics framework</a></li>
+    <li><a href="#comparison">Raw vs. curated</a></li>
+    <li><a href="#products">Product roles</a></li>
+    <li><a href="#claims">External claims</a></li>
+    <li><a href="#architecture">Reference architecture</a></li>
+    <li><a href="#bottom-line">Bottom line</a></li>
+  </ul>
+</nav>
+
+<main>
+
+<section id="executive">
+  <h2>Executive synthesis</h2>
+  <p>
+    All three analyses converge on one thesis: <strong>Frontier AI models are powerful reasoners, but raw MELT data (Metrics, Events, Logs, Traces) is not AI-ready at enterprise scale.</strong> It is too voluminous, repetitive, noisy, context-poor, and semantically inconsistent to feed directly into agentic models in a cost-effective or reliable way.
+  </p>
+  <p>
+    Splunk ES and ITSI do not merely store machine data—they <strong>curate it into meaning-rich intelligence objects</strong> that frontier models can actually reason over.
+  </p>
+
+  <div class="pillars">
+    <div class="pillar">
+      <strong>Core Splunk</strong>
+      <span>Access to machine data — search, SPL, indexing, historical and real-time retrieval</span>
+    </div>
+    <div class="pillar">
+      <strong>ES + ITSI + Observability</strong>
+      <span>Access to <em>meaning</em> — notables, risk scores, episodes, KPIs, service health, trace summaries</span>
+    </div>
+    <div class="pillar">
+      <strong>SOAR</strong>
+      <span>Access to <em>governed action</em> — approved playbooks, human gates, audit trails</span>
+    </div>
+  </div>
+
+  <div class="callout accent">
+    <h3>Defensible positioning</h3>
+    <p>
+      The strongest argument is not that Splunk simply "stores data for AI." The stronger and more defensible argument is that <strong>Splunk provides the semantic access layer between AI agents and raw machine data.</strong>
+    </p>
+    <p style="margin-bottom:0;">
+      <strong>Core Splunk gives Frontier AI access to machine data. ES and ITSI give Frontier AI access to meaning.</strong>
+    </p>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-item">
+      <span class="metric-highlight">100×–500×</span>
+      <span class="metric-label">Token reduction (security &amp; SPL)</span>
+    </div>
+    <div class="stat-item">
+      <span class="metric-highlight">100×–300×</span>
+      <span class="metric-label">Token reduction (outage &amp; ITSI)</span>
+    </div>
+    <div class="stat-item">
+      <span class="metric-highlight">3K–15K</span>
+      <span class="metric-label">Curated tokens per investigation</span>
+    </div>
+    <div class="stat-item">
+      <span class="metric-highlight">1.5M–2M+</span>
+      <span class="metric-label">Raw MELT tokens avoided</span>
+    </div>
+  </div>
+</section>
+
+<section id="problem">
+  <h2>The core problem — why raw MELT breaks AI reasoning</h2>
+  <p>
+    Raw MELT data presents five structural challenges that map directly to model constraints: context window limits, per-token cost, latency, hallucination risk on noisy input, and the inability to act safely without governed workflows.
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Challenge</th>
+        <th>Why it breaks AI reasoning</th>
+        <th>Model constraint affected</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Massive volume</strong></td>
+        <td>Billions of events/day exceed context windows</td>
+        <td>Token limits, cost</td>
+      </tr>
+      <tr>
+        <td><strong>Repetitive structure</strong></td>
+        <td>90%+ token waste on boilerplate fields</td>
+        <td>Cost, latency</td>
+      </tr>
+      <tr>
+        <td><strong>Context-poor at event level</strong></td>
+        <td>Single events lack causal, business, or entity meaning</td>
+        <td>Reasoning quality, hallucination</td>
+      </tr>
+      <tr>
+        <td><strong>Semantically inconsistent</strong></td>
+        <td>Vendor-specific schemas force re-learning per source</td>
+        <td>Reasoning loops, prompt complexity</td>
+      </tr>
+      <tr>
+        <td><strong>Causally fragmented</strong></td>
+        <td>Root cause spans sources, time, and entities</td>
+        <td>Investigation depth, accuracy</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <h3>Without ES/ITSI vs. with ES/ITSI</h3>
+    <p><strong>Without ES/ITSI:</strong> An AI agent must reconstruct correlation, entity context, and business impact from raw telemetry—an expensive, slow, and error-prone process.</p>
+    <p style="margin-bottom:0;"><strong>With ES/ITSI:</strong> The agent starts from pre-correlated, entity-aware, domain-specific objects—dramatically reducing tokens, reasoning loops, and hallucination risk.</p>
+  </div>
+</section>
+
+<section id="use-cases">
+  <h2>Most defensible use cases</h2>
+
+  <div class="use-case-card">
+    <h3><span class="tag primary">Strongest</span> 1. AI-assisted security investigation (ES-led)</h3>
+    <p>
+      Security investigations require correlation across authentication, VPN, endpoint, DNS, proxy, cloud, SaaS, and identity data. Feeding all of that raw data into a frontier model is impractical and economically unscalable.
+    </p>
+
+    <h4>What ES provides the AI agent</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>ES capability</th>
+          <th>AI value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Notable events</td><td>Curated investigation entry points</td></tr>
+        <tr><td>Risk-Based Alerting (RBA)</td><td>Entity-level aggregation of weak signals into user/host/asset risk</td></tr>
+        <tr><td>CIM normalization</td><td>Consistent fields across vendors—no schema teaching in prompts</td></tr>
+        <tr><td>Asset &amp; Identity Framework</td><td>Ownership, criticality, privilege, business context</td></tr>
+        <tr><td>Threat intelligence enrichment</td><td>Pre-classified indicators (known-bad, suspicious, benign)</td></tr>
+        <tr><td>Investigation timelines</td><td>Pre-reconstructed chronology</td></tr>
+        <tr><td>MITRE ATT&amp;CK alignment</td><td>Structured security reasoning framework</td></tr>
+      </tbody>
+    </table>
+
+    <h4>What the AI agent can answer</h4>
+    <ul>
+      <li>What happened, and which user/host/asset is involved?</li>
+      <li>Why is this suspicious? Is it part of a broader campaign?</li>
+      <li>What evidence supports the conclusion?</li>
+      <li>What follow-up SPL searches should run?</li>
+      <li>What SOAR playbook or analyst action is appropriate?</li>
+    </ul>
+
+    <h4>Before / after token comparison</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th>Raw MELT approach</th>
+          <th>ES-curated approach</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Input</td>
+          <td>20K auth logs, 5K VPN logs, 3K endpoint logs, 1.5K proxy, 800 DNS</td>
+          <td>3 notables, 1 high-risk user, 2 assets, 12 risk events, timeline, TI matches</td>
+        </tr>
+        <tr>
+          <td>Token estimate</td>
+          <td>~1.5M–2M tokens</td>
+          <td>~3,000–8,000 tokens (up to ~15K with detail)</td>
+        </tr>
+        <tr>
+          <td><strong>Reduction</strong></td>
+          <td colspan="2"><strong>~200×–500×</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="use-case-card">
+    <h3><span class="tag primary">Strongest</span> 2. AI-assisted service outage investigation (ITSI + Observability)</h3>
+    <p>
+      Operational incidents produce alert storms, metric noise, K8s events, traces, deploy logs, and DB logs. A frontier model should not receive all of that raw telemetry.
+    </p>
+
+    <h4>What ITSI and Observability provide the AI agent</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Capability</th>
+          <th>AI value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Service modeling</td><td>Maps technical components to business services</td></tr>
+        <tr><td>KPIs + adaptive thresholds</td><td>Distinguishes normal variation from abnormal behavior</td></tr>
+        <tr><td>Episodes</td><td>Compresses thousands of alerts into one manageable incident</td></tr>
+        <tr><td>Service health scores</td><td>Business-impact framing ("Checkout is degraded")</td></tr>
+        <tr><td>Dependency maps / service maps</td><td>Topology and causality context</td></tr>
+        <tr><td>Trace summarization</td><td>Critical path, slowest spans, error spans—not full trace dumps</td></tr>
+        <tr><td>Glass tables</td><td>Aligns operational state to business outcomes</td></tr>
+      </tbody>
+    </table>
+
+    <h4>What the AI agent can answer</h4>
+    <ul>
+      <li>Which service is degraded, and which KPI broke first?</li>
+      <li>What is the business impact? Which dependencies are involved?</li>
+      <li>Did a deployment or infrastructure change precede the issue?</li>
+      <li>Is this application, infrastructure, database, network, or dependency-related?</li>
+      <li>What should the incident team check next?</li>
+    </ul>
+
+    <h4>Before / after token comparison</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th>Raw MELT approach</th>
+          <th>ITSI + Observability approach</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Input</td>
+          <td>App logs, K8s events, infra metrics, DB logs, LB logs, deploy logs, full traces</td>
+          <td>Service health summary, impacted KPIs, episode, dependency map, critical-path traces, related logs only</td>
+        </tr>
+        <tr>
+          <td>Token estimate</td>
+          <td>Millions of tokens</td>
+          <td>~5,000–15,000 tokens</td>
+        </tr>
+        <tr>
+          <td><strong>Reduction</strong></td>
+          <td colspan="2"><strong>~100×–300×</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="use-case-card">
+    <h3><span class="tag">High value</span> 3. AI-guided SPL investigation — the token-reduction engine</h3>
+    <p>
+      SPL is not just a search language. For AI agents, it is a <strong>tool interface and compression engine</strong>. Instead of retrieving raw events, the agent generates targeted SPL that returns compact summaries.
+    </p>
+
+    <h4>Example agent tasks via SPL</h4>
+    <ul>
+      <li>Count failed logins by user over the last hour</li>
+      <li>Identify hosts with both authentication failures and endpoint alerts</li>
+      <li>Summarize error rates by service and deployment version</li>
+      <li>Compare current latency to last week's baseline</li>
+      <li>Return only anomalous services above threshold</li>
+      <li>Produce time-bucketed trend summaries instead of raw events</li>
+    </ul>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th>Raw search</th>
+          <th>SPL aggregation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Input</td>
+          <td>10,000 events × ~800 chars</td>
+          <td>50–200 summarized rows (top users, error counts, time buckets, anomalies)</td>
+        </tr>
+        <tr>
+          <td>Token estimate</td>
+          <td>~1.5M–2M tokens</td>
+          <td>~3,000–15,000 tokens</td>
+        </tr>
+        <tr>
+          <td><strong>Reduction</strong></td>
+          <td colspan="2"><strong>~100×–500×</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="use-case-card">
+    <h3><span class="tag success">Essential</span> 4. Governed AI action (SOAR)</h3>
+    <p>
+      Agentic AI must not take arbitrary action in production. SOAR separates <strong>model reasoning</strong> from <strong>controlled enterprise action</strong>.
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>SOAR capability</th>
+          <th>AI value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Playbooks</td><td>Approved action paths the agent can recommend or initiate</td></tr>
+        <tr><td>Human approval gates</td><td>Prevents unsafe autonomous actions</td></tr>
+        <tr><td>Case management</td><td>Maintains incident context across the workflow</td></tr>
+        <tr><td>Enrichment workflows</td><td>Standardizes investigation steps</td></tr>
+        <tr><td>Auditability</td><td>Full trace of AI recommendations and executed actions</td></tr>
+      </tbody>
+    </table>
+    <p><strong>The pattern:</strong> AI recommends → SOAR executes under policy, approval, and audit.</p>
+  </div>
+
+  <div class="use-case-card" style="border-left-color: var(--accent);">
+    <h3><span class="tag primary">Differentiator</span> 5. Cross-domain investigation</h3>
+    <p>
+      Real incidents cross security, IT operations, and application boundaries. Splunk's unified fabric—single language (SPL), single governance model (RBAC), single semantic layer (CIM)—lets an agent traverse domains without stitching APIs across point tools. This is the use case competitors struggle to match end-to-end.
+    </p>
+  </div>
+</section>
+
+<section id="metrics">
+  <h2>Most defensible metrics framework</h2>
+  <p>
+    The strongest metrics are <strong>measurable</strong>, tied to AI economics, and linked directly to Splunk capabilities. Prioritize metrics that finance, IT, and security leadership can understand and validate.
+  </p>
+
+  <h3>A. Token efficiency metrics <span class="tag primary">Headline numbers</span></h3>
+  <p>These are the most directly defensible because all three analyses converge on token reduction as the primary economic driver.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Metric</th>
+        <th>Definition</th>
+        <th>Defensible range / target</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Input-token reduction ratio</strong></td>
+        <td>Raw MELT tokens ÷ curated Splunk-context tokens</td>
+        <td><strong>100×–500×</strong> (security, SPL); <strong>100×–300×</strong> (outage/ITSI)</td>
+      </tr>
+      <tr>
+        <td><strong>Tokens per investigation</strong></td>
+        <td>Total tokens consumed for one investigation</td>
+        <td><strong>3,000–15,000</strong> curated vs. <strong>1.5M–2M+</strong> raw</td>
+      </tr>
+      <tr>
+        <td><strong>Raw events avoided</strong></td>
+        <td>Number of raw events not sent to the model</td>
+        <td>Direct compression measure per investigation</td>
+      </tr>
+      <tr>
+        <td><strong>Rows returned vs. events scanned</strong></td>
+        <td>SPL result size compared to source data volume</td>
+        <td>Shows retrieval compression via aggregation</td>
+      </tr>
+      <tr>
+        <td><strong>Number of reasoning loops</strong></td>
+        <td>AI model ↔ tool iterations per investigation</td>
+        <td>Fewer loops = lower cost + latency</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="formula">
+    AI investigation cost ≈ (model calls × tokens per call × price) + human validation time
+  </div>
+  <p>
+    ES and ITSI reduce <strong>both</strong> variables: tokens per call (through summarization, aggregation, and pre-correlation) and number of calls (by giving the agent higher-confidence context earlier).
+  </p>
+
+  <h3>B. Reasoning quality metrics</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Metric</th>
+        <th>Why it matters</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Evidence completeness</strong></td><td>AI cites relevant users, hosts, services, KPIs, notables, or episodes</td></tr>
+      <tr><td><strong>Correct entity identification</strong></td><td>Right user, asset, service, or dependency identified</td></tr>
+      <tr><td><strong>Correct timeline reconstruction</strong></td><td>Accurate sequence and onset of events</td></tr>
+      <tr><td><strong>Hallucination rate</strong></td><td>Frequency of unsupported claims—less noise = less confabulation</td></tr>
+      <tr><td><strong>Analyst acceptance rate</strong></td><td>Percentage of AI summaries accepted or lightly edited</td></tr>
+      <tr><td><strong>Follow-up search accuracy</strong></td><td>AI-recommended SPL searches are useful and actionable</td></tr>
+    </tbody>
+  </table>
+
+  <h3>C. Operational efficiency metrics</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Metric</th>
+        <th>Relevant product</th>
+        <th>Why it matters</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Mean time to triage</strong></td><td>ES, ITSI</td><td>SOC and incident efficiency</td></tr>
+      <tr><td><strong>Mean time to probable cause</strong></td><td>ITSI, Observability</td><td>Root-cause acceleration</td></tr>
+      <tr><td><strong>Mean time to resolution</strong></td><td>ITSI, SOAR</td><td>Downstream business value</td></tr>
+      <tr><td><strong>Analyst investigation time</strong></td><td>ES, ITSI</td><td>Human productivity reclaimed</td></tr>
+      <tr><td><strong>Alert-to-episode compression ratio</strong></td><td>ITSI</td><td>Noise reduction (e.g., 500 alerts → 1 episode)</td></tr>
+      <tr><td><strong>Raw-alert-to-notable compression ratio</strong></td><td>ES</td><td>Curation effectiveness</td></tr>
+      <tr><td><strong>Time to executive summary</strong></td><td>ES, ITSI</td><td>Stakeholder communication speed</td></tr>
+    </tbody>
+  </table>
+
+  <h3>D. Semantic readiness metrics (prerequisites for AI value)</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Metric</th>
+        <th>Why it matters</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>CIM mapping coverage</strong></td><td>Field consistency across sources</td></tr>
+      <tr><td><strong>Data model acceleration coverage</strong></td><td>Speed and structure of retrieval</td></tr>
+      <tr><td><strong>Asset/identity enrichment coverage</strong></td><td>Entity awareness in events</td></tr>
+      <tr><td><strong>Service model coverage</strong></td><td>Business context availability</td></tr>
+      <tr><td><strong>KPI coverage</strong></td><td>Operational state quality</td></tr>
+      <tr><td><strong>Threat intel enrichment coverage</strong></td><td>Security context quality</td></tr>
+      <tr><td><strong>Trace-to-service mapping coverage</strong></td><td>Observability reasoning quality</td></tr>
+    </tbody>
+  </table>
+  <div class="callout warn">
+    <h3>Planning note</h3>
+    <p style="margin-bottom:0;">
+      Token reduction only works if the Splunk environment is semantically ready. CIM, asset/identity, service models, and KPIs determine whether the model receives meaningful context or just compact noise.
+    </p>
+  </div>
+
+  <h3>E. Governance and safety metrics</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Metric</th>
+        <th>Why it matters</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>RBAC enforcement coverage</strong></td><td>Limits data exposure to authorized scopes</td></tr>
+      <tr><td><strong>Index-level access compliance</strong></td><td>Protects sensitive data from broad AI access</td></tr>
+      <tr><td><strong>Audit trail completeness</strong></td><td>All AI queries and actions are logged</td></tr>
+      <tr><td><strong>SOAR approval-gate usage</strong></td><td>Percentage of actions requiring human approval</td></tr>
+      <tr><td><strong>Playbook mapping rate</strong></td><td>AI recommendations tied to approved workflows</td></tr>
+      <tr><td><strong>Data minimization ratio</strong></td><td>Relevant data returned vs. total available data</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="comparison">
+  <h2>Raw MELT vs. Splunk-curated access</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Dimension</th>
+        <th>Raw MELT access by AI</th>
+        <th>Splunk-curated access by AI</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Input</strong></td>
+        <td>Raw logs, metrics, traces, events</td>
+        <td>Notables, risk objects, episodes, KPIs, service health, trace summaries</td>
+      </tr>
+      <tr>
+        <td><strong>Volume</strong></td>
+        <td>Very high (millions of tokens)</td>
+        <td>Much lower (3K–15K tokens)</td>
+      </tr>
+      <tr>
+        <td><strong>Context</strong></td>
+        <td>Sparse and inconsistent</td>
+        <td>Enriched: asset, identity, service, topology, business impact</td>
+      </tr>
+      <tr>
+        <td><strong>Semantics</strong></td>
+        <td>Vendor-specific</td>
+        <td>Normalized via CIM, data models, service models</td>
+      </tr>
+      <tr>
+        <td><strong>Cost</strong></td>
+        <td>Prohibitive / unscalable</td>
+        <td>Highly optimized (100×–500× reduction)</td>
+      </tr>
+      <tr>
+        <td><strong>Latency</strong></td>
+        <td>High (large inputs, repeated loops)</td>
+        <td>Lower (targeted retrieval, fewer loops)</td>
+      </tr>
+      <tr>
+        <td><strong>Reasoning quality</strong></td>
+        <td>Low signal-to-noise ratio</td>
+        <td>High signal-to-noise, pre-correlated</td>
+      </tr>
+      <tr>
+        <td><strong>Governance</strong></td>
+        <td>Risky if broadly exposed</td>
+        <td>RBAC, index controls, audit, SOAR approvals</td>
+      </tr>
+      <tr>
+        <td><strong>Actionability</strong></td>
+        <td>Observation only</td>
+        <td>Governed playbooks and workflows</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="products">
+  <h2>Harmonized product roles</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>What it provides</th>
+        <th>AI positioning</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Core Splunk</strong></td>
+        <td>Ingestion, indexing, search, SPL analytics, dashboards, schema-on-read flexibility</td>
+        <td>Foundation — gives the model access to machine data</td>
+      </tr>
+      <tr>
+        <td><strong>Enterprise Security</strong></td>
+        <td>CIM normalization, correlation searches, notables, risk events, asset/identity context, threat intel, MITRE ATT&amp;CK timelines</td>
+        <td>Security intelligence curation layer</td>
+      </tr>
+      <tr>
+        <td><strong>ITSI</strong></td>
+        <td>Service models, KPIs, service health, episodes, adaptive thresholds, dependency context, business-service impact</td>
+        <td>Service-aware operational intelligence layer</td>
+      </tr>
+      <tr>
+        <td><strong>Observability</strong></td>
+        <td>Metrics analytics, distributed tracing, APM, service maps, K8s/cloud visibility, trace exemplars, latency/error-span analysis</td>
+        <td>Causal context layer for modern applications</td>
+      </tr>
+      <tr>
+        <td><strong>SOAR</strong></td>
+        <td>Playbooks, approval gates, case management, enrichment, remediation workflows, auditability</td>
+        <td>Governed action layer</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Token reduction mechanisms (consolidated)</h3>
+  <ol>
+    <li><strong>SPL as a token-reduction engine</strong> — agents ask aggregated questions, not retrieve raw events</li>
+    <li><strong>CIM normalization</strong> — eliminates per-vendor schema teaching in prompts</li>
+    <li><strong>Data models &amp; acceleration</strong> — structured, fast, consistent retrieval</li>
+    <li><strong>Metrics rollups &amp; summary indexes</strong> — compress dense time-series into summaries</li>
+    <li><strong>ES correlation &amp; RBA</strong> — pre-correlated entity-level intelligence</li>
+    <li><strong>ITSI episodes &amp; KPIs</strong> — thousands of alerts compressed into one operational state</li>
+    <li><strong>Observability trace summarization</strong> — thousands of spans reduced to critical path</li>
+    <li><strong>SOAR playbooks</strong> — replace ad-hoc agent reasoning with approved action paths</li>
+  </ol>
+</section>
+
+<section id="claims">
+  <h2>Defensible external claims</h2>
+
+  <h3>Strong claims — use confidently</h3>
+  <ol>
+    <li>MELT data is not naturally AI-ready at enterprise scale.</li>
+    <li>Splunk provides a semantic curation layer—not just storage—for AI access to machine data.</li>
+    <li>ES converts raw security telemetry into notables, risk events, enriched entities, and timelines.</li>
+    <li>ITSI converts operational telemetry into episodes, KPIs, service health, and business-impact context.</li>
+    <li>SPL acts as a token-reduction engine for AI agents.</li>
+    <li>Token reduction of roughly <strong>100×–500×</strong> is plausible depending on use case and summarization level.</li>
+    <li>SOAR provides the governance layer that separates AI reasoning from controlled enterprise action.</li>
+  </ol>
+
+  <h3>Claims to phrase carefully</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Avoid</th>
+        <th>Say instead</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>"Splunk is the only platform that can do this"</td>
+        <td>"Splunk is strongly positioned because it combines broad MELT coverage, SPL-based reduction, semantic normalization, mature domain apps, and governed workflow automation"</td>
+      </tr>
+      <tr>
+        <td>"AI will automatically find root cause"</td>
+        <td>"Splunk-curated context helps AI generate faster, evidence-based root-cause hypotheses for analyst validation"</td>
+      </tr>
+      <tr>
+        <td>"Token reduction is always 500×"</td>
+        <td>"Depending on investigation type, data volume, and summarization, token reduction can plausibly range from 100× to 500×"</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="architecture">
+  <h2>Reference architecture</h2>
+  <ol>
+    <li><strong>Ingest</strong> — All MELT lands in Splunk and Observability Cloud</li>
+    <li><strong>Normalize &amp; enrich</strong> — CIM, data models, asset/identity, service models, threat intel</li>
+    <li><strong>Curate into higher-order objects</strong> — ES notables/risk events, ITSI episodes/KPIs, Observability traces/service maps</li>
+    <li><strong>Expose via governed tools</strong> — SPL, saved searches, APIs, notable/episode retrieval</li>
+    <li><strong>Agent receives compact context</strong> — summaries, top contributors, timelines, entity risk, service impact</li>
+    <li><strong>Action under governance</strong> — SOAR playbooks with human approval gates and audit trails</li>
+  </ol>
+
+  <div class="callout">
+    <h3>Recommended concise narrative</h3>
+    <p>
+      Frontier AI models are powerful reasoners, but raw MELT data is too voluminous, repetitive, semantically inconsistent, and context-poor to feed directly into models cost-effectively.
+    </p>
+    <p>
+      Splunk ES and ITSI make machine data AI-ready by converting raw telemetry into higher-order security and operational objects. ES provides notables, risk events, asset/identity context, threat intelligence, and investigation timelines. ITSI provides service health, KPIs, episodes, dependency context, and business-impact views. Observability adds trace and service-map context. SOAR provides governed action through approved playbooks.
+    </p>
+    <p>
+      The most defensible use cases are <strong>AI-assisted security investigation</strong> and <strong>AI-assisted service outage analysis</strong>. In both, Splunk reduces model input from millions of raw tokens to thousands of curated tokens—a <strong>100×–500× reduction</strong> that makes agentic AI economically viable.
+    </p>
+    <p style="margin-bottom:0;">
+      The result: lower AI cost, lower latency, fewer reasoning loops, better evidence quality, and safer action. <strong>Core Splunk gives AI access to machine data. ES, ITSI, Observability, and SOAR give AI the meaning, context, and governance needed to reason over that data effectively.</strong>
+    </p>
+  </div>
+</section>
+
+<section id="bottom-line">
+  <h2>Bottom line</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Priority</th>
+        <th>Item</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Strongest use cases</strong></td>
+        <td>(1) Security investigation via ES, (2) Outage/root-cause analysis via ITSI + Observability, (3) SPL-guided iterative investigation, (4) Governed action via SOAR, (5) Cross-domain investigation</td>
+      </tr>
+      <tr>
+        <td><strong>Headline metric</strong></td>
+        <td><strong>100×–500× token reduction</strong> — the difference between viable and unusable AI workflows</td>
+      </tr>
+      <tr>
+        <td><strong>Strategic framing</strong></td>
+        <td>ES and ITSI transform MELT from a data lake into a <strong>knowledge graph</strong>—semantically rich, entity-aware, governed, and token-efficient</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout accent">
+    <h3>Final statement</h3>
+    <p style="margin-bottom:0;">
+      Splunk is valuable for Frontier AI not because it contains the data, but because it <strong>curates the data into the meaning-rich, token-efficient, governed context that agentic models need to reason safely and affordably at enterprise scale.</strong>
+    </p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p>
+    Harmonized analysis synthesized from ChatGPT 5.5, Gemini 3.1 Flash Lite, and Claude Opus 4.7 analyses.
+    Token reduction ranges are planning assumptions based on comparable investigation scenarios—not guarantees.
+    Use institution-specific baselines for ROI modeling.
+  </p>
+</footer>
+
+</body>
+</html>

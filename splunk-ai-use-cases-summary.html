@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Splunk AI — Three Categories of Use Cases</title>
+<style>
+  :root {
+    --ink: #0a1628;
+    --navy: #0c4a6e;
+    --blue: #0369a1;
+    --light: #e0f2fe;
+    --panel: #f8fafc;
+    --border: #cbd5e1;
+    --cat1: #1d4ed8;
+    --cat2: #0d9488;
+    --cat3: #7c3aed;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    background: linear-gradient(180deg, #f1f5f9 0%, #fff 120px);
+    line-height: 1.5;
+    font-size: 15px;
+  }
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 1.5rem clamp(0.75rem, 2vw, 1.5rem) 3rem;
+  }
+  header {
+    border-bottom: 3px solid var(--navy);
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  header h1 {
+    margin: 0 0 0.35rem 0;
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: var(--navy);
+    letter-spacing: -0.02em;
+  }
+  header .sub {
+    color: #475569;
+    font-size: 0.95rem;
+    margin: 0;
+  }
+
+  h2 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 1.75rem 0 0.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  h2 .num {
+    font-size: 0.75rem;
+    font-weight: 700;
+    min-width: 1.75rem;
+    height: 1.75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    color: #fff;
+  }
+  h2 .num.c1 { background: var(--cat1); }
+  h2 .num.c2 { background: var(--cat2); }
+  h2 .num.c3 { background: var(--cat3); }
+
+  h3 {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #334155;
+    margin: 1rem 0 0.35rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  p { margin: 0 0 0.75rem 0; color: #1e293b; }
+  ul {
+    margin: 0 0 1rem 0;
+    padding-left: 1.25rem;
+  }
+  li { margin-bottom: 0.35rem; color: #334155; }
+  li strong { color: var(--ink); }
+
+  .lead {
+    font-size: 0.95rem;
+    color: #475569;
+    margin-bottom: 1.25rem;
+    padding: 0.75rem 1rem;
+    background: var(--light);
+    border-radius: 8px;
+    border-left: 4px solid var(--blue);
+  }
+
+  .exec {
+    margin-top: 2rem;
+    padding: 1rem 1.25rem;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+  .exec h2 {
+    margin-top: 0;
+    font-size: 1rem;
+  }
+  .exec h2 .num { display: none; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+  }
+  th, td {
+    text-align: left;
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  th {
+    background: #e2e8f0;
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  tr:last-child td { border-bottom: none; }
+  td:first-child {
+    font-weight: 600;
+    color: var(--navy);
+    white-space: nowrap;
+    width: 28%;
+  }
+
+  footer {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.8rem;
+    color: #64748b;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <h1>Splunk AI — Three Categories of Use Cases</h1>
+    <p class="sub">Summary for IT &amp; cybersecurity analysts and executive leadership · Source: <em>Splunk AI Use Cases</em></p>
+  </header>
+
+  <p class="lead">Splunk groups AI-related initiatives into three themes: <strong>efficiency inside the platform</strong>, <strong>governance of AI you deploy</strong>, and <strong>using machine data (and Splunk as an analytics tier) to power trustworthy AI workflows</strong>.</p>
+
+  <h2><span class="num c1" aria-hidden="true">1</span> AI efficiency — Splunk&rsquo;s built-in AI and ML</h2>
+  <p><strong>What it is.</strong> Productized AI and ML embedded in Splunk to make analysts and operators faster and to improve detection and service health—focused on <em>using</em> AI in Splunk, not only governing external AI systems.</p>
+  <h3>Analyst lens</h3>
+  <ul>
+    <li><strong>AI Toolkit</strong> in <strong>Enterprise Security (ES)</strong> and <strong>IT Service Intelligence (ITSI)</strong>: anomaly detection and baselines; ML-powered correlation (e.g., DNS exfiltration, risky commands); risk-based alerting; faster investigations. In ITSI: predictive signals for outages/degradation, adaptive KPI thresholds, alert grouping.</li>
+    <li><strong>App for Data Science and Deep Learning (DSDL)</strong>: custom ML/deep learning with containers (e.g., TensorFlow, PyTorch), JupyterLab, optional GPU.</li>
+    <li><strong>AI Assistant for SPL</strong>: natural language ↔ SPL, explanations, contextual how-to from documentation.</li>
+    <li><strong>AI Assistant for Security</strong> (in ES): triage acceleration, SPL from plain language, summaries and reports; ecosystem tie-ins (e.g., Cisco AI Defense visibility).</li>
+    <li><strong>AI for Observability</strong>: agentic assistant in Observability Cloud—natural language over observability data, RCA guidance, automation suggestions, MTTR reduction.</li>
+  </ul>
+  <h3>Leadership lens</h3>
+  <p>Shorter incident cycle time, fewer missed signals, less manual SPL and toil, and a practical path from packaged ML to custom models without requiring a large standalone data science team for every scenario.</p>
+
+  <h2><span class="num c2" aria-hidden="true">2</span> Security, availability, and governance of customer AI deployments</h2>
+  <p><strong>What it is.</strong> Using Splunk to observe, secure, and govern AI systems the organization runs—models, prompts, APIs—not only traditional infrastructure logs.</p>
+  <h3>Analyst lens</h3>
+  <ul>
+    <li><strong>Visibility:</strong> centralized logging and analysis of AI interactions (e.g., prompts, responses, backend behavior).</li>
+    <li><strong>Risk detection:</strong> data leakage, bias-related signals, hallucination-related abuse, adversarial patterns—treated as detectable security and operational events.</li>
+    <li><strong>Audit and compliance:</strong> traceable AI usage for regulatory and policy needs.</li>
+    <li><strong>Efficacy and operations:</strong> correlate AI telemetry with platform data to validate behavior; <strong>cost governance</strong> for model and API usage; <strong>resilience</strong> within safety and guardrail expectations.</li>
+  </ul>
+  <h3>Leadership lens</h3>
+  <p>The &ldquo;AI trust and governance&rdquo; story: demonstrate control, manage spend, and reduce AI-related operational and compliance risk without operating blind.</p>
+
+  <h2><span class="num c3" aria-hidden="true">3</span> Machine data and AI — Splunk as the analytics engine (e.g., MCP)</h2>
+  <p><strong>What it is.</strong> How logs, metrics, and traces improve AI outcomes, and why pushing analytics into Splunk—often via tool-use patterns such as the <strong>Splunk MCP server</strong>—can outperform feeding raw logs directly into large language models.</p>
+  <h3>Analyst lens</h3>
+  <ul>
+    <li>Machine data supports <strong>environment-specific baselines</strong>, <strong>faster root cause analysis</strong>, <strong>continuous security telemetry</strong>, <strong>model improvement over time</strong>, and <strong>noise reduction</strong> in alerts.</li>
+    <li><strong>Raw-data RAG</strong> (bulk events in the LLM context) vs <strong>tool-use / MCP RAG</strong> (LLM invokes Splunk, receives compact SPL results): the latter keeps queries deterministic, auditable, and typically <strong>exponentially cheaper</strong> in token usage; Splunk&rsquo;s MCP design (e.g., caps on execution and result size) encourages summary/table outputs over bulk raw export.</li>
+    <li><strong>Practical posture:</strong> SPL-first via MCP; sample raw events only when fine-grained evidence is needed.</li>
+  </ul>
+  <h3>Leadership lens</h3>
+  <p><strong>Massive reduction</strong> of token usage by AI to leverage the machine data in Splunk at scale, <strong>lower quantitative hallucination risk</strong> when aggregations run in Splunk, and a clearer <strong>audit trail</strong> because heavy lifting stays in the query layer.</p>
+
+  <section class="exec" aria-labelledby="exec-title">
+    <h2 id="exec-title">Executive one-line map</h2>
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Category</th>
+          <th scope="col">Executive takeaway</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1. AI efficiency</td>
+          <td>Splunk ships AI/ML that speeds SecOps and IT operations and cuts manual work.</td>
+        </tr>
+        <tr>
+          <td>2. AI governance</td>
+          <td>Splunk monitors and governs your AI stack—security, compliance, cost, and trust.</td>
+        </tr>
+        <tr>
+          <td>3. Machine data + MCP</td>
+          <td>Feed AI the right shape of data: Splunk as the deterministic analytics tier lowers cost and keeps answers trustworthy.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <footer>
+    Internal summary document. Align numbers and product names with current Splunk release documentation before external distribution.
+  </footer>
+</div>
+</body>
+</html>

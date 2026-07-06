@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI-Driven Incident Resolution - Most Defensible Metrics</title>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --surface: #1a2332;
+      --border: #2d3a4d;
+      --text: #e8edf4;
+      --muted: #9aacbf;
+      --accent: #5b9fd4;
+      --good: #7cb87c;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      line-height: 1.55;
+      max-width: 52rem;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 3rem;
+      background: var(--bg);
+      color: var(--text);
+    }
+    h1 {
+      font-size: 1.65rem;
+      font-weight: 650;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.35rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.75rem;
+    }
+    .meta {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+    }
+    h2 {
+      font-size: 1.2rem;
+      margin-top: 2rem;
+      color: var(--accent);
+      font-weight: 600;
+    }
+    h3 {
+      font-size: 1rem;
+      margin-top: 1.25rem;
+      color: var(--text);
+    }
+    p { margin: 0.75rem 0; }
+    ul { margin: 0.5rem 0 0.75rem 1.1rem; padding: 0; }
+    li { margin: 0.35rem 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      margin: 1rem 0;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.55rem 0.65rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: var(--surface);
+      color: var(--accent);
+      font-weight: 600;
+    }
+    tr:nth-child(even) td { background: rgba(26, 35, 50, 0.45); }
+    .callout {
+      background: var(--surface);
+      border-left: 4px solid var(--good);
+      padding: 1rem 1.1rem;
+      margin: 1.25rem 0;
+      border-radius: 0 6px 6px 0;
+    }
+    .callout strong { color: var(--good); }
+    .callout h2 {
+      margin: 0 0 0.65rem 0;
+      font-size: 1.2rem;
+      color: var(--good);
+      font-weight: 600;
+    }
+    .callout ul { margin-top: 0; }
+    code, .mono { font-family: ui-monospace, "Cascadia Code", monospace; font-size: 0.88em; }
+    footer {
+      margin-top: 2.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    a { color: var(--accent); }
+  </style>
+</head>
+<body>
+
+  <h1>AI-Driven Incident Resolution - Most Defensible Metrics</h1>
+  <p class="meta">Synthesized from three LLM analyses (Gemini 3.1 Flash Lite, Claude Opus 4.7, ChatGPT 4.5 Pro) of an Splunk/MCP-assisted outage investigation at the <span class="mono">&lt;XX&gt; datacenter</span>. Facility names anonymized.</p>
+
+  <div class="callout">
+    <h2>Executive Summary</h2>
+    <ul>
+      <li>Three model narratives agree Splunk-connected AI compressed multi-source evidence into a <strong>defensible, F5-centric proximate cause</strong> with <strong>quantified log corroboration</strong>.</li>
+      <li>The strongest time claim is <strong>faster MTTI/MTTK</strong> in one guided session versus <strong>~1–4+ hours</strong> up to multi-team half-day scenarios for equivalent confidence; <strong>full MTTR was not stopwatch-verified</strong>.</li>
+      <li>Illustrative manual-bridge labor was modeled at <strong>USD 5k–15k</strong> per incident class—verify internally.</li>
+      <li>Risk reduction: fewer wrong-layer actions, better escalation targeting, and reduced false “all clear” despite residual pool noise.</li>
+    </ul>
+  </div>
+
+  <h2>1. Cross-model agreement</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Theme</th>
+        <th>Consensus</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Incident shape</td>
+        <td>Broad impact (mail/macs, identity/idm): Icinga host/service down signals, Consul symptoms, LDAP/Duo/RADIUS/MFA paths affected.</td>
+      </tr>
+      <tr>
+        <td>Evidence pattern</td>
+        <td>Multi-index correlation: <span class="mono">icinga-stats</span>, <span class="mono">ei-linux</span>, firewall, and F5 logs—not single-pane guessing.</td>
+      </tr>
+      <tr>
+        <td>Proximate cause</td>
+        <td>F5 load-balancing / health-monitor path (e.g., “No members available,” pool flapping), not a generic fleet-wide host failure.</td>
+      </tr>
+      <tr>
+        <td>Ruled out</td>
+        <td>Firewall-as-primary narrative; F5 HA failover as root story; separation of a <strong>pre-existing Consul issue</strong> from this outage.</td>
+      </tr>
+      <tr>
+        <td>Human–AI pattern</td>
+        <td>Splunk/MCP tool access plus human correction (e.g., Icinga field names) → pivoted searches; value = live data + iteration.</td>
+      </tr>
+      <tr>
+        <td>Residual risk</td>
+        <td>Major waves subsided; residual pool/list flapping still warrants monitoring—reduces premature “all clear.”</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Where models diverged</h3>
+  <ul>
+    <li><strong>Gemini:</strong> Qualitative framing (minutes vs. hours; single admin).</li>
+    <li><strong>Claude Opus:</strong> Richest quantification (wave times, flap counts, dollar band, “under an hour” investigation narrative).</li>
+    <li><strong>ChatGPT 4.5 Pro:</strong> Most explicit that <strong>wall-clock MTTR is not measured</strong> in the source; separates MTTI/MTTK from full repair.</li>
+  </ul>
+
+  <h2>2. Most defensible MTTR-related metrics</h2>
+  <p>The document supports strong claims about <strong>diagnosis and investigation</strong>, not an audited <strong>end-to-end MTTR</strong> without timestamps for remediation.</p>
+
+  <h3>2a. Evidence-backed (high confidence)</h3>
+  <p>Log-derived quantities (not model opinion):</p>
+  <ul>
+    <li>Two disruption windows: <strong>08:51–08:54 EDT</strong> and <strong>09:09–09:12 EDT</strong>.</li>
+    <li>~<strong>720</strong> F5 “No members available” (or equivalent) events aligned with downstream symptoms.</li>
+    <li><strong>31</strong> hosts in <code>HOSTSTATE::DOWN</code> (Icinga); <strong>177</strong> CRITICAL service checks (per ChatGPT section).</li>
+    <li><strong>230</strong> pool-down / <strong>231</strong> pool-up transitions; Opus cites <strong>199</strong> and <strong>254</strong> status flaps across the two waves.</li>
+    <li>~<strong>22 s</strong> cascade narrative from <strong>08:51:18 EDT</strong> (Opus).</li>
+    <li>Post-check: major surge eased; <strong>residual flapping</strong> on some pools/lists.</li>
+  </ul>
+
+  <h3>2b. Investigation-time framing (estimates — label clearly)</h3>
+  <ul>
+    <li><strong>With AI + Splunk:</strong> Probable proximate cause and cross-domain story in <strong>one interactive session</strong>; diagnostic leg in <strong>minutes vs. hours</strong> (no formal stopwatch in source).</li>
+    <li><strong>Without comparable capability:</strong>
+      <ul>
+        <li>ChatGPT: <strong>1–3+ hours</strong> for similar cross-domain confidence (staffing/handoff dependent).</li>
+        <li>Opus: <strong>4–12 hours</strong> for full classic war-room handling of comparable complexity.</li>
+      </ul>
+    </li>
+  </ul>
+  <p><strong>Defensible published band:</strong> “Tens of minutes under AI-assisted Splunk vs. ~<strong>1–4+ hours</strong> for equivalent multi-source confidence in typical enterprise conditions,” with upper tail <strong>4–12 h</strong> documented as scenario-dependent.</p>
+  <p><strong>Do not</strong> label the entire outcome as measured MTTR unless you add instrumentation (open/close, change records, verification tied to remediation).</p>
+
+  <h2>3. Cost–benefit estimate (defensible band)</h2>
+  <p>Only Opus states an explicit loaded-labor range for the manual alternative:</p>
+  <ul>
+    <li><strong>~3–6 engineers</strong> on bridge for <strong>hours</strong> → illustrative <strong>USD 5,000–15,000 per comparable incident</strong> (before opportunity cost).</li>
+  </ul>
+  <p>Present as <strong>illustrative incremental labor</strong> for multi-SME bridges, not realized savings unless finance validates rates and hours. Internal benefit: multiply avoided overlap hours by your <strong>loaded hourly cost</strong>.</p>
+
+  <h2>4. Risk mitigation impact</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Risk</th>
+        <th>Mitigation described</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Wrong layer / misdiagnosis</td>
+        <td>Correlation indicated F5 monitor/pool path vs. chasing healthy hosts or unrelated Consul noise.</td>
+      </tr>
+      <tr>
+        <td>Harmful remediation</td>
+        <td>Less pressure for unnecessary reboots, Consul changes, or wrong-vendor escalation.</td>
+      </tr>
+      <tr>
+        <td>Single-source tunnel vision</td>
+        <td>Firewall-only reading not treated as primary; multi-index cross-check.</td>
+      </tr>
+      <tr>
+        <td>False closure</td>
+        <td>Recovery check plus residual flapping flagged.</td>
+      </tr>
+      <tr>
+        <td>Expert bottleneck &amp; audit</td>
+        <td>Guided AI + evidence trail; post-incident review posture (per Opus).</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <footer>
+    Generated for internal use. Source: anonymized incident write-up and three attached model analyses. File: <span class="mono">ai-driven-incident-resolution-results.html</span>
+  </footer>
+
+</body>
+</html>

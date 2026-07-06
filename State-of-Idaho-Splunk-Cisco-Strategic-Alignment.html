@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>State of Idaho — Splunk &amp; Cisco Alignment (Consolidation, Cost Reduction &amp; Modernization) · FY2024–FY2027</title>
+  <style>
+    :root {
+      --bg: #f6f8fa;
+      --surface: #ffffff;
+      --text: #1a1f2e;
+      --muted: #5c6578;
+      --accent: #0d4f8b;
+      --accent-soft: #e8f1f9;
+      --success: #0d6b4a;
+      --warning: #8a5b00;
+      --border: #d8dee6;
+      --radius: 10px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      font-size: 16px;
+      line-height: 1.55;
+      color: var(--text);
+      background: var(--bg);
+    }
+    .wrap {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 3rem;
+    }
+    header {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem 1.75rem 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,.06);
+    }
+    header h1 {
+      margin: 0 0 0.5rem;
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1.25;
+    }
+    .audience {
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin: 0 0 1rem;
+    }
+    .lede {
+      margin: 0;
+      font-size: 1.05rem;
+    }
+    section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 1px 2px rgba(0,0,0,.04);
+    }
+    section h2 {
+      margin: 0 0 1rem;
+      font-size: 1.15rem;
+      color: var(--accent);
+      border-bottom: 2px solid var(--accent-soft);
+      padding-bottom: 0.5rem;
+    }
+    section h3 {
+      margin: 1.25rem 0 0.5rem;
+      font-size: 1rem;
+      color: var(--text);
+    }
+    section h4 {
+      margin: 1rem 0 0.35rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+    section h4:first-child { margin-top: 0; }
+    ul {
+      margin: 0.5rem 0 0;
+      padding-left: 1.25rem;
+    }
+    li { margin-bottom: 0.4rem; }
+    p { margin: 0.5rem 0 0; }
+    p:first-of-type { margin-top: 0; }
+    .grid-2 {
+      display: grid;
+      gap: 1rem;
+    }
+    @media (min-width: 640px) {
+      .grid-2 { grid-template-columns: 1fr 1fr; }
+      .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+    }
+    .grid-3 {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: 1fr;
+    }
+    .card {
+      background: var(--accent-soft);
+      border-radius: 8px;
+      padding: 1rem 1.1rem;
+      border: 1px solid #c5d9eb;
+    }
+    .card h3 {
+      margin: 0 0 0.5rem;
+      font-size: 0.95rem;
+      color: var(--accent);
+    }
+    .card ul { margin-top: 0.35rem; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      margin-top: 0.75rem;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.65rem 0.75rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-weight: 600;
+    }
+    tr:nth-child(even) td { background: #fafbfc; }
+    .table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-top: 0.25rem;
+    }
+    .phase-list {
+      list-style: none;
+      padding-left: 0;
+    }
+    .phase-list li {
+      padding: 0.65rem 0 0.65rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .phase-list li:last-child { border-bottom: none; }
+    .phase-list strong { color: var(--accent); }
+    footer {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 1.5rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Splunk &amp; Cisco Capabilities — Driven by Consolidation, Cost Reduction &amp; Modernization</h1>
+      <p class="audience">For the CIO, CISO, CTO, and IT leadership</p>
+      <p class="lede">Deploying Splunk is anchored in three priorities that align with the <strong>FY2024–FY2027 ITS Strategic Plan</strong>: <strong>consolidation for efficiency</strong> (one analytics and security operations layer across agencies), <strong>cost reductions</strong> (automation, fewer redundant tools, and data-driven network and cloud decisions), and <strong>modernization</strong> (observability, cloud-smart governance, and evidence for application portfolio decisions). Cisco capabilities extend that stack for connectivity, threat intelligence, and end-to-end visibility. The sections below organize benefits, risks, and recommendations around these drivers.</p>
+    </header>
+
+    <section aria-labelledby="strategic-drivers">
+      <h2 id="strategic-drivers">Why Splunk: three strategic drivers</h2>
+      <p class="lede" style="margin-bottom:1rem">Splunk deployment is justified first by business and operational outcomes—not by tooling alone. Each driver reinforces the others: consolidation creates the platform for efficiency; efficiency and visibility expose cost takeout; modernization proceeds safely when telemetry and governance are shared.</p>
+      <div class="grid-3">
+        <div class="card">
+          <h3>1. Consolidation for efficiency</h3>
+          <ul>
+            <li><strong>Unified security operations</strong> — Splunk Enterprise Security (ES) as the central SIEM and integration layer for security data across agencies, enriched with Cisco Talos intelligence.</li>
+            <li><strong>Fewer silos, repeatable processes</strong> — Standardized correlation, dashboards, and response patterns replace inconsistent monitoring across 48 agencies.</li>
+            <li><strong>Automation at scale</strong> — Splunk SOAR shifts staff from repetitive tasks to threat hunting and higher-value work (~70% automation target for repetitive security tasks).</li>
+            <li><strong>Integrated stack alignment</strong> — Centralized logging with Cisco Secure Firewall and SD-WAN reduces fragmented tooling and supports a “Cyberfusion”-style operating model.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>2. Cost reductions</h3>
+          <ul>
+            <li><strong>Labor and toil</strong> — SOAR and automated correlation target lower MTTD/MTTR with fewer manual steps (e.g., firewall blocklist updates).</li>
+            <li><strong>Network spend</strong> — Cisco ThousandEyes validates provider performance and SLAs; empirical data supports circuit consolidation and migration off expensive legacy connectivity without sacrificing reliability.</li>
+            <li><strong>Infrastructure overhead</strong> — Integrated security and networking target ~20% reduction in hardware overhead; bandwidth optimization by identifying underutilized circuits.</li>
+            <li><strong>Cloud discipline</strong> — Splunk cloud monitoring and governance visibility help control landing-zone spend and compliance costs.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>3. Modernization</h3>
+          <ul>
+            <li><strong>Application portfolio decisions</strong> — Splunk Observability Cloud and Golden Signals inform refactor, retire, or replace (~25% downtime reduction target during modernization).</li>
+            <li><strong>Cloud-smart strategy</strong> — Combined visibility and policy (Splunk plus Cisco Umbrella) for landing zones, governance, and regulatory alignment.</li>
+            <li><strong>Responsible AI</strong> — Splunk ITSI for auditability, bias indicators, and monitoring of AI-driven decisions (Goal 7).</li>
+            <li><strong>Evidence-based change</strong> — Shared telemetry supports a shift from reactive IT to data-driven operations as legacy systems transition.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="expected-outcomes-its-plan">
+      <h2 id="expected-outcomes-its-plan">Expected Outcomes mapped to ITS Strategic Plan</h2>
+      <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Primary driver</th>
+            <th scope="col">Objective</th>
+            <th scope="col">Use case</th>
+            <th scope="col">Capability (Splunk / Cisco)</th>
+            <th scope="col">Expected outcome &amp; metrics</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Consolidation &amp; efficiency</td>
+            <td>Goal 2: Strengthen cyber security posture</td>
+            <td>Real-time threat detection and SIEM standardization</td>
+            <td>Splunk Enterprise Security (ES)</td>
+            <td>Reduce MTTD by 50% and MTTR by 40% through automated correlation.</td>
+          </tr>
+          <tr>
+            <td>Consolidation &amp; efficiency</td>
+            <td>Goal 2: Strengthen cyber security posture</td>
+            <td>Automated incident response and orchestration</td>
+            <td>Splunk SOAR</td>
+            <td>Automate 70% of repetitive security tasks (e.g., firewall blocklist updates); free staff for threat hunting.</td>
+          </tr>
+          <tr>
+            <td>Modernization</td>
+            <td>Goal 3: Modernization of applications</td>
+            <td>Monitoring technical debt and performance</td>
+            <td>Splunk Observability Cloud</td>
+            <td>Identify and remediate performance bottlenecks in legacy apps; reduce application downtime by 25% during modernization.</td>
+          </tr>
+          <tr>
+            <td>Cost reductions</td>
+            <td>Goal 4: State network cost reduction</td>
+            <td>Network path visibility and optimization</td>
+            <td>Cisco ThousandEyes</td>
+            <td>Reduce network troubleshooting time by 30%; optimize bandwidth costs by identifying underutilized circuits.</td>
+          </tr>
+          <tr>
+            <td>Consolidation &amp; cost</td>
+            <td>Goal 4: State network cost reduction</td>
+            <td>Secure, diverse connectivity</td>
+            <td>Cisco Secure Firewall &amp; SD-WAN</td>
+            <td>Consolidate security stacks; ~20% reduction in hardware overhead through integrated security and networking.</td>
+          </tr>
+          <tr>
+            <td>Modernization</td>
+            <td>Goal 6: Cloud smart strategy</td>
+            <td>Cloud governance and security monitoring</td>
+            <td>Splunk Cloud Monitoring &amp; Cisco Umbrella</td>
+            <td>100% visibility into cloud landing zones; compliance with state/federal regulations via automated audit logs.</td>
+          </tr>
+          <tr>
+            <td>Modernization</td>
+            <td>Goal 7: Foundational policy for AI</td>
+            <td>Monitoring AI model behavior and data integrity</td>
+            <td>Splunk ITSI</td>
+            <td>Detect data bias or unauthorized access to sensitive data in AI models; audit trails for 100% of AI-driven decisions.</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="risks-mitigated">
+      <h2 id="risks-mitigated">Risks mitigated</h2>
+      <p>Splunk and the extended Cisco stack address risks that would otherwise block <strong>consolidation</strong>, <strong>cost takeout</strong>, and <strong>safe modernization</strong>:</p>
+      <ul>
+        <li><strong>Delayed threat detection and prolonged incidents</strong> — Addressed by standardized SIEM, correlation, and Talos-fed threat context (Goal 2).</li>
+        <li><strong>Inconsistent or siloed security monitoring across agencies</strong> — Reduced by consolidating visibility and response patterns across the enterprise.</li>
+        <li><strong>Human error and backlog from manual security tasks</strong> — Reduced through SOAR automation for repeatable playbooks.</li>
+        <li><strong>Modernization-induced outages and performance regressions</strong> — Mitigated by observability and Golden Signals during application transition (Goal 3).</li>
+        <li><strong>Hidden network and provider failures driving cost and downtime</strong> — Mitigated by end-to-end path visibility and SLA validation (ThousandEyes, Goal 4).</li>
+        <li><strong>Fragmented security stacks and operational complexity</strong> — Partially consolidated through integrated firewall, SD-WAN, and centralized logging.</li>
+        <li><strong>Cloud sprawl, blind spots, and compliance gaps</strong> — Mitigated by unified monitoring of landing zones and secure cloud gateway controls (Goal 6).</li>
+        <li><strong>AI governance gaps (bias, unauthorized data use, weak auditability)</strong> — Addressed by model/data monitoring and decision audit trails (Goal 7).</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="barriers">
+      <h2 id="barriers">Barriers overcome</h2>
+      <p>These barriers explain why a deliberate Splunk-led consolidation matters—and how the three drivers reinforce each other:</p>
+      <ul>
+        <li><strong>Scale and fragmentation (48 agencies)</strong> — A common analytics and security operations layer helps align processes without replacing every local tool overnight.</li>
+        <li><strong>Uncertainty in the “R’s of modernization”</strong> — Observability quantifies which legacy systems merit refactor versus retirement.</li>
+        <li><strong>Cost pressure on legacy circuits and diverse connectivity / IRON integration</strong> — Empirical performance data supports moves to more agile, cost-effective options without sacrificing reliability.</li>
+        <li><strong>Reactive IT culture</strong> — Shared telemetry, automation, and proactive monitoring support a shift toward data-driven operations and “Cyberfusion”-style convergence.</li>
+        <li><strong>Policy and budget alignment in the cloud</strong> — Centralized visibility supports spend and compliance guardrails across agencies.</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="recommendations">
+      <h2 id="recommendations">Recommendations for leadership</h2>
+      <p>Sequence investments so <strong>consolidation</strong> establishes the platform, <strong>cost</strong> instruments are applied on credible telemetry, and <strong>modernization</strong> accelerates without blind spots:</p>
+      <ul class="phase-list">
+        <li><strong>Phase 1 — Consolidation &amp; efficiency:</strong> Prioritize Splunk ES across consolidated agencies to establish baseline visibility and standardized detection/response for the Cyberfusion program.</li>
+        <li><strong>Phase 2 — Cost reductions:</strong> Use Splunk ITSI and Cisco ThousandEyes to audit current network infrastructure and surface immediate cost-reduction opportunities through circuit consolidation and provider validation.</li>
+        <li><strong>Phase 3 — Modernization:</strong> Implement Splunk ITSI and extend observability/cloud governance so responsible AI and application transition programs run on measurable, auditable foundations.</li>
+      </ul>
+      <p>Integrating these platforms advances the three drivers together: a single analytics layer for efficiency, disciplined spend and operations, and safer modernization—supporting a shift from reactive IT to data-driven delivery that maximizes taxpayer value and protects citizen data.</p>
+    </section>
+
+    <footer>
+      <p>Content derived from the FY2024–FY2027 ITS Strategic Plan mapping and Splunk/Cisco capability assessment as provided. Structure emphasizes consolidation for efficiency, cost reductions, and modernization as primary Splunk deployment rationale. Metrics are targets from the source materials; validate baselines and measurement methods during program planning.</p>
+    </footer>
+  </div>
+</body>
+</html>

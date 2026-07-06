@@ -1,0 +1,100 @@
+dataset_name,cim_segment,cim_canonical_field,cim_data_type,description,amadeus_native_field,sita_native_field,inform_native_field,harmonization_notes,pii_class
+Airfield,Core,lastUpdated,int(10),Record last update epoch UTC,LAST_UPDATE_TS,flightLegLastModifiedUtc,GS_EVT_LAST_UPDATE_TS,Normalize all vendors to epoch UTC at ingest; use for Splunk _time when policy allows,internal
+Airfield,Core,flightUID,String,Stable flight leg identifier,FLIGHT_LEG_OID,flightLegUuid,GS_FLIGHT_LEG_KEY,Establish cross-vendor correlation table keyed by airline-date-flight-sequence if IDs differ,internal
+Airfield,Core,flightNumber,int(4),Marketing flight number,MARKETING_FLIGHT_NUMBER,flightNumber,FLT_NBR,Treat alphanumeric codes per airline rules before casting int where unsafe,none
+Airfield,Core,serviceType,String(1),Service type sched charter etc,SERVICE_TYPE_CODE,serviceTypeCode,SVC_TYP_CD,Map via lookup to CIM serviceTypes enumeration,none
+Airfield,Core,airline,String,IATA carrier 2-char,CARRIER_IATA_CODE,airlineDesignator,CARRIER_IATA,Uppercase strip spaces,none
+Airfield,Core,FQFC,String,Carrier plus flight number,derived_FQFC,derived_fullFlightDesignator,derived_FQFC,Prefer derive at normalization layer for consistency across vendors,none
+Airfield,Core,departureOrArrival,String(1),D or A leg direction,MOVEMENT_DIRECTION_IND,movementIndicator,ARR_DEP_IND,Map DEP ARR enums to single-char D A,none
+Airfield,Core,aircraftParkingPosition,String,Stand hardstand code,AIRCRAFT_STAND_CODE,standPosition.currentCode,PARK_POS_CD,INFORM allocation may lag Amadeus publish; define precedence,none
+Airfield,Core,passengerGate,String,Boarding gate,BOARDING_GATE_CODE,gateAssignment.boardingGate,GATE_ID,Remote gates may use suffix conventions document mapping,none
+Airfield,Core,remoteOperationalGate,String,Bus remote gate adjunct,REMOTE_GATE_CODE,gateAssignment.remoteGate,REMOTE_GATE_CD,Often null when not remote operation,none
+Airfield,Core,runway,String,Runway designation,DEPARTURE_RUNWAY_ID or ARRIVAL_RUNWAY_ID,runwayInUse.designator,RWY_DESIG,Tower or surveillance feed may override static AODB publish document precedence,tower_feed
+Airfield,Core,terminal,String,Terminal code,TERMINAL_CODE,terminalCode,TERM_CD,Map numeric vs alpha terminal ids via lookup,none
+Airfield,Core,paxBusInd,Boolean,Airside bus indicator,BUS_TRANSFER_IND,busTransferRequired,pax_bus_ind,Normalize Y N 1 0 true false to boolean,none
+Airfield,Core,registration,String,Tail number,AIRCRAFT_REGISTRATION,aircraftRegistration,AC_REG,Align tail updates with ACARS policy table,none
+Airfield,Core,agentInfo,String,Handling agent code,HANDLING_AGENT_CODE,handlingAgentCode,GH_AGENT_CD,Multi-agent flights may need array collapse rule at ingest,none
+Airfield,Core,paxCount,String or int,Passenger count final,PASSENGER_COUNT_FINAL,passengerCount.final,pax_cnt_final,May arrive only after gate close; type coerce consistently,none
+Airfield,Departures,destAirport,String(3),Destination IATA,ARRIVAL_STATION_IATA,destinationAirport.iataCode,DEST_AP_IATA,Departure-leg semantics only,none
+Airfield,Departures,SOBT,int(10),Scheduled off-block epoch,SCHED_OFF_BLOCK_DTM,scheduledOffBlockTimeUtc,SOBT_UTC,Parse ISO-8601 from SITA APIs to epoch,none
+Airfield,Departures,EOBT,int(10),Estimated off-block epoch,EST_OFF_BLOCK_DTM,estimatedOffBlockTimeUtc,EOBT_UTC,Vendor prediction refresh cadence differs document staleness,none
+Airfield,Departures,TOBT,int(10),Target off-block epoch,TARGET_OFF_BLOCK_DTM,targetOffBlockTimeUtc,TOBT_UTC,CDM commitment windows may live only on one system define master,CDM_module
+Airfield,Departures,COBT,int(10),Calculated off-block epoch,CALC_OFF_BLOCK_DTM,calculatedOffBlockTimeUtc,COBT_UTC,Alias COBT from CDM milestone export not prediction table,CDM_module
+Airfield,Departures,AOBT,int(10),Actual off-block epoch,ACT_OFF_BLOCK_DTM,actualOffBlockTimeUtc,AOBT_UTC,Precedence ACARS vs AODB vs INFORM mobile capture,ACARS
+Airfield,Departures,EGTO,int(10),Estimated gate open epoch,EST_GATE_OPEN_DTM,estimatedGateOpenUtc,gate_open_est_utc,Gate milestones may be INFORM-only if airport uses GS Gate Bridge,none
+Airfield,Departures,AGTO,int(10),Actual gate open epoch,ACT_GATE_OPEN_DTM,actualGateOpenUtc,gate_open_act_utc,,none
+Airfield,Departures,EBST,int(10),Estimated boarding start epoch,EST_BOARDING_START_DTM,estimatedBoardingStartUtc,brd_start_est_utc,,none
+Airfield,Departures,ABST,int(10),Actual boarding start epoch,ACT_BOARDING_START_DTM,actualBoardingStartUtc,brd_start_act_utc,,none
+Airfield,Departures,EGCL,int(10),Estimated gate close epoch,EST_GATE_CLOSE_DTM,estimatedGateCloseUtc,gate_close_est_utc,,none
+Airfield,Departures,AGCL,int(10),Actual gate close epoch,ACT_GATE_CLOSE_DTM,actualGateCloseUtc,gate_close_act_utc,,none
+Airfield,Departures,TSAT,int(10),Target startup approval epoch,TARGET_STARTUP_APPROVAL_DTM,targetStartupApprovalUtc,TSAT_UTC,US Surface CDM naming differs map vendor startup approval fields here,faa_surface_CDM
+Airfield,Departures,ESAT,int(10),Estimated startup approval epoch,EST_STARTUP_APPROVAL_DTM,estimatedStartupApprovalUtc,ESAT_UTC,,faa_surface_CDM
+Airfield,Departures,ASAT,int(10),Actual startup approval epoch,ACT_STARTUP_APPROVAL_DTM,actualStartupApprovalUtc,ASAT_UTC,,faa_surface_CDM
+Airfield,Departures,ATOT,int(10),Actual takeoff epoch,ACT_TAKEOFF_DTM,actualTakeOffTimeUtc,ATOT_UTC,Licensed NAS feeds may supply authoritative ATOT retain native sourcetype,SWIM_or_ACARS
+Airfield,Departures,CTOT,int(10),Calculated constraint takeoff epoch,NAS_CTOT_DTM or CONSTRAINT_TAKEOFF_DTM,calculatedTakeOffTimeUtc,CTOT_UTC,US EDCT vs CTOT retain native nas_edct_utc if policy differs,TFMS
+Airfield,Departures,TTOT,int(10),Target takeoff epoch,TARGET_TAKEOFF_DTM,targetTakeOffTimeUtc,TTOT_UTC,,CDM_module
+Airfield,Arrivals,originAirport,String(3),Origin IATA,DEPARTURE_STATION_IATA,originAirport.iataCode,ORIG_AP_IATA,Arrival-leg semantics only,none
+Airfield,Arrivals,SIBT,int(10),Scheduled on-block epoch,SCHED_ON_BLOCK_DTM,scheduledOnBlockTimeUtc,SIBT_UTC,,none
+Airfield,Arrivals,EIBT,int(10),Estimated on-block epoch,EST_ON_BLOCK_DTM,estimatedOnBlockTimeUtc,EIBT_UTC,,none
+Airfield,Arrivals,TIBT,int(10),Target on-block epoch,TARGET_ON_BLOCK_DTM,targetOnBlockTimeUtc,TIBT_UTC,,CDM_module
+Airfield,Arrivals,AIBT,int(10),Actual on-block epoch,ACT_ON_BLOCK_DTM,actualOnBlockTimeUtc,AIBT_UTC,,ACARS
+Airfield,Arrivals,ETDN,int(10),Estimated touchdown epoch,EST_TOUCHDOWN_DTM,estimatedTouchdownUtc,tdn_est_utc,Surveillance enrichment optional,ASDE_X_optional
+Airfield,Arrivals,ETEN,int(10),Estimated ten-mile epoch,EST_10NM_DTM,estimatedTenMileUtc,eten_est_utc,Define fix distance consistently across feeds,FDM_optional
+Airfield,Arrivals,ATDN,int(10),Actual touchdown epoch,ACT_TOUCHDOWN_DTM,actualTouchdownUtc,tdn_act_utc,,ASDE_X_optional
+Airfield,Arrivals,ATEN,int(10),Actual ten-mile epoch,ACT_10NM_DTM,actualTenMileUtc,aten_act_utc,,FDM_optional
+Security,PassengerPSRM,passengerName,String(<=20),PSM passenger name,PSM_PASSENGER_NAME,passengerNamePsm,PSM_NAME,CUPPS vs SITA Airport Connect vs INFORM pax modules tenant dependent,confidential_pii
+Security,PassengerPSRM,from,String,Origin label,ORIGIN_TEXT,originDescription,ORIG_TXT,,low
+Security,PassengerPSRM,to,String,Destination label,DESTINATION_TEXT,destinationDescription,DEST_TXT,,low
+Security,PassengerPSRM,airline,String,IATA carrier,CARRIER_IATA_CODE,carrierIata,CARRIER_IATA,Cross-check against Airfield.airline,none
+Security,PassengerPSRM,flightNumber,int(4),Flight number,MARKETING_FLIGHT_NUMBER,flightNumber,FLT_NBR,,none
+Security,PassengerPSRM,FQFC,String,FQFC,derived_FQFC,derived_fullFlightDesignator,derived_FQFC,,none
+Security,PassengerPSRM,seat,String,Seat,SEAT_NUMBER,seatDesignator,SEAT_CD,,low
+Security,PassengerPSRM,passengerGate,String,Gate on BP,GATE_CODE,gateCode,GATE_CD,Prefer Airfield.passengerGate for ops KPI unless BP scan is source of truth,none
+Security,PassengerPSRM,boardTime,int(4),Boarding HHMM,SCHED_BOARDING_TIME_HHMM,scheduledBoardingLocal,BRD_TM_HHMM,Normalize HHMM int vs epoch per single convention,none
+Security,PassengerPSRM,BPSOBT,String,BPS printed SOBT,BPS_PRINTED_SOBT,boardingPassPrintedSobt,BPS_SOBT_STR,Join via flightUID year absent in print artifact,none
+Security,PassengerPSRM,class,int(1),PADIS class,CABIN_CLASS_CODE,cabinClassPadis,CLS_CD_PADIS,RBD to PADIS lookup may be required,none
+Security,PassengerPSRM,dateOfIssue,String,BSP issue date,DATE_OF_ISSUE,dateOfIssue,dOI,,low
+Security,CheckpointWTMD,WTMDID,int,Detector id,N/A,deviceLaneId,GS_SEC_DEVICE_ID,Vendor-specific checkpoint telemetry not from AODB vendors,none
+Security,CheckpointWTMD,passengerDirection,int(1),Pass direction,N/A,passengerWalkDirection,walk_dir_ind,,none
+Security,CheckpointWTMD,zoneAlarm,int(20),Zone bitmap,N/A,alarmZoneBitmap,zone_alarm_mask,Document bit-endian per OEM,none
+Security,CheckpointWTMD,alarm,Boolean,Alarm flag,N/A,isAlarm,alarm_flg,,none
+Security,CheckpointWTMD,randomAlarm,Boolean,Random alarm,N/A,isRandomAlarm,random_alarm_flg,,none
+Security,CheckpointWTMD,lastUpdated,int(10),Event epoch,N/A,eventTimestampUtc,evt_ts_utc,_time candidate for checkpoint stream,internal
+Security,CheckpointXRAY,imageID,String,Scan image id,N/A,scanImageGuid,xray_img_guid,,internal
+Security,CheckpointXRAY,decision,String,clear reject,N/A,operatorDecision,xray_decision_cd,,none
+Security,CheckpointXRAY,TIP,Boolean,TIP flag,N/A,threatImageProjection,tip_ind,,none
+Security,CheckpointXRAY,lastUpdated,int(10),Event epoch,N/A,eventTimestampUtc,evt_ts_utc,_time candidate for checkpoint stream,internal
+Baggage,Hold,bagTag,int(10),Bag tag number,BAG_TAG_NUMBER,bagTagNumber,LPN_TAG_NBR,BHS vendor export names vary normalize leading zeros,none
+Baggage,Hold,passengerName,String(<=20),PSM on bag msg,PSM_PASSENGER_NAME,passengerNamePsm,BPM_PSM_NAME,SITA Type B gateway element names vary by parser version,confidential_pii
+Baggage,Hold,flightUID,String,Leg join to Airfield,FLIGHT_LEG_OID,flightLegRefUuid,GS_FLIGHT_LEG_KEY,Must align with Airfield.flightUID correlation table,internal
+Baggage,Hold,ULDID,String,ULD id,ULD_IDENTIFIER,uldReference,ULD_REF,,none
+Baggage,Hold,SOBT,int(10),SOBT for sort context,SCHED_OFF_BLOCK_DTM,scheduledOffBlockTimeUtc,SOBT_UTC,Clock sync between BHS and AODB required,none
+Baggage,Hold,FQFC,String,FQFC for sort,derived_FQFC,derived_fullFlightDesignator,derived_FQFC,,none
+Baggage,Hold,messageType,String,BSM BPM BUM,MESSAGE_TYPE_ID,typeBMessageType,MSG_TYP_CD,SITA gateway primary path for Type B at many hubs,none
+Baggage,Hold,messageAction,String,NEW UPT DEL,MESSAGE_ACTION_CD,typeBAction,MSG_ACT_CD,,none
+Baggage,Hold,level,int(1),Screening level,SCREENING_LEVEL_NBR,securityScreeningLevel,SCR_LVL_NBR,Airport tier lookup required,none
+Baggage,Hold,decision,String,clear reject,SCREENING_DECISION,securityDecision,SCR_DEC_CD,,none
+Baggage,Hold,previousLevel,int(1),Prior level,PREV_SCREENING_LEVEL_NBR,previousScreeningLevel,PREV_SCR_LVL,,none
+Baggage,Hold,nextLevel,int(1),Next level,NEXT_SCREENING_LEVEL_NBR,nextScreeningLevel,NEXT_SCR_LVL,,none
+GroundOps,Deice,type1.start,int(10),Type I start epoch,N/A,N/A,N/A,Pad vendor systems map separately to CIM GroundOps,internal
+GroundOps,Deice,type1.stop,int(10),Type I stop epoch,N/A,N/A,N/A,,internal
+GroundOps,Deice,type4.start,int(10),Type IV start epoch,N/A,N/A,N/A,,internal
+GroundOps,Deice,type4.stop,int(10),Type IV stop epoch,N/A,N/A,N/A,,internal
+GroundOps,Deice,registration,String,Tail,AIRCRAFT_REGISTRATION,aircraftRegistration,AC_REG,Same harmonization as Airfield.registration,none
+GroundOps,Deice,FQFC,String,Flight code,FULL_FLIGHT_CODE,derived_fullFlightDesignator,derived_FQFC,,none
+GroundOps,Deice,airportId,String,Station,IATA_OR_ICAO_AT_PAD,airportIataOrIcao,ARPT_CD,,none
+GroundOps,Deice,padId,String,Deice pad,N/A,N/A,GS_DEICE_PAD_ID,INFORM pad resource id when airport uses GS Ground Ops module for deice,none
+GroundOps,Deice,eventType,String,Service type,N/A,N/A,GS_DEICE_SVC_TYP,,none
+ParkingEvents,PARCS,eventTime,int(10),Event epoch,TRANSACTION_TIMESTAMP_UTC,N/A,N/A,PARCS vendor neutral fields align to ParkingEvents CIM,internal
+ParkingEvents,PARCS,vehicleId,String,Token plate,VEHICLE_TOKEN_ID,N/A,N/A,,internal
+ParkingEvents,PARCS,eventType,String,Event kind,EVENT_TYPE_CD,N/A,N/A,,none
+ParkingEvents,PARCS,eventOutcome,String,success fail,EVENT_OUTCOME_CD,N/A,N/A,,none
+ParkingEvents,PARCS,gateId,String,Device id,GATE_DEVICE_ID,N/A,N/A,,none
+ParkingEvents,PARCS,gateLocation,String,Location text,GATE_LOCATION_DESC,N/A,N/A,,none
+ParkingEvents,PARCS,gateType,String,Usage type,GATE_USAGE_TYPE,N/A,N/A,,none
+ParkingFaults,PARCS,eventTime,int(10),Fault epoch,FAULT_TIMESTAMP_UTC,N/A,N/A,,internal
+ParkingFaults,PARCS,eventType,String,Fault type,FAULT_TYPE_CD,N/A,N/A,,none
+ParkingFaults,PARCS,eventStatus,int(1),Active flag,FAULT_ACTIVE_IND,N/A,N/A,,none
+ParkingFaults,PARCS,gateId,String,Device id,GATE_DEVICE_ID,N/A,N/A,,none
+ParkingFaults,PARCS,gateLocation,String,Location,GATE_LOCATION_DESC,N/A,N/A,,none
+ParkingFaults,PARCS,gateType,String,Usage type,GATE_USAGE_TYPE,N/A,N/A,,none

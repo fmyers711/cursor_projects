@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Splunk ES &amp; Cisco SNA / XDR — East/West Security</title>
+  <style>
+    :root {
+      --bg: #f4f6f9;
+      --surface: #ffffff;
+      --text: #15202b;
+      --muted: #5a6878;
+      --accent: #1566a8;
+      --accent-soft: rgba(21, 102, 168, 0.12);
+      --border: #d8dee6;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+    .wrap {
+      max-width: 52rem;
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 3rem;
+    }
+    header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+    h1 {
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 0.5rem;
+      letter-spacing: -0.02em;
+    }
+    .sub {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin: 0;
+    }
+    ol {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: item;
+    }
+    li {
+      counter-increment: item;
+      position: relative;
+      padding: 1.15rem 1.15rem 1.15rem 3.25rem;
+      margin-bottom: 0.85rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+    li::before {
+      content: counter(item);
+      position: absolute;
+      left: 1rem;
+      top: 1.1rem;
+      width: 1.65rem;
+      height: 1.65rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      line-height: 1.65rem;
+      text-align: center;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-radius: 6px;
+    }
+    li strong {
+      display: block;
+      margin-bottom: 0.4rem;
+      color: var(--text);
+      font-size: 1rem;
+    }
+    aside {
+      margin-top: 2rem;
+      padding: 1.1rem 1.15rem;
+      background: var(--accent-soft);
+      border: 1px solid rgba(21, 102, 168, 0.22);
+      border-radius: 10px;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+    aside strong {
+      color: var(--text);
+    }
+    footer {
+      margin-top: 2rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    @media print {
+      body { background: #fff; color: #111; }
+      .wrap { max-width: none; }
+      li, aside { border-color: #ccc; background: #fff; }
+      li strong, aside strong { color: #111; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>How Splunk &amp; Splunk Enterprise Security complement Cisco SNA &amp; Cisco XDR</h1>
+      <p class="sub">Five aggregated themes for securing East/West network traffic (SIEM + network analytics + XDR)</p>
+    </header>
+
+    <ol>
+      <li>
+        <strong>MITRE ATT&amp;CK–aligned correlation for multi-stage East/West attacks</strong>
+        Splunk ES ties weak or siloed signals (perimeter → internal lateral movement, reconnaissance, credential abuse, segmentation-style behaviors) into coherent attack sequences and maps them to ATT&amp;CK tactics and techniques, so East/West activity that might not stand alone as a high-severity alert still forms a clear incident narrative.
+      </li>
+      <li>
+        <strong>Risk-based alerting to prioritize without alert fatigue</strong>
+        RBA aggregates risk from many low- or medium-confidence observations across network (including SNA-style signals), endpoint, firewall, and identity data into fewer, higher-confidence incidents so analysts focus on multi-domain intrusions rather than chasing every isolated East/West event.
+      </li>
+      <li>
+        <strong>A second, independently auditable SIEM correlation path alongside XDR</strong>
+        Splunk ingests and correlates the same broad telemetry classes (e.g., firewall, endpoint, Active Directory, Entra ID) through native paths where applicable, operating in parallel with Cisco XDR’s fusion—giving dual analytical verification and an audit-friendly record of detection logic, while enriched/high-fidelity findings (e.g., OCSF-oriented outputs from SNA) keep the Splunk side analyst-ready rather than raw-traffic heavy.
+      </li>
+      <li>
+        <strong>Complementary orchestration with Splunk SOAR</strong>
+        Splunk SOAR provides an additional, customizable automation layer (playbooks, triage, enrichment, containment) across common enforcement targets (e.g., firewall, Falcon, directory/identity) so existing Splunk-centric workflows can continue and extend response—alongside XDR—without forcing a single orchestration model.
+      </li>
+      <li>
+        <strong>Historical analysis, reporting, retention, and compliance</strong>
+        Splunk supports extended retention (e.g., 90–180+ days as policy allows), fast search and trending over East/West-relevant data, dashboards and scheduled/custom reports, and workflow-oriented investigation—supporting post-incident scope/timeline work and regulatory/reporting needs—while architectures that keep high-volume raw telemetry in tools like LogScale can still position Splunk ES as the operational SIEM layer for correlated, reportable security operations on East/West-relevant findings.
+      </li>
+    </ol>
+
+    <aside>
+      <strong>Architecture note:</strong> Where LogScale or similar is the primary bulk telemetry store, Splunk/ES becomes the complementary layer that operationalizes correlation, prioritization, investigation, and reporting on SNA/XDR-driven East/West visibility—not a wholesale replacement for specialized network analytics or XDR incident fusion.
+    </aside>
+
+    <footer>Aggregated summary · Display document</footer>
+  </div>
+</body>
+</html>

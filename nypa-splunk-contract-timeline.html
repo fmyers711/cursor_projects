@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>New York Power Authority — Splunk Three-Year Contract Planning Timeline</title>
+<style>
+  :root {
+    --ink: #0a1628;
+    --navy: #0c4a6e;
+    --blue: #0369a1;
+    --light: #e0f2fe;
+    --panel: #f8fafc;
+    --border: #cbd5e1;
+    --cyber: #1d4ed8;
+    --itops: #0d9488;
+    --dcops: #c2410c;
+    --phase4: #7c3aed;
+    --ai-lane: #6366f1;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    background: linear-gradient(180deg, #f1f5f9 0%, #fff 140px);
+    line-height: 1.45;
+    font-size: 15px;
+  }
+  .page {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 1.5rem clamp(0.75rem, 2vw, 1.5rem) 3rem;
+  }
+  header {
+    border-bottom: 3px solid var(--navy);
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  header h1 {
+    margin: 0 0 0.35rem 0;
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: var(--navy);
+    letter-spacing: -0.02em;
+  }
+  header .sub { color: #475569; font-size: 0.95rem; margin: 0 0 0.5rem 0; }
+  header .note {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin: 0;
+    padding: 0.5rem 0.75rem;
+    background: var(--light);
+    border-radius: 8px;
+    border-left: 4px solid var(--blue);
+  }
+
+  h2 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 1.75rem 0 0.75rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  h2 .tag {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background: var(--navy);
+    color: #fff;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+  }
+
+  /* Planning phases — horizontal Gantt strip (full width of .planning-align) */
+  .planning-align {
+    width: 100%;
+    max-width: 100%;
+  }
+  .timeline-wrap {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    -webkit-overflow-scrolling: touch;
+  }
+  .axis {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    margin-bottom: 0.35rem;
+    font-size: 0.72rem;
+    color: #64748b;
+    text-align: center;
+    width: 100%;
+    min-width: 100%;
+    box-sizing: border-box;
+  }
+  .axis span { padding: 0.25rem 0; border-bottom: 1px solid var(--border); }
+  .track {
+    position: relative;
+    min-height: 200px;
+    width: 100%;
+    min-width: 100%;
+    box-sizing: border-box;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.75rem 0.5rem 1rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .track-grid {
+    position: absolute;
+    inset: 0.75rem 0.5rem 1rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    pointer-events: none;
+    opacity: 0.35;
+  }
+  .track-grid div {
+    border-left: 1px dashed #e2e8f0;
+  }
+  .track-grid div:first-child { border-left: none; }
+
+  .phase-row {
+    position: relative;
+    height: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .phase-bar {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    padding: 0 0.65rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #fff;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.12);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  /* 4 months (Apr–Jul); 4 sequential phases ≈ 1 month each = 25% width */
+  .p1 { left: 0%; width: 25%; background: linear-gradient(135deg, #1e40af, #3b82f6); }
+  .p2 { left: 25%; width: 25%; background: linear-gradient(135deg, #0e7490, #14b8a6); }
+  .p3 { left: 50%; width: 25%; background: linear-gradient(135deg, #b45309, #f59e0b); }
+  .p4 { left: 75%; width: 25%; background: linear-gradient(135deg, #6d28d9, #a78bfa); }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.25rem;
+    margin-top: 0.75rem;
+    font-size: 0.8rem;
+    color: #475569;
+  }
+  .legend span { display: inline-flex; align-items: center; gap: 0.35rem; }
+  .dot { width: 10px; height: 10px; border-radius: 2px; }
+
+  /* Phases 1–4 — full content width, four equal columns, tops aligned (same starting line) */
+  .phase-details {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(0.4rem, 1.2vw, 0.75rem);
+    align-items: start;
+    width: 100%;
+    margin-top: 0.5rem;
+    box-sizing: border-box;
+  }
+  /* Medium widths: keep four columns side-by-side; scroll horizontally if needed */
+  @media (max-width: 900px) and (min-width: 521px) {
+    .phase-details {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      grid-template-columns: repeat(4, minmax(200px, 1fr));
+      padding-bottom: 0.25rem;
+    }
+  }
+  /* Stack only on very narrow viewports */
+  @media (max-width: 520px) {
+    .phase-details {
+      grid-template-columns: 1fr;
+      overflow-x: visible;
+    }
+  }
+  .phase-detail-card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 0;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.85rem clamp(0.5rem, 1vw, 0.85rem) 0.9rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    border-top: 4px solid #cbd5e1;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+  .phase-detail-card.p1 { border-top-color: #3b82f6; }
+  .phase-detail-card.p2 { border-top-color: #14b8a6; }
+  .phase-detail-card.p3 { border-top-color: #f59e0b; }
+  .phase-detail-card.p4 { border-top-color: #a78bfa; }
+  .phase-detail-card h3 {
+    margin: 0 0 0.35rem 0;
+    font-size: 0.95rem;
+    color: var(--navy);
+    line-height: 1.25;
+  }
+  .phase-detail-card .objective {
+    font-size: 0.82rem;
+    color: #64748b;
+    margin: 0 0 0.65rem 0;
+    font-style: italic;
+  }
+  .phase-detail-card ul {
+    margin: 0;
+    padding-left: 1.05rem;
+    font-size: 0.86rem;
+    color: #334155;
+  }
+  .phase-detail-card li { margin-bottom: 0.4rem; }
+  .phase-detail-card .subhead {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #475569;
+    margin: 0.65rem 0 0.3rem 0;
+  }
+  .phase-detail-card .subhead:first-of-type { margin-top: 0; }
+  .phase-detail-card.compact ul {
+    margin-top: 0.35rem;
+  }
+  .phase-detail-card.compact li { margin-bottom: 0.28rem; }
+  .phase-detail-card.compact .objective {
+    margin-bottom: 0.45rem;
+  }
+
+  /* Swim lanes */
+  .swim-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+  }
+  @media (max-width: 1200px) and (min-width: 901px) {
+    .swim-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 900px) {
+    .swim-grid { grid-template-columns: 1fr; }
+  }
+  .swim {
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--border);
+    background: #fff;
+  }
+  .swim h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.88rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .swim h4 .stripe { width: 4px; height: 1.25rem; border-radius: 2px; }
+  .swim.cyber h4 .stripe { background: var(--cyber); }
+  .swim.itops h4 .stripe { background: var(--itops); }
+  .swim.dcops h4 .stripe { background: var(--dcops); }
+  .swim.ai-lane h4 .stripe { background: var(--ai-lane); }
+  .swim p { margin: 0; font-size: 0.85rem; color: #475569; line-height: 1.45; }
+  .swim p + p { margin-top: 0.45rem; }
+  .swim ul {
+    margin: 0.4rem 0 0 0;
+    padding-left: 1.1rem;
+    font-size: 0.82rem;
+    color: #334155;
+    line-height: 1.4;
+  }
+  .swim li { margin-bottom: 0.35rem; }
+  .swim li:last-child { margin-bottom: 0; }
+  .swim .deliverable {
+    margin-top: 0.65rem;
+    padding-top: 0.55rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .swim-phase-intro {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin: 0 0 1rem 0;
+    max-width: 72ch;
+    line-height: 1.45;
+  }
+
+  /* Next steps */
+  .next {
+    margin-top: 1.5rem;
+    padding: 1rem 1.1rem;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+  .next h3 { margin: 0 0 0.5rem 0; font-size: 0.95rem; color: var(--navy); }
+  .next ol { margin: 0; padding-left: 1.2rem; font-size: 0.88rem; color: #334155; }
+  .next li { margin-bottom: 0.35rem; }
+
+  footer {
+    margin-top: 2rem;
+    font-size: 0.78rem;
+    color: #64748b;
+    border-top: 1px solid var(--border);
+    padding-top: 0.75rem;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <h1>New York Power Authority — Splunk Environment: Contract Planning Timeline</h1>
+    <p class="sub">Structured path from current-state discovery → future-state sizing → three-year strategic alignment (CyberSecurity, IT Operations, DC Ops, Splunk’s role in NYPA’s AI strategy). <strong>Planning window:</strong> April 2026 through July 2026 to produce the three-year contract proposal.</p>
+    <p class="note"><strong>Privacy &amp; compliance:</strong> Maintain data privacy and security standards when collecting infrastructure logs and security event data during discovery and sizing.</p>
+  </header>
+
+  <h2><span class="tag">Apr–Jul 2026</span> Planning horizon → three-year contract proposal</h2>
+  <p style="margin:0 0 0.75rem 0; font-size:0.9rem; color:#64748b;">Four phases run in sequence from kickoff (now) through <strong>July 2026</strong>, when the consolidated proposal (roadmap, TCO, executive summary) is targeted for delivery. Each phase is about one month on average across the four-month window.</p>
+
+  <div class="planning-align">
+  <div class="timeline-wrap">
+    <div class="axis" aria-hidden="true">
+      <span>Apr&nbsp;’26</span><span>May&nbsp;’26</span><span>Jun&nbsp;’26</span><span>Jul&nbsp;’26</span>
+    </div>
+    <div class="track">
+      <div class="track-grid" aria-hidden="true">
+        <div></div><div></div><div></div><div></div>
+      </div>
+      <div class="phase-row" style="margin-top:0.25rem;">
+        <div class="phase-bar p1" title="Phase 1">Phase 1 — Discovery &amp; baseline</div>
+      </div>
+      <div class="phase-row">
+        <div class="phase-bar p2" title="Phase 2">Phase 2 — Requirements &amp; initiatives</div>
+      </div>
+      <div class="phase-row">
+        <div class="phase-bar p3" title="Phase 3">Phase 3 — Sizing &amp; workload</div>
+      </div>
+      <div class="phase-row">
+        <div class="phase-bar p4" title="Phase 4">Phase 4 — Three-year proposal (target: Jul&nbsp;’26)</div>
+      </div>
+    </div>
+    <div class="legend">
+      <span><i class="dot" style="background:#3b82f6;"></i> Interviews, infra audit (ES, ITSI/APM), baseline metrics</span>
+      <span><i class="dot" style="background:#14b8a6;"></i> ES Premier path, ITSI/APM production KPIs, DC monitoring</span>
+      <span><i class="dot" style="background:#f59e0b;"></i> Ingestion growth, hot/warm/cold, ES Premier &amp; ITSI/APM workload model</span>
+      <span><i class="dot" style="background:#a78bfa;"></i> Roadmap, TCO, executive summary</span>
+    </div>
+  </div>
+
+  <h2 style="margin-top:1.5rem;"><span class="tag">Detail</span> Contract proposal plan — Phases 1–4</h2>
+  <p style="margin:0 0 0.75rem 0; font-size:0.9rem; color:#64748b;">What each phase produces for the Apr–Jul&nbsp;’26 proposal and the three-year contract.</p>
+
+  <div class="phase-details">
+    <div class="phase-detail-card p1 compact">
+      <h3>Phase 1 — Discovery &amp; baseline</h3>
+      <p class="objective">Map today’s Splunk footprint and maturity.</p>
+      <ul>
+        <li><strong>Interviews:</strong> Swim-lane leads (e.g., Costanza, Gottor, Niles) — pain points and priorities.</li>
+        <li><strong>Audit:</strong> ES coverage gaps; ITSI/APM, IT &amp; DC Ops.</li>
+        <li><strong>Metrics:</strong> Ingestion (GB/day), data retention requirements, search concurrency, license use — by group.</li>
+      </ul>
+    </div>
+
+    <div class="phase-detail-card p2 compact">
+      <h3>Phase 2 — Requirements &amp; mapping</h3>
+      <p class="objective">Tie Splunk scope to each department’s goals.</p>
+      <ul>
+        <li><strong>CyberSecurity:</strong> ES → ES Premier; hunting &amp; compliance data sources.</li>
+        <li><strong>IT Ops:</strong> ITSI/APM production readiness; Digital Resiliency KPIs.</li>
+        <li><strong>DC Ops:</strong> Infra monitoring for capacity and automated IR.</li>
+        <li><strong>AI:</strong> Splunk’s role in NYPA’s overall AI strategy.</li>
+      </ul>
+    </div>
+
+    <div class="phase-detail-card p3 compact">
+      <h3>Phase 3 — Sizing &amp; workload</h3>
+      <p class="objective">Size data and compute for a three-year view.</p>
+      <ul>
+        <li><strong>Ingestion:</strong> Growth (~15–20% YoY where planned); hot / warm / cold tiers.</li>
+        <li><strong>Workload:</strong> ES Premier analytics load; ITSI + APM at full deployment.</li>
+        <li><strong>Check:</strong> Sizing calculator vs. projections to hit performance SLAs.</li>
+      </ul>
+    </div>
+
+    <div class="phase-detail-card p4 compact">
+      <h3>Phase 4 — Proposal package</h3>
+      <p class="objective">Single deliverable by Jul&nbsp;’26: contract-ready plan and numbers.</p>
+      <ul>
+        <li><strong>Roadmap:</strong> ES Premier rollout; ITSI/APM go-live.</li>
+        <li><strong>TCO:</strong> Three years — licenses, support, implementation PS.</li>
+        <li><strong>Executive summary:</strong> Security &amp; resiliency story (incl. Cisco alignment as needed).</li>
+      </ul>
+    </div>
+  </div>
+  </div>
+
+  <h2><span class="tag">Phase 2</span> Requirements &amp; mapping — swim lane details</h2>
+  <p class="swim-phase-intro">Phase 2 translates discovery into scoped initiatives: each swim lane defines what must be true in the target Splunk program (data, apps, ownership, and success measures). The items below expand the Phase 2 card in the proposal plan and are the inputs to sizing (Phase 3) and the commercial proposal (Phase 4).</p>
+  <div class="swim-grid">
+    <div class="swim cyber">
+      <h4><span class="stripe"></span> Swim lane 1 — CyberSecurity</h4>
+      <p>This lane sets the security analytics and operations runway: from today’s Enterprise Security (ES) footprint to <strong>ES Premier</strong>, with explicit priorities for hunting, compliance evidence, and SOC workflow.</p>
+      <ul>
+        <li><strong>Current → target:</strong> Document which ES domains, use cases, and data models are in use today vs. required for ES Premier; note gaps in detection logic, correlation, and analyst workflows.</li>
+        <li><strong>High-value data:</strong> Onboard or prioritize sources that support <strong>advanced threat hunting</strong> (endpoint, network, identity, cloud) and <strong>compliance automation</strong> (audit-ready views, scheduled attestations, data retention requirements aligned to policy).</li>
+        <li><strong>Risk &amp; ownership:</strong> Align on who owns content lifecycle, tuning, and escalation paths so the proposal includes the right PS, training, and license scope.</li>
+      </ul>
+      <p class="deliverable">Primary deliverable: <strong>Security Posture Improvement Plan</strong> — prioritized initiatives, data dependencies, and ES Premier transition path for the three-year contract.</p>
+    </div>
+    <div class="swim itops">
+      <h4><span class="stripe"></span> Swim lane 2 — IT Operations</h4>
+      <p>This lane defines how <strong>ITSI and APM</strong> are scoped and operated in <strong>production</strong> and how leadership defines <strong>Digital Resiliency</strong> in measurable terms—so Splunk becomes the system of record for service health, not only ad hoc dashboards.</p>
+      <ul>
+        <li><strong>Current → target:</strong> Document which ITSI/APM entities, KPIs, alert thresholds, and integrations are in use today vs. required for production; note gaps in runbooks, ownership, and day-two operations.</li>
+        <li><strong>KPIs &amp; services:</strong> Agree on service definitions, dependencies, and KPIs (e.g., availability, incident/breach of SLA, critical business transactions) that roll up to “Digital Resiliency” narratives for executives.</li>
+        <li><strong>Consumption model:</strong> Clarify role-based views (NOC, app owners, leadership) and refresh cadence so Phase 3 can size search and concurrent usage realistically.</li>
+      </ul>
+      <p class="deliverable">Primary deliverable: <strong>Digital Resiliency dashboarding</strong> — KPI catalog, ITSI/APM production scope, and dashboard/alert blueprint referenced in the contract.</p>
+    </div>
+    <div class="swim dcops">
+      <h4><span class="stripe"></span> Swim lane 3 — DC Ops</h4>
+      <p>This lane covers <strong>infrastructure and facilities-aligned monitoring</strong>: capacity, faults, and change-related signals that feed planning cycles and, where appropriate, <strong>automated incident response</strong> integrated with IT workflows.</p>
+      <ul>
+        <li><strong>Capacity &amp; planning:</strong> Metrics and trends that support forecasting (compute, storage, network, environmental where applicable) and tie to Splunk ingestion and data retention requirements.</li>
+        <li><strong>Availability &amp; events:</strong> Standardized views for uptime and degradation, correlated with application and dependency layers so root-cause and customer impact are visible in one place.</li>
+        <li><strong>Automation scope:</strong> Which alerts trigger tickets, enrichment, or orchestration; guardrails and change windows so automated responses stay safe and auditable.</li>
+      </ul>
+      <p class="deliverable">Primary deliverable: <strong>Capacity &amp; availability reporting</strong> — scope of infra monitoring, reporting cadence, and automation boundaries for the proposal.</p>
+    </div>
+    <div class="swim ai-lane">
+      <h4><span class="stripe"></span> Swim lane 4 — Splunk &amp; NYPA AI strategy</h4>
+      <p>This lane connects Splunk to NYPA’s <strong>enterprise AI strategy</strong>: how operational and security data, search, and workflow in Splunk support trusted analytics, monitoring, and governance for AI initiatives—aligned to approved tools, data paths, and compliance expectations.</p>
+      <ul>
+        <li><strong>Current → target:</strong> Document how Splunk data, apps, and integrations show up in NYPA’s AI roadmap today vs. the desired state (e.g., lineage into analytics platforms, observability for AI services, audit evidence for model-related activity); note gaps in access control, retention, and operational ownership.</li>
+        <li><strong>Use cases &amp; guardrails:</strong> Prioritize Splunk-backed scenarios (resilience and security around AI workloads, usage/cost visibility, evidence for policy) and utilize Splunk as the foundational and analytics layer for machine data (MELT).</li>
+        <li><strong>Stakeholders &amp; narrative:</strong> Clarify who owns Splunk’s role in the AI story (IT, Cyber, data/office of the CIO) so the proposal can scope licenses, integrations, and PS consistently with NYPA’s AI priorities.</li>
+      </ul>
+      <p class="deliverable">Primary deliverable: <strong>Splunk–AI alignment brief</strong> — scoped use cases, governance touchpoints, and proposal hooks that tie Splunk to NYPA’s AI strategy for the three-year contract.</p>
+    </div>
+  </div>
+
+  <div class="next">
+    <h3>Next steps (implementation)</h3>
+    <ol>
+      <li><strong>Kick-off:</strong> Schedule with swim-lane leads (e.g., Victor Costanza, Jaiah Gottor, Jude Niles) to confirm Phase 1 discovery scope.</li>
+      <li><strong>Data collection:</strong> Use Splunk Monitoring Console (and related internal tools) for ingestion, license utilization, and search performance baselines.</li>
+      <li><strong>Review cycle:</strong> Present Phase 1–2 findings to stakeholders before locking Phase 3 sizing and Phase 4 financials.</li>
+    </ol>
+  </div>
+
+  <footer>
+    Planning horizon: April–July 2026 to complete Phases 1–4 and deliver the three-year contract proposal (roadmap, TCO, executive summary). Execution of that contract is out of scope for this planning artifact.
+  </footer>
+</div>
+</body>
+</html>

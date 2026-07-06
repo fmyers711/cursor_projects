@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Splunk for Quantum Computing — Consolidated Use Cases & Defensible Metrics</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --bg-mid: #eef2f8;
+      --surface: #ffffff;
+      --surface-muted: #e8eef5;
+      --border: #c5d0df;
+      --text: #1a2332;
+      --muted: #4a5568;
+      --accent: #0a60ff;
+      --heading: #0f2147;
+      --security: #0277bd;
+      --ops: #2e7d32;
+      --biz: #c05621;
+      --warn: #c62828;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, "Segoe UI", system-ui, sans-serif;
+      font-size: 16px;
+      line-height: 1.55;
+      color: var(--text);
+      background: linear-gradient(165deg, var(--bg) 0%, var(--bg-mid) 50%, var(--bg) 100%);
+      min-height: 100vh;
+    }
+    .wrap {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 4rem;
+    }
+    header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      margin: 0 0 0.5rem;
+      letter-spacing: -0.02em;
+      color: var(--heading);
+    }
+    .subtitle {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin: 0;
+    }
+    .meta {
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    h2 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin: 2rem 0 0.75rem;
+      color: var(--heading);
+      border-left: 3px solid var(--accent);
+      padding-left: 0.65rem;
+    }
+    h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin: 1.25rem 0 0.5rem;
+      color: var(--heading);
+    }
+    p { margin: 0.65rem 0; }
+    ul { margin: 0.5rem 0; padding-left: 1.25rem; }
+    li { margin: 0.35rem 0; }
+    .callout {
+      background: var(--surface-muted);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.15rem;
+      margin: 1.25rem 0;
+    }
+    .callout strong { color: var(--heading); }
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+    .pill {
+      display: inline-block;
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    .pill-sec { background: rgba(2, 119, 189, 0.12); color: var(--security); }
+    .pill-ops { background: rgba(46, 125, 50, 0.12); color: var(--ops); }
+    .pill-biz { background: rgba(192, 86, 33, 0.1); color: var(--biz); }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      margin: 0.75rem 0 1.25rem;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.55rem 0.65rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: var(--surface-muted);
+      font-weight: 600;
+      color: var(--heading);
+    }
+    td:first-child { font-weight: 500; white-space: nowrap; max-width: 200px; }
+    .tier-note {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 0.35rem;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: 0 1px 2px rgba(15, 33, 71, 0.06);
+    }
+    .card h3 {
+      margin-top: 0;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .card .tag {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      opacity: 0.85;
+    }
+    .tag-sec { color: var(--security); }
+    .tag-ops { color: var(--ops); }
+    .tag-biz { color: var(--biz); }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    @media print {
+      body { background: #fff; color: #111; }
+      .callout, .card, th { background: #f4f6f9; box-shadow: none; }
+      th, td { border-color: #ccc; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Splunk for quantum computing in higher education</h1>
+      <p class="subtitle">Consolidated best-fit use cases for security, availability, and resource optimization — with the most defensible metrics</p>
+      <p class="meta">Synthesized from three analyses (ChatGPT 5.4, Claude Haiku 4.5, Gemini 3.1), April 2026. Folder: <em>Engagements Internal / Quantum Computing / Summary analysis</em>.</p>
+    </header>
+
+    <section>
+      <h2>Executive consensus</h2>
+      <p>Across the three documents, roughly <strong>70–82%</strong> of mature HPC-oriented Splunk patterns apply to quantum computing systems (QCS) with <strong>low-to-moderate customization</strong> on the classical, scheduling, identity, and governance layers. The weakest early fit is undifferentiated anomaly scoring at the raw device-physics layer without calibration context.</p>
+      <div class="callout">
+        <strong>Most defensible positioning:</strong> Splunk as the <strong>unified correlation and observability layer</strong> for the whole quantum platform — identity, orchestration, schedulers, classical control plane, compliance, utilization, and (as telemetry matures) calibration, facility, and hybrid workflow IDs — not solely as a log sink for the QPU.
+      </div>
+      <div class="pill-row">
+        <span class="pill pill-sec">Security &amp; governance</span>
+        <span class="pill pill-ops">Availability &amp; operations</span>
+        <span class="pill pill-biz">Utilization &amp; optimization</span>
+      </div>
+    </section>
+
+    <section>
+      <h2>1. Security — best-fit use cases</h2>
+      <p>All three analyses rank identity, privileged access, and cross-domain SIEM correlation as <strong>Tier 1</strong>: direct HPC carryover with high audit value for IP, collaborators, and vendor access.</p>
+      <div class="grid-3">
+        <div class="card">
+          <h3><span class="tag tag-sec">Core</span> Identity &amp; privileged access</h3>
+          <ul>
+            <li>SSO/MFA, VPN, bastions, JupyterHub, APIs, vendor/support portals</li>
+            <li>Controller and admin-plane access; role-based job submission</li>
+            <li>Cloud provider API keys (IBM, Rigetti, Quantinuum, etc.) where used</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3><span class="tag tag-sec">Core</span> Security event correlation</h3>
+          <ul>
+            <li>Correlate IAM, endpoint, network, scheduler, and controller events</li>
+            <li>Patterns: privilege escalation → data movement; vendor login → config/firmware change</li>
+            <li>Insider and collaborator risk (stale accounts, unusual egress)</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3><span class="tag tag-sec">Extended</span> Compliance &amp; audit</h3>
+          <ul>
+            <li>Attribution for experiments; admin changes; export-control awareness where applicable</li>
+            <li>Sponsor-ready trails (NSF, DOE, institutional policy)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>2. Availability — best-fit use cases</h2>
+      <p>Availability is defended through <strong>scheduler health</strong>, <strong>classical control-plane SLOs</strong>, and <strong>end-to-end hybrid workflow latency</strong> — not abstract “quantum uptime” alone.</p>
+      <div class="grid-3">
+        <div class="card">
+          <h3><span class="tag tag-ops">Core</span> Scheduler &amp; job lifecycle</h3>
+          <ul>
+            <li>Queue depth, median wait time, success/failure rates, retries, throughput</li>
+            <li>Reservation efficiency (booked vs. used QPU time)</li>
+            <li>Transpilation time and failure rate (workflow friction before hardware)</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3><span class="tag tag-ops">Core</span> Classical infrastructure</h3>
+          <ul>
+            <li>Orchestration servers, storage, APIs, containers/Kubernetes if present</li>
+            <li>Controller errors, firmware events, orchestrator–controller latency</li>
+            <li>Service availability, MTTR, downtime impact on funded work</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3><span class="tag tag-ops">Phase 2+</span> Quantum-aware &amp; facility</h3>
+          <ul>
+            <li>Calibration age vs. job outcomes; fidelity/readout trends (baselines per calibration window)</li>
+            <li>Cryogenics, vibration, power, RF correlated with errors or failures</li>
+            <li>Workflow IDs across notebook → transpile → execute → retrieve</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>3. Resource optimization — best-fit use cases</h2>
+      <p>Scarce QPU time makes <strong>utilization, chargeback, and capacity signals</strong> the strongest business case; all three documents align on governance and funding justification.</p>
+      <ul>
+        <li><strong>Attribution:</strong> QPU runtime and shots by PI, lab, project, department, funding source</li>
+        <li><strong>Efficiency:</strong> Cost per completed experiment; reservation utilization; queue vs. demand</li>
+        <li><strong>Hybrid economics:</strong> On-prem vs. cloud cost per comparable experiment (where measurable)</li>
+        <li><strong>Research productivity:</strong> Stage-level failure rates (classical vs. QPU vs. retrieval) to target improvements</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Most defensible metrics (consolidated)</h2>
+      <p>“Defensible” = objectively measurable from logs/APIs/telemetry, explainable to IT/security/research leadership, actionable, and stable enough to trend. Thresholds below are <strong>examples</strong> from the source analyses — tune to your environment.</p>
+
+      <h3>Tier 1 — deploy first</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Theme</th>
+            <th>Metric</th>
+            <th>Why it holds up</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Security</td>
+            <td>Failed authentication attempts (e.g., per user/hour)</td>
+            <td>Standard across SSO, VPN, bastions, notebooks; brute-force and misconfiguration signal.</td>
+          </tr>
+          <tr>
+            <td>Security</td>
+            <td>Successful privileged logins &amp; admin actions</td>
+            <td>Audit-critical; ties to controllers, schedulers, firmware.</td>
+          </tr>
+          <tr>
+            <td>Security</td>
+            <td>Vendor/support session activity</td>
+            <td>Third-party risk; time-bounded maintenance windows.</td>
+          </tr>
+          <tr>
+            <td>Security</td>
+            <td>Stale/disabled accounts with activity; unusual egress</td>
+            <td>Higher-ed collaborator churn; IP and data-loss scenarios.</td>
+          </tr>
+          <tr>
+            <td>Operations</td>
+            <td>Queue depth; <strong>median</strong> wait time</td>
+            <td>Robust vs. mean for skewed queues; fairness and saturation.</td>
+          </tr>
+          <tr>
+            <td>Operations</td>
+            <td>Job success rate; failure rate; retry frequency</td>
+            <td>Direct reliability and UX indicators.</td>
+          </tr>
+          <tr>
+            <td>Operations</td>
+            <td>Scheduler throughput; reservation utilization</td>
+            <td>Capacity and booking discipline on expensive resources.</td>
+          </tr>
+          <tr>
+            <td>Operations</td>
+            <td>Service/API availability; control-server uptime; MTTR</td>
+            <td>Classic SRE measures for the classical stack and APIs.</td>
+          </tr>
+          <tr>
+            <td>Optimization</td>
+            <td>Total QPU runtime (and shots) by PI/lab/project</td>
+            <td>Governance, chargeback, and investment narrative.</td>
+          </tr>
+          <tr>
+            <td>Optimization</td>
+            <td>Cost per completed experiment; demand by department/project</td>
+            <td>ROI, hybrid cloud comparison, planning.</td>
+          </tr>
+          <tr>
+            <td>Workflow</td>
+            <td>Transpilation time &amp; transpilation failure rate</td>
+            <td>Quantum-relevant, log-friendly, explains perceived delay.</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="tier-note">Example guardrails cited in-source: failed logins &lt;5/hour/user (contextual); job failure rate &lt;5% weekly baseline; median wait &lt;2h for “standard” jobs; control server &gt;99.5% weekly; APIs &gt;99.9% monthly; reservation efficiency &gt;75%.</p>
+
+      <h3>Tier 2 — add with quantum &amp; facility telemetry</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Theme</th>
+            <th>Metric</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Device</td>
+            <td>Calibration age at execution; gate fidelity &amp; readout error trends</td>
+            <td>Explain outcomes vs. stale calibration; trend vs. static thresholds.</td>
+          </tr>
+          <tr>
+            <td>Device</td>
+            <td>T1/T2 trends; simulator vs. hardware divergence</td>
+            <td>Requires domain interpretation and stable ingestion.</td>
+          </tr>
+          <tr>
+            <td>Facility</td>
+            <td>Cryogenic temperature/pressure stability; power/vibration/RF correlation</td>
+            <td>Unique QCS value; integrate BMS/sensors.</td>
+          </tr>
+          <tr>
+            <td>Workflow</td>
+            <td>End-to-end latency (notebook → results); stage failure rates</td>
+            <td>Requires workflow/correlation IDs across systems.</td>
+          </tr>
+          <tr>
+            <td>Integrity</td>
+            <td>Metadata completeness; reproducibility reruns; audit response time</td>
+            <td>Grant and publication defensibility.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Defer or use cautiously at first</h3>
+      <ul>
+        <li>Generic anomaly scores without calibration context</li>
+        <li>Static thresholds on noisy quantum signals</li>
+        <li>Predictive maintenance before enough history and labeled events</li>
+        <li>Cross-device benchmarks on heterogeneous stacks</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Phased rollout (aligned across sources)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Phase</th>
+            <th>Focus</th>
+            <th>Examples</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1 — Weeks 1–4</td>
+            <td>Foundation</td>
+            <td>IAM &amp; privileged monitoring; scheduler/queue dashboards; SIEM correlation; compliance/chargeback baselines; classical infra health.</td>
+          </tr>
+          <tr>
+            <td>2 — Months 2–3</td>
+            <td>Quantum-aware integration</td>
+            <td>Calibration/device metrics; controller/firmware; facility/environment; hybrid workflow tracing; reproducibility metadata.</td>
+          </tr>
+          <tr>
+            <td>3 — Months 4–6</td>
+            <td>Advanced analytics</td>
+            <td>Drift and aging trends; tuned ML on top of deterministic rules; predictive maintenance when data supports it.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Data ingestion layers (summary)</h2>
+      <ol>
+        <li><strong>Identity &amp; access:</strong> IdP/MFA, VPN, bastion, SSH, notebooks, API gateways, vendor portals</li>
+        <li><strong>Classical &amp; orchestration:</strong> Schedulers, OS/app logs, K8s, transpilers, middleware, storage</li>
+        <li><strong>Quantum control:</strong> Controllers, firmware, pulse/control interfaces, health events</li>
+        <li><strong>Facility:</strong> Cryogenics, HVAC, power, vibration, RF where available</li>
+        <li><strong>Governance:</strong> Project/PI tags, usage/billing exports, ticket/change records</li>
+      </ol>
+    </section>
+
+    <footer>
+      <p>This HTML consolidates overlapping recommendations from the three Summary analysis documents. Numeric examples and ROI ranges in the source PDFs/DOCX are illustrative; validate against your contracts, vendors, and institutional baselines.</p>
+    </footer>
+  </div>
+</body>
+</html>

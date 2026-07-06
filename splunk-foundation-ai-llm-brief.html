@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Splunk as the Foundation for Third-Party AI &amp; LLMs</title>
+<style>
+  :root {
+    --bg: #0f1419;
+    --panel: #1a2332;
+    --accent: #e20074;
+    --accent2: #00a4e4;
+    --text: #e8eef5;
+    --muted: #9aa8b8;
+    --border: #2d3d52;
+    --good: #3ddc97;
+    --warn: #ffb347;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    background: linear-gradient(165deg, #0a0e14 0%, var(--bg) 40%, #111820 100%);
+    color: var(--text);
+    line-height: 1.55;
+  }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+  header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .header-brand {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 1.25rem 1.75rem;
+    margin-bottom: 0;
+  }
+  .splunk-logo {
+    height: 42px;
+    width: auto;
+    max-width: 100%;
+    display: block;
+    flex-shrink: 0;
+    /* Black SVG → light on dark background */
+    filter: brightness(0) invert(1);
+  }
+  .header-text {
+    flex: 1;
+    min-width: min(100%, 260px);
+  }
+  h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem;
+    letter-spacing: -0.02em;
+  }
+  .lede {
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 52ch;
+    margin: 0;
+  }
+  h2 {
+    font-size: 1.15rem;
+    color: var(--accent2);
+    margin: 2rem 0 0.75rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border);
+  }
+  h2:first-of-type { border-top: none; padding-top: 0; margin-top: 1.25rem; }
+  h3 { font-size: 1rem; margin: 1.25rem 0 0.5rem; color: var(--text); }
+  ul { margin: 0.25rem 0 1rem; padding-left: 1.35rem; }
+  li { margin: 0.35rem 0; }
+  .grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    margin: 1rem 0;
+  }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.1rem 1.25rem;
+  }
+  .card h3 { margin-top: 0; }
+  .metric {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .metric strong { color: var(--good); font-size: 1.05rem; }
+  .risks { border-left: 4px solid var(--accent); padding-left: 1rem; margin: 1rem 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    margin: 1rem 0 1.5rem;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 0.6rem 0.65rem;
+    text-align: left;
+    vertical-align: top;
+  }
+  th { background: #243044; color: var(--text); }
+  tr:nth-child(even) td { background: rgba(255,255,255,.03); }
+  .takeaway {
+    background: linear-gradient(135deg, rgba(226,0,116,.12), rgba(0,164,228,.08));
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem 1.4rem;
+    margin-top: 2rem;
+  }
+  .takeaway h2 { margin-top: 0; border: none; padding: 0; }
+  footer { margin-top: 2.5rem; font-size: 0.8rem; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="header-brand">
+      <img class="splunk-logo" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgdmlld0JveD0iMCAwIDMwMCAxMTMuNCI+CiAgPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDI4LjcuMSwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDEuMi4wIEJ1aWxkIDE0MikgIC0tPgogIDxnPgogICAgPGcgaWQ9ImJsYWNrIj4KICAgICAgPHBhdGggZD0iTTMyLDUzLjljMCwyLS40LDMuOC0xLjMsNS41LS44LDEuNy0yLDMuMS0zLjUsNC4zLTEuNSwxLjItMy4zLDIuMS01LjQsMi44LTIuMS43LTQuNCwxLTYuOCwxcy01LjYtLjQtOC0xLjJjLTIuNC0uOC00LjctMi4xLTcuMS00bDMuOS02LjNjMS45LDEuNiwzLjYsMi43LDUuMSwzLjQsMS41LjcsMywxLjEsNC42LDEuMXMzLjUtLjUsNC43LTEuNWMxLjItMSwxLjgtMi4zLDEuOC00cy0uMS0xLjQtLjMtMmMtLjItLjYtLjYtMS4zLTEuMi0xLjktLjYtLjctMS40LTEuNC0yLjMtMi4yLTEtLjgtMi4zLTEuOC0zLjgtMi45LTEuMi0uOC0yLjQtMS43LTMuNS0yLjYtMS4xLS45LTIuMi0xLjktMy4xLTIuOS0uOS0xLTEuNy0yLjItMi4zLTMuNC0uNi0xLjMtLjktMi43LS45LTQuM3MuNC0zLjYsMS4yLTUuMWMuOC0xLjUsMS44LTIuOCwzLjItMy45LDEuNC0xLjEsMy0xLjksNC45LTIuNSwxLjktLjYsNC0uOSw2LjItLjlzNC42LjMsNi44LjljMi4yLjYsNC4yLDEuNSw2LjEsMi43bC0zLjUsNS43Yy0yLjQtMS43LTQuOS0yLjUtNy42LTIuNXMtMywuNC00LDEuM2MtMS4xLjgtMS42LDEuOS0xLjYsMy4ycy41LDIuMywxLjQsMy4zYy45LDEsMi41LDIuMyw0LjgsNC4xLDIuMywxLjcsNC4yLDMuMiw1LjcsNC40LDEuNSwxLjMsMi43LDIuNSwzLjYsMy42LjksMS4xLDEuNSwyLjMsMS44LDMuNC4zLDEuMS41LDIuNC41LDMuOGgwWk04NC42LDQyLjhjMCwzLjYtLjUsNi44LTEuNiw5LjgtMS4xLDMtMi42LDUuNi00LjUsNy44LTEuOSwyLjItNC4yLDQtNi45LDUuMi0yLjcsMS4yLTUuNSwxLjktOC42LDEuOXMtMi43LS4xLTMuOS0uNGMtMS4yLS4yLTIuNC0uNy0zLjQtMS4yLTEuMS0uNi0yLjItMS4zLTMuMi0yLjItMS4xLS45LTIuMi0yLTMuMy0zLjR2MjguN2gtMTEuNlYyMS4yaDExLjZ2Ni42YzIuMi0yLjcsNC41LTQuNiw2LjktNS44LDIuNS0xLjIsNS4zLTEuOSw4LjYtMS45czUuNy42LDguMSwxLjdjMi40LDEuMSw0LjYsMi43LDYuMyw0LjcsMS44LDIsMy4yLDQuNCw0LjEsNy4xLDEsMi44LDEuNSw1LjgsMS41LDkuMmgwWk03Miw0My4yYzAtNC45LTEtOC45LTMtMTEuNy0yLTIuOS00LjctNC4zLTguMi00LjNzLTYuNSwxLjUtOC42LDQuNi0zLjIsNy4yLTMuMiwxMi40LDEsOS4xLDMuMSwxMS45YzIuMSwyLjksNSw0LjMsOC42LDQuM3M0LS42LDUuNC0xLjdjMS40LTEuMSwyLjYtMi41LDMuNS00LjMuOS0xLjcsMS41LTMuNiwxLjktNS42LjQtMiwuNS0zLjkuNS01LjdaTTg5LjgsNjYuNGgxMS45VjBoLTExLjl2NjYuNFpNMTUyLjcsNjYuNFYyMS4xaC0xMS45djI0LjRjMCwyLjIsMCwzLjgtLjMsNS0uMiwxLjItLjUsMi4zLS45LDMuMi0xLjcsMy43LTQuOCw1LjYtOS4zLDUuNnMtNi0xLjMtNy40LTMuOGMtLjUtMS0uOS0yLjEtMS4xLTMuMy0uMi0xLjItLjMtMy0uMy01LjN2LTI1LjloLTExLjl2MjUuN2MwLDEuOCwwLDMuMiwwLDQuNCwwLDEuMi4xLDIuMy4yLDMuMi4xLjkuMywxLjguNCwyLjUuMS43LjQsMS40LjcsMi4xLDEuMSwyLjgsMi45LDQuOSw1LjMsNi4zLDIuNCwxLjQsNS41LDIuMSw5LDIuMXM2LS42LDguNC0xLjdjMi40LTEuMSw0LjgtMi45LDcuMS01LjV2Ni4xaDEyWk0yMDQuMSw2Ni40di0yNS43YzAtMS43LDAtMy4yLDAtNC41LDAtMS4yLS4xLTIuMy0uMi0zLjItLjEtLjktLjMtMS43LS41LTIuNC0uMi0uNy0uNC0xLjQtLjYtMi0xLjEtMi43LTIuOS00LjgtNS4zLTYuMy0yLjQtMS41LTUuNS0yLjItOS0yLjJzLTYsLjYtOC40LDEuN2MtMi40LDEuMS00LjgsMi45LTcuMSw1LjV2LTYuMWgtMTIuMXY0NS4yaDEydi0yNC40YzAtMi4xLDAtMy43LjItNC45LjItMS4yLjQtMi4zLjktMy4zLjgtMS44LDItMy4yLDMuNi00LjEsMS42LS45LDMuNS0xLjQsNS44LTEuNCwzLjUsMCw2LDEuMyw3LjQsMy44LjUsMSwuOSwyLjEsMS4xLDMuMy4yLDEuMi4zLDMsLjMsNS4ydjI1LjhzMTEuOSwwLDExLjksMFpNMjUzLjUsNjMuNGwtMTguMi0yMi42LDE1LjQtMTYuNS05LTMuOS0xNiwxOC41aC0xLjNWMGgtMTJ2NjYuNGgxMnYtMjQuMWwxOCwyNSwxMS4xLTMuOWgwWk0zMDAsNDcuMnYtNy40bC0zNi4yLTE4LjF2OC4xbDI4LDEzLjYtMjgsMTMuOHY3LjlsMzYuMi0xOFpNNjkuMiw5OC44aC0yLjZjLjEtMS4zLjgtMi40LDEuOS0zLjEsMS0uNywyLjMtMSwzLjgtMXMzLjIuNSw0LjIsMS40Yy44LjgsMS4yLDEuOSwxLjIsMy4ydjkuMWgtMmwtLjMtMS44Yy0xLDEuNS0yLjUsMi4yLTQuNSwyLjJzLTIuNy0uNC0zLjYtMS4yYy0uNy0uNy0xLjEtMS42LTEuMS0yLjZzLjUtMi4zLDEuNC0zLjFjLjgtLjYsMi0xLjEsMy43LTEuNGwzLjktLjd2LS43YzAtLjktLjMtMS41LS45LTItLjUtLjQtMS4zLS42LTIuMi0uNi0xLjgsMC0yLjguNy0zLDIuMmgwczAsMCwwLDBaTTcxLjUsMTA2LjdjMSwwLDItLjMsMi43LTEsLjctLjYsMS0xLjQsMS0yLjJ2LTEuN2wtMy4zLjZjLTEuMi4yLTIsLjUtMi41LjktLjQuMy0uNS44LS41LDEuNHMuMiwxLjEuNywxLjVjLjQuMywxLjEuNSwxLjkuNWgwWk0xMTEuMiwxMDguNGg0Ljl2LTE5LjRoLTQuOXYxOS40Wk0xNDAuNSw5OC43YzAsNi4zLDQuOCwxMC4xLDEwLjMsMTAuMXMzLjgtLjUsNC40LS43di01LjJjLS4yLjEtMS44LDEtNC4xLDEtMy4yLDAtNS4zLTIuMy01LjMtNS4yczIuMi01LjIsNS4zLTUuMiwzLjkuOSw0LjEsMXYtNS4yYy0uNS0uMS0yLjEtLjctNC40LS43LTUuOSwwLTEwLjMsNC4yLTEwLjMsMTAuMWgwWk04OS44LDk4LjdjMCw2LjMsNC44LDEwLjEsMTAuMiwxMC4xczMuOC0uNSw0LjQtLjd2LTUuMmMtLjIuMS0xLjgsMS00LjEsMS0zLjIsMC01LjMtMi4zLTUuMy01LjJzMi4yLTUuMiw1LjMtNS4yLDMuOS45LDQuMSwxdi01LjJjLS41LS4xLTIuMS0uNy00LjQtLjctNS45LDAtMTAuMiw0LjItMTAuMiwxMC4xaDBaTTE3MC41LDg4LjZjLTUuOSwwLTEwLjIsNC41LTEwLjIsMTAuMXM0LjIsMTAuMSwxMC4yLDEwLjEsMTAuMi00LjUsMTAuMi0xMC4xLTQuMy0xMC4xLTEwLjItMTAuMVpNMTcwLjUsMTAzLjhjLTIuOSwwLTUtMi4zLTUtNS4xczIuMS01LjEsNS01LjEsNSwyLjMsNSw1LjEtMi4xLDUuMS01LDUuMVpNMTMxLjIsOTYuN2wtMS4zLS40Yy0uOC0uMy0yLjItLjctMi4yLTEuOHMxLjEtMS42LDMtMS42LDMuNy42LDMuOC42di00LjJjLS4xLDAtMi40LS42LTQuNy0uNi00LjUsMC03LjIsMi40LTcuMiw2LjFzMi4zLDQuOCw1LDUuN2MuMy4xLjcuMiwxLC4zLDEuMi40LDIuMi45LDIuMiwxLjlzLTEuMSwxLjgtMy41LDEuOC00LjItLjYtNC42LS43djQuNWMuMiwwLDIuNy41LDUuMi41LDMuNywwLDgtMS42LDgtNi41cy0xLjQtNC41LTQuNi01LjZoMHMwLDAsMCwwWk0yMDEuOCwxMDQuMWgyLjdjLS4yLDEuNC0uOSwyLjYtMiwzLjUtMSwuOC0yLjMsMS4yLTMuOCwxLjJzLTMuNS0uNy00LjctMmMtMS4xLTEuMi0xLjYtMi45LTEuNi00LjlzLjYtNC4yLDEuOS01LjUsMi42LTEuNyw0LjMtMS43LDMsLjQsNC4xLDEuM2MuOS44LDEuNSwxLjgsMS43LDNoLTIuN2MtLjItLjctLjUtMS4zLTEtMS43LS41LS40LTEuMi0uNi0yLS42LTEuMiwwLTIuMS41LTIuOCwxLjQtLjYuOS0uOSwyLjEtLjksMy43cy40LDIuOSwxLjIsMy44Yy43LjcsMS41LDEsMi41LDFzMS42LS4zLDIuMi0uOGMuNS0uNC44LTEuMS45LTEuOGgwWk0yMDYuNCwxMDEuN2MwLTIuNC43LTQuMywyLjItNS41LDEuMi0xLDIuNi0xLjUsNC40LTEuNXMzLjcuNyw0LjksMmMxLjEsMS4yLDEuNywyLjksMS43LDUuMXMtLjcsNC4zLTIuMSw1LjVjLTEuMiwxLTIuNywxLjUtNC41LDEuNXMtMy43LS43LTQuOS0yLjFjLTEuMS0xLjItMS43LTIuOS0xLjctNWgwWk0yMDguOSwxMDEuN2MwLDEuNy40LDMsMS4zLDMuOS43LjgsMS42LDEuMSwyLjcsMS4xczIuMy0uNSwzLTEuNWMuNy0uOSwxLTIuMSwxLTMuNnMtLjQtMy4xLTEuMy00Yy0uNy0uNy0xLjYtMS4xLTIuNy0xLjFzLTIuMy41LTMsMS41Yy0uNy45LTEsMi4xLTEsMy42aDBzMCwwLDAsMFpNMjI0LjgsMTA4LjRoLTIuNXYtMTMuM2gybC4zLDEuNmMuOS0xLjMsMi4yLTIsMy45LTJzMy4yLjcsMy45LDIuMWMuOS0xLjQsMi4zLTIuMSw0LjMtMi4xczIuNi41LDMuNCwxLjRjLjcuOCwxLjEsMiwxLjEsMy40djguOWgtMi41di04LjhjMC0xLjktLjktMi45LTIuNi0yLjlzLTEuOC40LTIuNSwxLjJjLS41LjctLjcsMS40LS43LDIuM3Y4LjFoLTIuNXYtOC44YzAtMS45LS45LTIuOS0yLjYtMi45cy0xLjguNC0yLjQsMS4xYy0uNS42LS44LDEuNC0uOCwyLjN2OC4yWk0yNDUuMSw5NWgybC40LDEuN2MxLjEtMS40LDIuNi0yLjEsNC41LTIuMXMzLjQuNyw0LjUsMi4xYy45LDEuMiwxLjQsMi45LDEuNCw0LjlzLS42LDQuMy0xLjksNS41Yy0xLjEsMS4xLTIuNSwxLjYtNC4xLDEuNnMtMy4zLS43LTQuMy0yLjF2Ni4zaC0yLjV2LTE4aDBzMCwwLDAsMFpNMjU1LjMsMTAxLjZjMC0xLjctLjQtMi45LTEuMy0zLjgtLjctLjctMS41LTEtMi42LTFzLTIuMi41LTMsMS40Yy0uNy45LTEuMSwyLTEuMSwzLjRzLjQsMywxLjMsMy45Yy43LjgsMS42LDEuMiwyLjgsMS4yczIuMy0uNSwyLjktMS40Yy42LS45LjktMi4xLjktMy43sMCwwLDAsMFpNMjYyLjcsOTguOGgtMi42Yy4xLTEuMy44LTIuNCwxLjktMy4xLDEtLjcsMi4zLTEsMy44LTFzMy4yLjUsNC4yLDEuNGMuOC44LDEuMiwxLjksMS4yLDMuMnY5LjFoLTJsLS4zLTEuOGMtMSwxLjUtMi41LDIuMi00LjUsMi4ycy0yLjctLjQtMy42LTEuMmMtLjctLjctMS4xLTEuNi0xLjEtMi42cy41LTIuMywxLjQtMy4xYy44LS42LDItMS4xLDMuNy0xLjRsMy45LS43di0uN2MwLS45LS4zLTEuNS0uOS0yLS41LS40LTEuMy0uNi0yLjItLjYtMS44LDAtMi44LjctMywyLjJoMHMwLDAsMCwwWk0yNjUsMTA2LjdjMSwwLDItLjMsMi43LTEsLjctLjYsMS0xLjQsMS0yLjJ2LTEuN2wtMy4zLjZjLTEuMi4yLTIsLjUtMi41LjktLjQuMy0uNS44LS41LDEuNHMuMiwxLjEuNywxLjVjLjQuMywxLjEuNSwxLjkuNWgwWk0yNzcuMywxMDguNGgtMi41di0xMy4zaDJsLjMsMS43YzEtMS40LDIuMy0yLjEsNC4xLTIuMXMyLjguNSwzLjYsMS41Yy43LjksMS4xLDIuMSwxLjEsMy42djguN2gtMi41di04LjdjMC0yLS45LTIuOS0yLjgtMi45cy0xLjguMy0yLjQsMWMtLjYuNi0uOSwxLjQtLjksMi40djguMmgwWk0zMDAsOTVsLTQuNiwxMy41Yy0uNiwxLjgtMS4yLDMtMS44LDMuNy0uNy44LTEuNSwxLjItMi42LDEuMnMtMSwwLTEuNi0uMnYtMmMuNS4xLjkuMiwxLjMuMnMuOS0uMiwxLjItLjZjLjMtLjQuNy0xLjIsMS4xLTIuNGgtLjhsLTQuOS0xMy4zaDIuN2wzLjgsMTEuMywzLjgtMTEuM2gyLjVzMCwwLDAsMFoiLz4KICAgIDwvZz4KICA8L2c+Cjwvc3ZnPg==" alt="Splunk" width="300" height="113">
+      <div class="header-text">
+        <h1>Splunk as the Foundation for Third-Party AI &amp; LLMs</h1>
+        <p class="lede">When AI consumes machine data (metrics, events, logs, traces), cost and quality are driven less by the model than by how data is collected, filtered, summarized, and contextualized <em>before</em> it reaches the LLM.</p>
+      </div>
+    </div>
+  </header>
+
+  <h2>Executive summary</h2>
+  <p>Splunk provides a unified machine-data foundation that reduces raw volume sent to third-party AI, improves signal quality, and enables deterministic resolution before LLM calls—lowering token spend and improving answer quality for hybrid, complex enterprises.</p>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Key savings &amp; efficiency</h3>
+      <ul>
+        <li><span class="metric"><strong>Fewer tokens</strong></span> — Aggregation, rollups, and statistical summarization limit raw data exposure to AI.</li>
+        <li><span class="metric"><strong>Higher signal-to-noise</strong></span> — Correlation, deduplication, and event grouping cut wasted processing.</li>
+        <li><span class="metric"><strong>Lower AI calls per incident</strong></span> — Many issues close via analytics alone; less reliance on reasoning.</li>
+        <li><span class="metric"><strong>Reusable intelligence</strong></span> — Historical incident context, baselines, and summaries reduce repeat AI spend.</li>
+        <li><span class="metric"><strong>Stronger TCO</strong></span> — Consolidated logs, metrics, traces, and security data in one platform.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Expected business outcomes</h3>
+      <ul>
+        <li>Faster <strong>MTTR</strong> and lower downtime cost.</li>
+        <li>Better AI answers from <strong>better summaries</strong>, not bigger prompts.</li>
+        <li><strong>Compounding returns</strong> as playbooks, baselines, and knowledge reuse accumulate.</li>
+        <li>More issues resolved <strong>pre-AI</strong>, containing operational and AI budget risk.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Risks mitigated &amp; barriers overcome</h2>
+  <div class="risks">
+    <ul>
+      <li><strong>Fragmented observability</strong> — Single platform coverage for logs, metrics, traces, and events reduces blind spots that force AI to stitch fragmented tools.</li>
+      <li><strong>Linear AI cost growth</strong> — Avoids pushing raw or semi-raw firehoses into LLM workflows where cost scales with volume.</li>
+      <li><strong>Weak cross-domain correlation</strong> — Advanced correlation and time-series analytics reduce false paths and redundant AI investigations.</li>
+      <li><strong>DIY normalization gaps</strong> — Compared with open stacks, stronger governance and lifecycle patterns reduce poorly normalized data that confuses models.</li>
+      <li><strong>Data-lake latency for ops</strong> — Not relying on batch-only stores for real-time decisions; better fit for operational AI assistance.</li>
+    </ul>
+  </div>
+
+  <h2>Splunk: economic strengths for AI</h2>
+  <ul>
+    <li><strong>Data reduction with context</strong> — Fewer events → fewer tokens; better summaries → better answers.</li>
+    <li><strong>Deterministic first</strong> — Many operational issues resolve without invoking AI.</li>
+    <li><strong>Capability completeness</strong> — Mature search, correlation, time series, AIOps, and ecosystem integrations.</li>
+  </ul>
+
+  <h2>Alternatives at a glance (economic trade-offs)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Approach</th>
+        <th>Upside</th>
+        <th>AI / ops cost angle</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Cloud-native monitoring</td>
+        <td>Lower entry cost; cloud integration</td>
+        <td>Fragmented views; limited cross-domain correlation; AI cost often grows with raw volume.</td>
+      </tr>
+      <tr>
+        <td>Metrics-first tools</td>
+        <td>Efficient time series &amp; viz</td>
+        <td>Logs/traces secondary; extra tools; AI must integrate fragments—incomplete foundation for reasoning.</td>
+      </tr>
+      <tr>
+        <td>Open source + DIY</td>
+        <td>No license fees; flexibility</td>
+        <td>High engineering/scale cost; weak normalization → AI inefficiency; lighter enterprise AIOps/governance.</td>
+      </tr>
+      <tr>
+        <td>Data lakes / warehouses</td>
+        <td>Cheap storage; historical analysis</td>
+        <td>Not real-time optimized; heavy transform before AI; weak native incident intelligence.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Comparison dimensions</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Dimension</th>
+        <th>Splunk</th>
+        <th>Cloud native</th>
+        <th>Metrics only</th>
+        <th>Open source</th>
+        <th>Data lake</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Machine data coverage</td>
+        <td>Complete</td>
+        <td>Partial</td>
+        <td>Metrics-heavy</td>
+        <td>Variable</td>
+        <td>Raw-oriented</td>
+      </tr>
+      <tr>
+        <td>Signal-to-noise control</td>
+        <td>High</td>
+        <td>Medium</td>
+        <td>Medium</td>
+        <td>Low</td>
+        <td>Low</td>
+      </tr>
+      <tr>
+        <td>AI token efficiency</td>
+        <td>High</td>
+        <td>Low–medium</td>
+        <td>Medium</td>
+        <td>Low</td>
+        <td>Low</td>
+      </tr>
+      <tr>
+        <td>Incident correlation</td>
+        <td>Advanced</td>
+        <td>Limited</td>
+        <td>Limited</td>
+        <td>DIY</td>
+        <td>Minimal</td>
+      </tr>
+      <tr>
+        <td>Long-term cost control</td>
+        <td>Strong</td>
+        <td>Weak</td>
+        <td>Medium</td>
+        <td>Weak</td>
+        <td>Medium</td>
+      </tr>
+      <tr>
+        <td>Enterprise readiness</td>
+        <td>High</td>
+        <td>Medium</td>
+        <td>Medium</td>
+        <td>Low–medium</td>
+        <td>Medium</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="takeaway">
+    <h2>Executive takeaway</h2>
+    <p><strong>Splunk is economically efficient for AI because it minimizes the most expensive part of AI: reasoning over unnecessary data.</strong> Completeness across logs, metrics, traces, and events supports scalable, cost-controlled AI-driven recommendations—especially in complex hybrid environments—while mitigating fragmentation, raw-data firehoses, and operational latency risks common to alternative patterns.</p>
+  </div>
+
+  <footer>
+    <p>Summary derived from provided briefing materials.</p>
+  </footer>
+</div>
+</body>
+</html>
