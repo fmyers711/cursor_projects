@@ -741,6 +741,245 @@
   </div>
 </section>
 
+<section id="competitive">
+  <h2>Competitive landscape — Frontier AI access to MELT data</h2>
+  <p>
+    State AI programs, campus research labs, and SOC modernization initiatives are converging on the same requirement: <strong>frontier models need governed access to Metrics, Events, Logs, and Traces (MELT)</strong>—not generic documents, but environment-specific operational evidence. Most alternative approaches solve storage or chat, not the <em>semantic access layer</em> frontier models require. The result is a widening capability gap across efficiency, cost, and reasoning quality.
+  </p>
+
+  <div class="callout warn">
+    <h3>The core gap</h3>
+    <p style="margin:0;">
+      <strong>Frontier AI models are powerful reasoners, but raw MELT is not AI-ready at enterprise scale.</strong> It is too voluminous, repetitive, context-poor, and semantically inconsistent to feed directly into agentic models—or into naive retrieval pipelines—without prohibitive token cost, latency, and hallucination risk.
+    </p>
+  </div>
+
+  <h3>Why raw MELT breaks AI economics</h3>
+  <p>
+  Machine telemetry carries structural properties that collide with frontier-model constraints: finite context windows, per-token pricing, multi-step reasoning loops, and the need for governed, auditable access in SLED environments.
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Structural challenge</th>
+        <th>Effect on AI efficiency</th>
+        <th>Cost / scale impact</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Massive volume</strong></td>
+        <td>Billions of events/day exceed any context window; agents must iterate in loops</td>
+        <td>Each loop multiplies token spend and wall-clock latency</td>
+      </tr>
+      <tr>
+        <td><strong>Repetitive structure</strong></td>
+        <td>90%+ of tokens repeat boilerplate fields (timestamps, hostnames, sourcetypes, JSON keys)</td>
+        <td>Paying frontier-model rates for noise, not signal</td>
+      </tr>
+      <tr>
+        <td><strong>Context-poor at event level</strong></td>
+        <td>Single events lack causal, entity, or business meaning—model must reconstruct correlation</td>
+        <td>More reasoning loops, lower first-pass accuracy</td>
+      </tr>
+      <tr>
+        <td><strong>Semantically inconsistent</strong></td>
+        <td>Vendor-specific schemas force re-learning per source in every prompt or RAG chunk</td>
+        <td>Higher prompt complexity, brittle retrieval, schema drift</td>
+      </tr>
+      <tr>
+        <td><strong>Causally fragmented</strong></td>
+        <td>Root cause spans sources, time windows, and entities across siloed stores</td>
+        <td>Investigations stall or produce plausible-but-wrong narratives</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="stat-row">
+    <div class="stat-item">
+      <span class="metric-highlight">1.5M–2M+</span>
+      <span class="metric-label">tokens per raw security investigation (typical estimate)</span>
+    </div>
+    <div class="stat-item">
+      <span class="metric-highlight">3K–15K</span>
+      <span class="metric-label">tokens with curated, promoted, or aggregated context</span>
+    </div>
+    <div class="stat-item">
+      <span class="metric-highlight">100×–500×</span>
+      <span class="metric-label">defensible input-token reduction vs. raw MELT retrieval</span>
+    </div>
+  </div>
+
+  <h3>Competitive approaches — capability gaps</h3>
+  <p>
+    Buyers evaluating AI for security, operations, or campus analytics typically consider four alternatives. Each leaves a distinct gap when frontier models need <em>meaning</em>, not just <em>more data</em>.
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Approach</th>
+        <th>What it does well</th>
+        <th>Capability gap for Frontier AI</th>
+        <th>Efficiency / cost exposure</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Hot-index everything</strong><br><span class="tag muted">Index all MELT in Tier A</span></td>
+        <td>Fast search, real-time detections, mature SPL ecosystem</td>
+        <td>Still dumps high-volume raw events into AI context unless curated upstream; no economic path to retain everything</td>
+        <td><span class="bool-no">Prohibitive</span> — storage + indexing + AI token cost on full event streams</td>
+      </tr>
+      <tr>
+        <td><strong>Unmanaged cloud lake + raw RAG</strong><br><span class="tag muted">S3 / blob dump → embeddings</span></td>
+        <td>Cheap landing, familiar to data teams</td>
+        <td>No catalog, no promotion lifecycle, no semantic normalization; retrieval returns repetitive log chunks with no entity or business context</td>
+        <td><span class="bool-no">Prohibitive</span> — embedding millions of near-duplicate chunks; re-embed on schema change; frontier context stuffed with boilerplate</td>
+      </tr>
+      <tr>
+        <td><strong>Vector DB over raw logs</strong><br><span class="tag muted">Chunk → embed → retrieve</span></td>
+        <td>Semantic-ish search over unstructured text</td>
+        <td>Chunks inherit repetitive structure; no correlation, risk objects, episodes, or KPIs; poor temporal/causal reasoning across chunks</td>
+        <td><span class="bool-no">High</span> — retrieval widens context with redundant fields; each investigation re-pays token cost for the same patterns</td>
+      </tr>
+      <tr>
+        <td><strong>Siloed SIEM / observability AI</strong><br><span class="tag muted">Point-tool copilots</span></td>
+        <td>Domain-specific summaries within one product boundary</td>
+        <td>Cannot cross agency, campus, security, and ops silos; vendor-specific semantics do not transfer to frontier agents</td>
+        <td><span class="bool-partial">Partial</span> — efficient inside one silo; breaks on cross-domain incidents SLED faces daily</td>
+      </tr>
+      <tr>
+        <td><strong>CDF + MDL tiered lifecycle</strong><br><span class="tag success">Land → Discover → Promote → Search / Power AI</span></td>
+        <td>Economic retention, governed promotion, federated search, open AI formats (Parquet, vectors, MCP)</td>
+        <td>Requires semantic readiness (CIM, service models, KPIs) for maximum curation benefit—not a magic dump-and-ask layer</td>
+        <td><span class="bool-yes">Optimized</span> — pay landing cost once; promote and query only mission-relevant slices; compress before model sees data</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>The raw RAG tax — why repetitive data is expensive twice</h3>
+  <p>
+    <strong>Raw RAG</strong>—embedding and retrieving unstructured log chunks without upstream curation—is the most common DIY pattern in SLED AI pilots. It fails on MELT for two compounding reasons:
+  </p>
+  <ol>
+    <li><strong>Indexing tax</strong> — Every near-duplicate event field (hostname, sourcetype, JSON envelope) is embedded and stored again. A 90-day security corpus can generate millions of chunks where &gt;90% of token mass is boilerplate.</li>
+    <li><strong>Inference tax</strong> — Retrieved chunks are injected into frontier-model context at per-token rates. Repetitive structure means the model spends capacity parsing format, not reasoning over evidence.</li>
+  </ol>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Cost layer</th>
+        <th>Raw RAG on MELT</th>
+        <th>CDF / MDL curated access</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Data landing</strong></td>
+        <td>Cheap storage—but unmanaged, no governance catalog</td>
+        <td>Economic MDL landing with catalog, RBAC, and promotion paths</td>
+      </tr>
+      <tr>
+        <td><strong>Retrieval prep</strong></td>
+        <td>Re-embed on ingest, schema change, or time-window shift</td>
+        <td>Promote structured slices (Analytics Table, Parquet, vector indexes) once; query via SPL, APIs, or MCP</td>
+      </tr>
+      <tr>
+        <td><strong>Per-investigation tokens</strong></td>
+        <td>~1.5M–2M+ (raw events or chunky RAG hits)</td>
+        <td>~3K–15K (aggregated, promoted, or semantically enriched context)</td>
+      </tr>
+      <tr>
+        <td><strong>Reasoning loops</strong></td>
+        <td>Many—model must correlate, filter, and disambiguate noisy input</td>
+        <td>Fewer—search-in-place and SPL aggregation return summaries, not raw firehoses</td>
+      </tr>
+      <tr>
+        <td><strong>Governance</strong></td>
+        <td>Hard to enforce CJIS, FERPA, or agency-scoped access on arbitrary chunks</td>
+        <td>Controlled promotion, audit trails, and index-level RBAC before AI consumption</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout accent">
+    <h3>Formula buyers can understand</h3>
+    <p style="margin:0;font-family:ui-monospace,monospace;font-size:0.92rem;">
+      AI investigation cost ≈ (model calls × tokens per call × price per token) + human validation time
+    </p>
+    <p style="margin:0.75rem 0 0;">
+      Raw RAG inflates <strong>both</strong> variables. CDF reduces tokens per call through promotion, aggregation, and open-format export—and reduces call count by giving agents higher-confidence, pre-discoverable context earlier.
+    </p>
+  </div>
+
+  <h3>Raw MELT vs. CDF-governed access</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Dimension</th>
+        <th>Raw MELT / raw RAG</th>
+        <th>CDF + MDL governed access</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Input to model</strong></td>
+        <td>Raw logs, metrics, traces, repetitive chunks</td>
+        <td>Promoted analytics slices, Parquet summaries, vector indexes, SPL aggregations, MCP-governed tool results</td>
+      </tr>
+      <tr>
+        <td><strong>Volume per query</strong></td>
+        <td>Very high (millions of tokens possible)</td>
+        <td>Targeted (3K–15K curated context typical)</td>
+      </tr>
+      <tr>
+        <td><strong>Semantic consistency</strong></td>
+        <td>Vendor-specific; schema teaching in every prompt</td>
+        <td>Normalized via CIM/OCSF, catalogued fields, optional ES/ITSI enrichment on promoted tiers</td>
+      </tr>
+      <tr>
+        <td><strong>Retention economics</strong></td>
+        <td>Drop data or pay twice (lake + embeddings + inference)</td>
+        <td>Land all in MDL at low cost; pay premium only on promote, scan, or query</td>
+      </tr>
+      <tr>
+        <td><strong>Cross-silo access</strong></td>
+        <td>Separate RAG indexes per silo; manual stitching</td>
+        <td>Federated search across Splunk, MDL tiers, S3, Security Lake</td>
+      </tr>
+      <tr>
+        <td><strong>Reasoning quality</strong></td>
+        <td>Low signal-to-noise; hallucination on sparse events</td>
+        <td>Higher signal-to-noise when paired with semantic curation (ES, ITSI, SPL)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Competitive messaging</h3>
+  <div class="quote-block">
+    "Dumping logs into a vector database is not an AI strategy—it is an expensive way to teach the model your JSON schema over and over."
+    <br><em>vs. unmanaged lake + raw RAG</em>
+  </div>
+  <div class="quote-block">
+    "Frontier models do not need more events. They need the right evidence—governed, compressed, and semantically consistent. That is what Land → Discover → Promote delivers."
+    <br><em>vs. hot-index-everything and siloed copilots</em>
+  </div>
+  <div class="quote-block">
+    "Retain everything economically in MDL, promote only what the mission needs, and feed frontier agents curated context—not a repetitive raw firehose."
+    <br><em>CDF differentiation for SLED AI programs</em>
+  </div>
+
+  <div class="callout">
+    <h3>Planning note for sellers</h3>
+    <p style="margin:0;">
+      Token reduction claims are strongest when the environment has <strong>semantic readiness</strong>—CIM coverage, asset/identity enrichment, service models, and KPIs on promoted tiers. MDL solves the retention and promotion economics; ES, ITSI, and SPL solve the meaning layer. Position both when competing against raw RAG pilots.
+    </p>
+  </div>
+</section>
+
 <section id="patterns">
   <h2>Four patterns for MDL + federation</h2>
   <p>Choose the right capability level for each data type and mission—without one-size-fits-all indexing costs.</p>
