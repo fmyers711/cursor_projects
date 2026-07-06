@@ -254,8 +254,8 @@
   <ul>
     <li><a href="#executive">Executive summary</a></li>
     <li><a href="#challenge">Governance challenge</a></li>
-    <li><a href="#frameworks">Two frameworks</a></li>
-    <li><a href="#better-together">Better together</a></li>
+    <li><a href="#compliance-standards">Compliance standards</a></li>
+    <li><a href="#barriers-adoption">Barriers to adoption</a></li>
     <li><a href="#stack">Five-asset stack</a></li>
     <li><a href="#framework-narrative">RMF + ATLAS narrative</a></li>
     <li><a href="#nist-rmf">NIST AI RMF mapping</a></li>
@@ -302,110 +302,148 @@
     </ul>
   </div>
 
-  <h3>Who owns which framework?</h3>
+  <h3 id="compliance-standards">Emerging AI compliance standards</h3>
+  <p>
+    AI governance is no longer optional for state government and higher education. A converging set of federal directives, state legislation, sector regulations, and procurement requirements now expect organizations to <strong>identify AI systems, assess risk, demonstrate controls, and respond to incidents</strong>—not merely publish acceptable-use policies.
+  </p>
+
+  <h4>What is driving mandates today</h4>
+  <ul>
+    <li><strong>Federal alignment</strong> — Executive and agency guidance increasingly reference NIST AI RMF as the baseline for trustworthy AI. OMB and agency-specific memos require inventory, impact assessment, and continuous monitoring for high-impact AI use cases.</li>
+    <li><strong>State AI legislation</strong> — Dozens of states have enacted or proposed AI transparency, bias, and accountability laws covering government use, automated decision-making, and vendor disclosure.</li>
+    <li><strong>Sector overlays</strong> — CJIS (criminal justice data), FERPA (student records), HIPAA (health), and state privacy statutes impose data-handling constraints that AI inference, agent tools, and RAG pipelines must respect.</li>
+    <li><strong>Procurement and audit pressure</strong> — RFPs, IG reviews, and accreditation bodies increasingly ask for framework-mapped evidence: inventory, evaluation results, security testing, and incident response records.</li>
+    <li><strong>International influence</strong> — The EU AI Act and ISO/IEC 42001 (AI management systems) shape vendor expectations and enterprise AI program design even for U.S. public-sector organizations.</li>
+  </ul>
+
+  <div class="callout accent">
+    <h3>The compliance gap most SLED organizations face</h3>
+    <p>
+      Mandates require <strong>evidence</strong>—inventories, metrics, test results, audit trails, and incident records. Most organizations have policy language aligned to NIST but lack the telemetry, security controls, and operational workflows to produce defensible proof at statewide or system-wide scale.
+    </p>
+  </div>
+
+  <h3>Primary AI project risk areas — and how the frameworks address them</h3>
+  <p>
+    NIST AI RMF and MITRE ATLAS are complementary, not competing. RMF answers <em>"Are we managing AI risk responsibly?"</em> for auditors, legal, and executive leadership. ATLAS answers <em>"How is AI attacked, and can we defend it?"</em> for security operations and threat modeling. Together they cover the full lifecycle of AI risk—from governance and measurement through adversarial defense.
+  </p>
+
   <table>
     <thead>
       <tr>
-        <th>Framework</th>
-        <th>Primary audience</th>
-        <th>Secondary audience</th>
+        <th>Primary risk area</th>
+        <th>NIST AI RMF response</th>
+        <th>MITRE ATLAS response</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td>NIST AI RMF</td>
-        <td>AI Governance, Risk &amp; Compliance; Chief Data Office; CIO</td>
-        <td>CISO</td>
+        <td><strong>Governance &amp; accountability</strong><br><span style="color:var(--muted);font-size:0.84rem">Unclear ownership, missing policies, no enterprise inventory</span></td>
+        <td><span class="tag">GOVERN</span> Roles, legal/regulatory mapping, AI system inventory, decommissioning procedures, third-party risk policies</td>
+        <td><span class="tag">Discovery</span> <span class="tag">Reconnaissance</span> Adversary enumeration of AI assets; shadow AI and exposed model endpoints</td>
       </tr>
       <tr>
-        <td>MITRE ATLAS</td>
-        <td>CISO</td>
-        <td>AI GRC, CDO, CIO</td>
+        <td><strong>Context &amp; use-case risk</strong><br><span style="color:var(--muted);font-size:0.84rem">Misaligned deployment, unknown knowledge limits, unmapped impacts</span></td>
+        <td><span class="tag">MAP</span> Document intended use, task boundaries, scientific integrity, likelihood/magnitude of harm</td>
+        <td><span class="tag">AI Model Access</span> <span class="tag">Initial Access</span> Attack paths to models, APIs, and agent interfaces</td>
+      </tr>
+      <tr>
+        <td><strong>Output quality, bias &amp; safety</strong><br><span style="color:var(--muted);font-size:0.84rem">Hallucinations, drift, unfair outcomes, unsafe recommendations</span></td>
+        <td><span class="tag">MEASURE</span> Production metrics, bias/fairness evaluation, safety fail-safes, transparency and explainability</td>
+        <td><span class="tag">Impact</span> <span class="tag">AI Attack Staging</span> Adversarial manipulation of model behavior and downstream harm</td>
+      </tr>
+      <tr>
+        <td><strong>Data privacy &amp; regulatory compliance</strong><br><span style="color:var(--muted);font-size:0.84rem">PII/PHI leakage, CJIS/FERPA violations, uncontrolled inference on sensitive data</span></td>
+        <td><span class="tag">MEASURE</span> Privacy-enhanced design; <span class="tag">MANAGE</span> Ongoing monitoring and disengagement of misbehaving systems</td>
+        <td><span class="tag">Collection</span> <span class="tag">Exfiltration</span> Data harvesting via prompts, agents, and tool invocation</td>
+      </tr>
+      <tr>
+        <td><strong>Model &amp; runtime security</strong><br><span style="color:var(--muted);font-size:0.84rem">Prompt injection, jailbreaks, tool misuse, agent poisoning</span></td>
+        <td><span class="tag">MEASURE</span> Secure &amp; resilient testing; <span class="tag">MANAGE</span> Runtime response and disengagement</td>
+        <td><span class="tag">Execution</span> <span class="tag">Persistence</span> <span class="tag">Privilege Escalation</span> Prompt injection, context/RAG/tool poisoning, jailbreak chains</td>
+      </tr>
+      <tr>
+        <td><strong>Supply chain &amp; third-party risk</strong><br><span style="color:var(--muted);font-size:0.84rem">Poisoned models, compromised datasets, untrusted MCP tools and plugins</span></td>
+        <td><span class="tag">GOVERN</span> <span class="tag">MAP</span> <span class="tag">MANAGE</span> Third-party software/data risk assessment and continuous monitoring</td>
+        <td><span class="tag">Resource Development</span> Poisoned artifacts, malicious model publishing, compromised training data</td>
+      </tr>
+      <tr>
+        <td><strong>Identity &amp; agent governance</strong><br><span style="color:var(--muted);font-size:0.84rem">Shadow agents, NHIs, API keys, MCP servers without owners or lifecycle controls</span></td>
+        <td><span class="tag">GOVERN</span> Inventory and role clarity; <span class="tag">MAP</span> Surface shadow AI in deployment context</td>
+        <td><span class="tag">Credential Access</span> <span class="tag">Lateral Movement</span> Agent tool credential harvesting, valid-account abuse, session hijacking</td>
+      </tr>
+      <tr>
+        <td><strong>Detection, response &amp; resilience</strong><br><span style="color:var(--muted);font-size:0.84rem">AI incidents uncorrelated in SOC, no playbooks, slow containment</span></td>
+        <td><span class="tag">MANAGE</span> Prioritized risk treatment, post-deployment monitoring, incident identification and recovery</td>
+        <td><span class="tag">Defense Evasion</span> <span class="tag">Command and Control</span> <span class="tag">Impact</span> Obfuscation, C2 channels, and operational disruption of AI systems</td>
       </tr>
     </tbody>
   </table>
+
+  <p>
+    <strong>Practical takeaway:</strong> Use NIST AI RMF to structure your compliance program—inventory, measurement, and audit evidence. Use MITRE ATLAS to harden the same AI systems against the adversary techniques that can undermine trustworthiness, safety, and regulatory compliance in production. Cisco and Splunk map to both frameworks in the sections that follow.
+  </p>
 </section>
 
-<section id="frameworks">
-  <h2>Two frameworks, one integrated story</h2>
+<section id="barriers-adoption">
+  <h2>How Cisco addresses the barriers to adoption</h2>
+  <p>
+    The barriers above block statewide and system-wide AI adoption until leadership can see, measure, protect, and prove control over every model, agent, and non-human identity. Cisco and Splunk close each gap through an integrated stack—inventory and identity governance, continuous evaluation, runtime defense, supply-chain scanning, SOC correlation, and audit-ready evidence mapped to NIST AI RMF and MITRE ATLAS.
+  </p>
 
-  <div class="framework-grid">
-    <div class="framework-box">
-      <h3>NIST AI RMF</h3>
-      <p><strong>Question:</strong> Are we managing AI risk well?</p>
-      <p><strong>Functions:</strong> Govern · Map · Measure · Manage</p>
-      <p>Lead with RMF for compliance conversations, board reporting, statewide AI policy alignment, and audit readiness.</p>
-    </div>
-    <div class="framework-box">
-      <h3>MITRE ATLAS</h3>
-      <p><strong>Question:</strong> How is AI attacked, and can we defend it?</p>
-      <p><strong>Scope:</strong> 16 tactics across the AI kill chain</p>
-      <p>Lead with ATLAS for security teams, threat modeling, and proving defense against agentic and model-level adversary techniques.</p>
-    </div>
-  </div>
-</section>
-
-<section id="better-together">
-  <h2>The better-together story</h2>
-
-  <div class="pillars">
-    <div class="pillar">
-      <strong>Splunk AI Observability</strong>
-      <span>Output integrity — hallucination detection, bias/drift monitoring, evaluation evidence for RMF audits</span>
-    </div>
-    <div class="pillar">
-      <strong>Cisco AI Defense</strong>
-      <span>Model/runtime/supply-chain defense — from poisoned artifacts through prompt injection to exfiltration and impact</span>
-    </div>
-    <div class="pillar">
-      <strong>Astrix</strong>
-      <span>Identity discovery and governance — who owns each agent, what secrets exist, shadow AI exposure</span>
-    </div>
-    <div class="pillar">
-      <strong>WideField</strong>
-      <span>Identity runtime — credential harvesting, session anomalies, lateral movement, identity-based exfiltration</span>
-    </div>
-    <div class="pillar">
-      <strong>Splunk + Cisco backbone</strong>
-      <span>Detect, correlate, enforce, respond — ES/SOAR/XDR closes Defense Evasion and operationalizes incident response</span>
-    </div>
-  </div>
-
-  <h3>What each layer solves for leadership</h3>
   <table>
     <thead>
       <tr>
-        <th>Leadership concern</th>
-        <th>Cisco + Splunk answer</th>
+        <th>Barrier leadership must address</th>
+        <th>How Cisco + Splunk closes the gap</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td>"We can't prove we're managing AI risk"</td>
-        <td>NIST RMF-aligned telemetry, dashboards, and evidence from Splunk AI Observability + AI Defense + Astrix inventory</td>
+        <td><strong>No unified inventory</strong> of AI systems, models, agents, or NHIs across the enterprise</td>
+        <td>
+          Three-layer inventory built on your existing footprint: <strong>Splunk Platform/ITSI</strong> surfaces AI services and dependencies; <strong>Cisco AI Defense AI Cloud Visibility</strong> discovers models, agents, and MCP endpoints; <strong>Astrix</strong> maps agent and NHI identities to human owners. Together they replace spreadsheet inventories with a living, statewide view of what AI exists and who is accountable for it.
+        </td>
       </tr>
       <tr>
-        <td>"We don't know what AI systems exist"</td>
-        <td>Three-layer inventory: Splunk Platform/ITSI (AI services) + AI Defense AI Cloud Visibility (models/agents/MCP) + Astrix (agent/NHI identities)</td>
+        <td><strong>No continuous evaluation</strong> of AI output quality, safety, bias, or drift in production</td>
+        <td>
+          <strong>Splunk AI Observability</strong> (formerly Galileo) monitors production AI with hallucination detection, bias and fairness metrics, drift alerts, and evaluation traces. Output integrity is measured continuously—not just at deployment—supplying the MEASURE function evidence auditors and AI GRC teams require.
+        </td>
       </tr>
       <tr>
-        <td>"Agents and MCP create new attack paths"</td>
-        <td>AI Defense runtime guardrails + Astrix governance + WideField identity monitoring cover the full agentic kill chain</td>
+        <td><strong>No runtime protection</strong> against prompt injection, tool misuse, or agent poisoning</td>
+        <td>
+          <strong>Cisco AI Defense</strong> runtime guardrails block prompt injection, jailbreaks, unsafe tool invocation, and agent context/RAG/tool-data poisoning at inference time. <strong>WideField</strong> and <strong>Astrix</strong> extend protection to identity abuse—credential harvesting, session anomalies, and lateral movement through agent credentials—covering the full agentic kill chain.
+        </td>
       </tr>
       <tr>
-        <td>"We need audit-ready evidence"</td>
-        <td>Native telemetry serves as both RMF evidence package and ATLAS incident-response record in Splunk</td>
+        <td><strong>No supply-chain scanning</strong> for poisoned models, datasets, or MCP tool repositories</td>
+        <td>
+          <strong>Cisco AI Defense Supply Chain Risk Management</strong> scans models, datasets, plugins, and MCP tool repositories before production—detecting poisoned artifacts, compromised training data, and malicious publishing (MITRE ATLAS Resource Development). <strong>Cisco Secure Workload</strong> and <strong>Astrix</strong> add segmentation and third-party agent-identity exposure controls.
+        </td>
       </tr>
       <tr>
-        <td>"Data must stay in-environment"</td>
-        <td>Cisco AI Defense keeps inference/agent/MCP data in-environment (metadata only to Cisco)—strong for CJIS/FERPA</td>
+        <td><strong>No correlation</strong> between AI security events and broader SOC incident response</td>
+        <td>
+          <strong>Splunk Enterprise Security</strong> and <strong>SOAR</strong> correlate AI Defense, AI Observability, Astrix, and WideField signals with enterprise security telemetry. <strong>Cisco XDR</strong>, <strong>Secure Firewall</strong>, and <strong>Duo/ISE</strong> enforce containment—closing Defense Evasion gaps and operationalizing playbooks that isolate misbehaving agents, revoke credentials, and escalate through existing SOC workflows.
+        </td>
       </tr>
       <tr>
-        <td>"We already own Splunk and Cisco"</td>
-        <td>Accelerate posture on existing footprint—risk reduction and governance, not a net-new platform rip-and-replace</td>
+        <td><strong>No audit-ready evidence package</strong> tying controls to framework subcategories</td>
+        <td>
+          Native telemetry from Splunk AI Observability, AI Defense, Astrix, and WideField feeds Splunk dashboards and retention stores that map directly to NIST AI RMF Govern, Map, Measure, and Manage subcategories—and serve simultaneously as MITRE ATLAS incident-response records. One evidence stream satisfies compliance, security, and executive reporting without manual collection.
+        </td>
       </tr>
     </tbody>
   </table>
+
+  <div class="callout success">
+    <h3>Build on what you already own</h3>
+    <p>
+      For SLED organizations running Splunk ES/SOAR and Cisco Duo, ISE, Firewall, or XDR, these capabilities extend your existing investment—accelerating AI governance and threat defense without a parallel platform rip-and-replace. Cisco AI Defense keeps inference and agent data in-environment (metadata only to Cisco), supporting CJIS, FERPA, and state data-residency requirements.
+    </p>
+  </div>
 </section>
 
 <section id="stack">
