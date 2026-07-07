@@ -396,7 +396,7 @@
       <tr>
         <td><strong>No continuous evaluation</strong> of AI output quality, safety, bias, or drift in production</td>
         <td>
-          <strong>Splunk AI Observability</strong> (formerly Galileo) monitors production AI with hallucination detection, bias and fairness metrics, drift alerts, and evaluation traces. Output integrity is measured continuously—not just at deployment—supplying the MEASURE function evidence auditors and AI GRC teams require.
+          <strong>Splunk AI Observability (Galileo)</strong> monitors production AI with hallucination detection, bias and fairness metrics, drift alerts, and evaluation traces. Output integrity is measured continuously—not just at deployment—supplying the MEASURE function evidence auditors and AI GRC teams require.
         </td>
       </tr>
       <tr>
@@ -420,7 +420,7 @@
       <tr>
         <td><strong>No audit-ready evidence package</strong> tying controls to framework subcategories</td>
         <td>
-          Native telemetry from Splunk AI Observability, AI Defense, Astrix, and WideField feeds Splunk dashboards and retention stores that map directly to NIST AI RMF Govern, Map, Measure, and Manage subcategories—and serve simultaneously as MITRE ATLAS incident-response records. One evidence stream satisfies compliance, security, and executive reporting without manual collection.
+          Native telemetry from Splunk AI Observability (Galileo), AI Defense, Astrix, and WideField feeds Splunk dashboards and retention stores that map directly to NIST AI RMF Govern, Map, Measure, and Manage subcategories—and serve simultaneously as MITRE ATLAS incident-response records. One evidence stream satisfies compliance, security, and executive reporting without manual collection.
         </td>
       </tr>
     </tbody>
@@ -445,11 +445,11 @@
     </thead>
     <tbody>
       <tr><td>GOVERN 1.1</td><td>Legal/regulatory requirements documented</td><td>Splunk dashboards map posture to state AI mandates and CJIS</td></tr>
-      <tr><td>GOVERN 1.2</td><td>Trustworthy-AI characteristics in practice</td><td>Splunk AI Observability (eval) + AI Defense (security/safety guardrails)</td></tr>
+      <tr><td>GOVERN 1.2</td><td>Trustworthy-AI characteristics in practice</td><td>Splunk AI Observability (Galileo) (eval) + AI Defense (security/safety guardrails)</td></tr>
       <tr><td>GOVERN 1.6</td><td>Inventory AI systems</td><td>Splunk Platform/ITSI + AI Defense AI Cloud Visibility + Astrix — three-layer inventory</td></tr>
       <tr><td>GOVERN 1.7</td><td>Safe decommissioning</td><td>Splunk SOAR playbooks; Astrix/WideField/Cisco ISE revoke agent identities; AI Defense blocklists</td></tr>
       <tr><td>GOVERN 2.1</td><td>Roles and responsibilities clear</td><td>Cisco Duo/ISE RBAC; Astrix Identity Graph maps each agent/NHI to a human owner</td></tr>
-      <tr><td>GOVERN 4.3</td><td>Enable AI testing and incident identification</td><td>Splunk AI Observability + AI Defense red teaming; Splunk ES/SOAR for incident ID</td></tr>
+      <tr><td>GOVERN 4.3</td><td>Enable AI testing and incident identification</td><td>Splunk AI Observability (Galileo) + AI Defense red teaming; Splunk ES/SOAR for incident ID</td></tr>
       <tr><td>GOVERN 6.1/6.2</td><td>Third-party software/data risk</td><td>AI Defense Supply Chain Risk Management; Cisco Secure Workload; Astrix (third-party agent identities)</td></tr>
     </tbody>
   </table>
@@ -460,8 +460,8 @@
       <tr><th>Subcategory</th><th>Outcome</th><th>Cisco + Splunk support</th></tr>
     </thead>
     <tbody>
-      <tr><td>MAP 1.1</td><td>Intended use/deployment context documented</td><td>Splunk AI Observability traces; AI Defense AI-traffic flow mapping; WideField/Astrix surface shadow AI</td></tr>
-      <tr><td>MAP 2.1–2.3</td><td>Tasks, knowledge limits, scientific integrity</td><td>Splunk AI Observability guardrails; AI Defense validation red teaming</td></tr>
+      <tr><td>MAP 1.1</td><td>Intended use/deployment context documented</td><td>Splunk AI Observability (Galileo) traces; AI Defense AI-traffic flow mapping; WideField/Astrix surface shadow AI</td></tr>
+      <tr><td>MAP 2.1–2.3</td><td>Tasks, knowledge limits, scientific integrity</td><td>Splunk AI Observability (Galileo) guardrails; AI Defense validation red teaming</td></tr>
       <tr><td>MAP 4.1/4.2</td><td>Third-party and legal risk mapped</td><td>AI Defense supply-chain scanning; Cisco Secure Workload; Astrix agent-identity exposure</td></tr>
       <tr><td>MAP 5.1</td><td>Likelihood/magnitude of impacts</td><td>Splunk correlates evaluation + security + identity signals</td></tr>
     </tbody>
@@ -473,13 +473,13 @@
       <tr><th>Subcategory</th><th>Outcome</th><th>Cisco + Splunk support</th></tr>
     </thead>
     <tbody>
-      <tr><td>MEASURE 1.1</td><td>Metrics for mapped risks</td><td>Splunk AI Observability eval metrics; AI Defense validation findings; Splunk ES security metrics</td></tr>
-      <tr><td>MEASURE 2.4</td><td>Functionality monitored in production</td><td>Splunk AI Observability + ITSI (drift/KPIs); AI Defense runtime monitoring</td></tr>
+      <tr><td>MEASURE 1.1</td><td>Metrics for mapped risks</td><td>Splunk AI Observability (Galileo) eval metrics; AI Defense validation findings; Splunk ES security metrics</td></tr>
+      <tr><td>MEASURE 2.4</td><td>Functionality monitored in production</td><td>Splunk AI Observability (Galileo) + ITSI (drift/KPIs); AI Defense runtime monitoring</td></tr>
       <tr><td>MEASURE 2.6</td><td>Safety evaluated; fail-safe</td><td>AI Defense runtime safety guardrails (50+ categories); Cisco Hypershield isolation</td></tr>
       <tr><td>MEASURE 2.7</td><td>Secure &amp; Resilient</td><td>AI Defense (red teaming + runtime protection) + Splunk ES + Cisco Firewall/Workload + WideField/Astrix</td></tr>
-      <tr><td>MEASURE 2.8–2.9</td><td>Transparency, explainability</td><td>Splunk AI Observability tracing; Astrix owner attribution; AI Defense validation reporting</td></tr>
-      <tr><td>MEASURE 2.10</td><td>Privacy risk</td><td>AI Defense PII/PCI/PHI leakage prevention; Splunk AI Observability output-leakage detection; Cisco segmentation</td></tr>
-      <tr><td>MEASURE 2.11</td><td>Fairness/bias</td><td>Splunk AI Observability bias metrics; AI Defense safety/bias red-team categories</td></tr>
+      <tr><td>MEASURE 2.8–2.9</td><td>Transparency, explainability</td><td>Splunk AI Observability (Galileo) tracing; Astrix owner attribution; AI Defense validation reporting</td></tr>
+      <tr><td>MEASURE 2.10</td><td>Privacy risk</td><td>AI Defense PII/PCI/PHI leakage prevention; Splunk AI Observability (Galileo) output-leakage detection; Cisco segmentation</td></tr>
+      <tr><td>MEASURE 2.11</td><td>Fairness/bias</td><td>Splunk AI Observability (Galileo) bias metrics; AI Defense safety/bias red-team categories</td></tr>
       <tr><td>MEASURE 3.1</td><td>Emergent risk tracked</td><td>Splunk analytics; AI Defense Talos threat intel; WideField emergent identity threats</td></tr>
     </tbody>
   </table>
@@ -492,8 +492,8 @@
     <tbody>
       <tr><td>MANAGE 1.2/1.3</td><td>Risks prioritized; responses developed</td><td>Splunk ES prioritization; AI Defense runtime guardrails; Cisco ISE/Duo/WideField revoke access</td></tr>
       <tr><td>MANAGE 2.4</td><td>Disengage misbehaving AI</td><td>AI Defense blocks unsafe agent chains; Splunk SOAR isolates; WideField/Astrix kill compromised sessions</td></tr>
-      <tr><td>MANAGE 3.1/3.2</td><td>Third-party and pre-trained model monitoring</td><td>AI Defense supply-chain + MCP scanning; Astrix; Splunk AI Observability</td></tr>
-      <tr><td>MANAGE 4.1/4.3</td><td>Post-deployment monitoring and incident response</td><td>Splunk AI Observability + ES + SOAR + AI Defense + Cisco XDR</td></tr>
+      <tr><td>MANAGE 3.1/3.2</td><td>Third-party and pre-trained model monitoring</td><td>AI Defense supply-chain + MCP scanning; Astrix; Splunk AI Observability (Galileo)</td></tr>
+      <tr><td>MANAGE 4.1/4.3</td><td>Post-deployment monitoring and incident response</td><td>Splunk AI Observability (Galileo) + ES + SOAR + AI Defense + Cisco XDR</td></tr>
     </tbody>
   </table>
 
@@ -503,13 +503,13 @@
       <tr><th>Characteristic</th><th>Primary stack support</th></tr>
     </thead>
     <tbody>
-      <tr><td>Valid &amp; Reliable</td><td>Splunk AI Observability + AI Defense validation</td></tr>
+      <tr><td>Valid &amp; Reliable</td><td>Splunk AI Observability (Galileo) + AI Defense validation</td></tr>
       <tr><td>Safe</td><td>AI Defense runtime safety guardrails + Cisco Hypershield</td></tr>
       <tr><td>Secure &amp; Resilient</td><td>AI Defense + Splunk ES + Cisco Firewall/Workload + WideField/Astrix</td></tr>
-      <tr><td>Accountable &amp; Transparent</td><td>Splunk AI Observability tracing + Astrix owner attribution</td></tr>
-      <tr><td>Explainable &amp; Interpretable</td><td>Splunk AI Observability evaluation/explainability</td></tr>
-      <tr><td>Privacy-Enhanced</td><td>AI Defense leakage prevention + Splunk AI Observability + Cisco segmentation</td></tr>
-      <tr><td>Fair (Bias Managed)</td><td>Splunk AI Observability + AI Defense bias red-team categories</td></tr>
+      <tr><td>Accountable &amp; Transparent</td><td>Splunk AI Observability (Galileo) tracing + Astrix owner attribution</td></tr>
+      <tr><td>Explainable &amp; Interpretable</td><td>Splunk AI Observability (Galileo) evaluation/explainability</td></tr>
+      <tr><td>Privacy-Enhanced</td><td>AI Defense leakage prevention + Splunk AI Observability (Galileo) + Cisco segmentation</td></tr>
+      <tr><td>Fair (Bias Managed)</td><td>Splunk AI Observability (Galileo) + AI Defense bias red-team categories</td></tr>
     </tbody>
   </table>
 </section>
@@ -533,13 +533,13 @@
       <tr><td>Privilege Escalation</td><td>AI Defense blocks jailbreak/priv-esc</td><td>Astrix; Cisco ISE</td></tr>
       <tr><td>Defense Evasion</td><td>Splunk ES/SOAR correlation; AI Defense runtime</td><td>WideField/Astrix; Cisco XDR</td></tr>
       <tr><td>Credential Access</td><td>WideField; Astrix secrets inventory</td><td>Cisco Duo MFA</td></tr>
-      <tr><td>Discovery</td><td>Astrix Identity Graph; AI Defense AI Cloud Visibility</td><td>Splunk AI Observability (hallucinations)</td></tr>
+      <tr><td>Discovery</td><td>Astrix Identity Graph; AI Defense AI Cloud Visibility</td><td>Splunk AI Observability (Galileo) (hallucinations)</td></tr>
       <tr><td>Lateral Movement</td><td>Cisco Secure Workload; WideField session detection</td><td>Cisco Duo</td></tr>
       <tr><td>Collection</td><td>AI Defense runtime data guardrails</td><td>Cisco Secure Workload segmentation</td></tr>
-      <tr><td>AI Attack Staging</td><td>AI Defense algorithmic red teaming</td><td>Splunk AI Observability validation</td></tr>
+      <tr><td>AI Attack Staging</td><td>AI Defense algorithmic red teaming</td><td>Splunk AI Observability (Galileo) validation</td></tr>
       <tr><td>Command and Control</td><td>Cisco Secure Firewall/XDR</td><td>Splunk ES correlation</td></tr>
       <tr><td>Exfiltration</td><td>AI Defense (LLM leakage, exfil via agent)</td><td>WideField; Cisco network controls</td></tr>
-      <tr><td>Impact</td><td>AI Defense; Splunk AI Observability integrity</td><td>Splunk SOAR; Cisco Secure Firewall</td></tr>
+      <tr><td>Impact</td><td>AI Defense; Splunk AI Observability (Galileo) integrity</td><td>Splunk SOAR; Cisco Secure Firewall</td></tr>
     </tbody>
   </table>
 
@@ -552,7 +552,7 @@
       <tr><td><strong>Cisco AI Defense</strong></td><td>Broadest coverage — 13 of 16 tactics including Resource Development, Execution, Persistence, Exfiltration, Impact</td></tr>
       <tr><td><strong>WideField</strong></td><td>Credential Access, Lateral Movement, Defense Evasion, Exfiltration, AI Model Access, Persistence</td></tr>
       <tr><td><strong>Astrix</strong></td><td>Discovery, Credential Access, Privilege Escalation, Persistence, Reconnaissance</td></tr>
-      <tr><td><strong>Splunk AI Observability</strong></td><td>Discovery (hallucinations), AI Attack Staging, Impact (integrity/bias)</td></tr>
+      <tr><td><strong>Splunk AI Observability (Galileo)</strong></td><td>Discovery (hallucinations), AI Attack Staging, Impact (integrity/bias)</td></tr>
       <tr><td><strong>Splunk ES/ITSI/SOAR + Cisco backbone</strong></td><td>Defense Evasion, C2, cross-cutting detection, enforcement, and response</td></tr>
     </tbody>
   </table>
