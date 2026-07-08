@@ -353,6 +353,173 @@
       font-size: 0.8rem;
       color: var(--text);
     }
+    .journey-map {
+      min-width: min(100%, 980px);
+      margin: 0 auto;
+    }
+    .journey-map-title {
+      margin: 0 0 1rem;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .journey-columns {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 8px 8px 0 0;
+      overflow: hidden;
+    }
+    .journey-col {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      padding: 0.55rem 0.45rem 0.75rem;
+      min-height: 100%;
+    }
+    .journey-col.core { background: #fff9e6; }
+    .journey-col.value { background: #ffefd9; }
+    .journey-col.roi { background: #f8eef8; }
+    .journey-col.brand { background: #fdeef5; }
+    .journey-col-header {
+      text-align: center;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #fff;
+      padding: 0.45rem 0.35rem;
+      border-radius: 4px;
+      margin-bottom: 0.25rem;
+      line-height: 1.25;
+    }
+    .journey-col.core .journey-col-header,
+    .journey-col.value .journey-col-header { background: linear-gradient(135deg, #ff9000, #d97a00); }
+    .journey-col.roi .journey-col-header,
+    .journey-col.brand .journey-col-header { background: linear-gradient(135deg, #ff007f, #bd0d5f); }
+    .journey-chevron {
+      background: #fffef5;
+      border: 1px solid #e0c96a;
+      color: var(--text);
+      font-size: 0.68rem;
+      font-weight: 600;
+      line-height: 1.25;
+      text-align: center;
+      padding: 0.45rem 0.85rem 0.45rem 0.55rem;
+      clip-path: polygon(0 0, calc(100% - 9px) 0, 100% 50%, calc(100% - 9px) 100%, 0 100%, 7px 50%);
+      min-height: 2.4rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .journey-col.value .journey-chevron,
+    .journey-col.roi .journey-chevron,
+    .journey-col.brand .journey-chevron {
+      border-color: #d4b8e0;
+      background: #fffcf8;
+    }
+    .journey-col.brand .journey-chevron {
+      font-size: 0.64rem;
+      padding-left: 0.45rem;
+      padding-right: 0.75rem;
+    }
+    .journey-pair {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 0.2rem;
+      align-items: center;
+    }
+    .journey-pair .journey-chevron {
+      font-size: 0.62rem;
+      padding: 0.4rem 0.7rem 0.4rem 0.45rem;
+      min-height: 2.6rem;
+    }
+    .journey-pair-arrow {
+      color: #ff007f;
+      font-size: 0.85rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .journey-chevron.highlight {
+      box-shadow: inset 0 0 0 2px var(--blue);
+      background: #e0eeff;
+    }
+    .journey-chevron small {
+      display: block;
+      font-size: 0.58rem;
+      font-weight: 500;
+      margin-top: 0.15rem;
+      line-height: 1.2;
+    }
+    .journey-maturity {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-top: none;
+      border-radius: 0 0 8px 8px;
+      overflow: hidden;
+    }
+    .journey-maturity-bar {
+      position: relative;
+      padding: 0.65rem 0.75rem 0.55rem;
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-align: center;
+    }
+    .journey-maturity-bar.data {
+      background: linear-gradient(90deg, #80174b, #ff007f);
+      border-right: 1px solid rgba(255,255,255,0.2);
+    }
+    .journey-maturity-bar.personnel {
+      background: linear-gradient(90deg, #bd0d5f, #ff007f);
+    }
+    .journey-maturity-bar .bar-label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+    .journey-maturity-bar .bar-scale {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.68rem;
+      font-weight: 600;
+      opacity: 0.95;
+    }
+    .journey-maturity-bar .bar-track {
+      flex: 1;
+      height: 3px;
+      background: rgba(255,255,255,0.35);
+      border-radius: 2px;
+      position: relative;
+    }
+    .journey-maturity-bar .bar-track::after {
+      content: "";
+      position: absolute;
+      left: 8%;
+      right: 8%;
+      top: 50%;
+      height: 1px;
+      background: rgba(255,255,255,0.8);
+    }
+    .journey-map-caption {
+      margin: 0.75rem 0 0;
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-align: center;
+    }
+    @media (max-width: 900px) {
+      .journey-columns { grid-template-columns: 1fr 1fr; }
+      .journey-maturity { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .journey-columns { grid-template-columns: 1fr; }
+      .journey-pair { grid-template-columns: 1fr; }
+      .journey-pair-arrow { text-align: center; transform: rotate(90deg); }
+    }
     footer {
       max-width: 1100px;
       margin: 0 auto;
@@ -392,6 +559,7 @@
     <li><a href="#risks">Risks without it</a></li>
     <li><a href="#logs">Critical log types</a></li>
     <li><a href="#maturity">Maturity model</a></li>
+    <li><a href="#journey-map">Splunk journey map</a></li>
     <li><a href="#higher-ed">Higher ed context</a></li>
     <li><a href="#action">Recommended actions</a></li>
   </ul>
@@ -684,6 +852,108 @@
     <p>
       Institutions that attempt to "run" before they "crawl"—deploying SOAR, AI assistants, or advanced analytics on fragmented data—typically see poor ROI, alert fatigue, and governance failures. <strong>Centralized logging is the non-negotiable first investment</strong> that makes every subsequent security and IT operations capability viable.
     </p>
+  </div>
+
+  <h3 id="journey-map">Higher Education Splunk Journey</h3>
+  <p>
+    Centralized logging is the entry point on a broader maturity path. Institutions typically begin with <strong>Basic Log Monitoring</strong> in the Core Use Cases column, then progress across higher-value security, IT operations, and mission-impact capabilities as data and personnel maturity advance from pillared, tactical operations toward integrated platforms and centers of excellence.
+  </p>
+
+  <div class="diagram-wrap">
+    <div class="journey-map" role="img" aria-label="Higher Education Splunk Journey map with four use case columns and data and personnel maturity scales">
+
+      <div class="journey-columns">
+        <div class="journey-col core">
+          <div class="journey-col-header">Core Use Cases</div>
+          <div class="journey-chevron highlight">Basic Log Monitoring</div>
+          <div class="journey-chevron">SOC / SIEM</div>
+          <div class="journey-chevron">Infrastructure Monitoring</div>
+          <div class="journey-chevron">Synthetic Transaction Monitoring</div>
+        </div>
+
+        <div class="journey-col value">
+          <div class="journey-col-header">High Value Use Cases</div>
+          <div class="journey-pair">
+            <div class="journey-chevron">Compliance<br><small>NIST, GDPR, PCI, PHI, CMMC</small></div>
+            <span class="journey-pair-arrow" aria-hidden="true">→</span>
+            <div class="journey-chevron">Financial Fraud</div>
+          </div>
+          <div class="journey-pair">
+            <div class="journey-chevron">Cloud Services Security and Usage</div>
+            <span class="journey-pair-arrow" aria-hidden="true">→</span>
+            <div class="journey-chevron">Risk Based Alerting and Automation</div>
+          </div>
+          <div class="journey-pair">
+            <div class="journey-chevron">Remote Workforce Security</div>
+            <span class="journey-pair-arrow" aria-hidden="true">→</span>
+            <div class="journey-chevron">Distance Learning Security and Availability</div>
+          </div>
+          <div class="journey-chevron">Remote Workforce Technology Monitoring</div>
+          <div class="journey-pair">
+            <div class="journey-chevron">NOC and WiFi Optimization</div>
+            <span class="journey-pair-arrow" aria-hidden="true">→</span>
+            <div class="journey-chevron">Serverless, Container, Virtualization</div>
+          </div>
+          <div class="journey-pair">
+            <div class="journey-chevron">Critical Applications Monitoring</div>
+            <span class="journey-pair-arrow" aria-hidden="true">→</span>
+            <div class="journey-chevron">Real User Experience Monitoring</div>
+          </div>
+        </div>
+
+        <div class="journey-col roi">
+          <div class="journey-col-header">High ROI Use Cases</div>
+          <div class="journey-chevron">Compliance CMMC</div>
+          <div class="journey-pair">
+            <div class="journey-chevron">Public Safety and Threat Detection</div>
+            <span class="journey-pair-arrow" aria-hidden="true">→</span>
+            <div class="journey-chevron">OT / Facilities Security</div>
+          </div>
+          <div class="journey-pair">
+            <div class="journey-chevron">HPC Security and Optimization</div>
+            <span class="journey-pair-arrow" aria-hidden="true">→</span>
+            <div class="journey-chevron">Grant Funding</div>
+          </div>
+          <div class="journey-pair">
+            <div class="journey-chevron">Service Intelligence</div>
+            <span class="journey-pair-arrow" aria-hidden="true">→</span>
+            <div class="journey-chevron">Sustainability for Facilities</div>
+          </div>
+          <div class="journey-chevron">Athletics and Event Management</div>
+        </div>
+
+        <div class="journey-col brand">
+          <div class="journey-col-header">Brand Impact Use Cases</div>
+          <div class="journey-chevron">Safe and Secure Campus</div>
+          <div class="journey-chevron">Counter Terrorism Research</div>
+          <div class="journey-chevron">Diversity Equity and Inclusion Analytics</div>
+          <div class="journey-chevron">Facilities Optimization Planning</div>
+          <div class="journey-chevron">Staff Scorecarding</div>
+          <div class="journey-chevron">Student Retention and Success Standards</div>
+        </div>
+      </div>
+
+      <div class="journey-maturity">
+        <div class="journey-maturity-bar data">
+          <span class="bar-label">Data Maturity</span>
+          <div class="bar-scale">
+            <span>Pillared</span>
+            <span class="bar-track" aria-hidden="true"></span>
+            <span>Integrated</span>
+          </div>
+        </div>
+        <div class="journey-maturity-bar personnel">
+          <span class="bar-label">Personnel Maturity</span>
+          <div class="bar-scale">
+            <span>Tactical</span>
+            <span class="bar-track" aria-hidden="true"></span>
+            <span>Center of Excellence</span>
+          </div>
+        </div>
+      </div>
+
+      <p class="journey-map-caption">Progress left to right across use case tiers as data integration and security/IT team capability mature.</p>
+    </div>
   </div>
 </section>
 
