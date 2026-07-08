@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CHOA + ReliaQuest GreyMatter MSSP — Splunk ES Security Operations Best Practices</title>
+  <style>
+    :root {
+      --bg: #f2f5f7;
+      --panel: #ffffff;
+      --text: #07182d;
+      --muted: #536070;
+      --accent: #ff007f;
+      --blue: #0a60ff;
+      --blue-light: #e0eeff;
+      --border: #ced4db;
+      --success: #2d6a1e;
+      --success-bg: #eef8ea;
+      --warn-bg: #fff8f0;
+      --warn-border: #e8a020;
+      --danger-bg: #fff1f1;
+      --danger-border: #c53030;
+      --choa: #0f214d;
+      --rq: #1a4d6e;
+      --gm: #0d6e5c;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      font-size: 15px;
+    }
+    header {
+      background: linear-gradient(135deg, #07182d 0%, #12275c 55%, #0f214d 100%);
+      color: #fff;
+      padding: 1.75rem 2rem 2rem;
+    }
+    header .inner { max-width: 1100px; margin: 0 auto; }
+    header .eyebrow {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #7ae2ff;
+      margin: 0 0 0.5rem;
+    }
+    header h1 {
+      margin: 0;
+      font-size: clamp(1.35rem, 3vw, 1.85rem);
+      font-weight: 700;
+      line-height: 1.25;
+      max-width: 54rem;
+    }
+    header .subtitle {
+      margin: 0.75rem 0 0;
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.95rem;
+      max-width: 50rem;
+    }
+    header .meta {
+      margin-top: 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.65);
+    }
+    header .meta span {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 0.25rem 0.65rem;
+      border-radius: 4px;
+    }
+    nav.toc {
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      overflow-x: auto;
+    }
+    nav.toc ul {
+      list-style: none;
+      margin: 0 auto;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem 1.25rem;
+      max-width: 1100px;
+      font-size: 0.85rem;
+    }
+    nav.toc a { color: var(--blue); text-decoration: none; white-space: nowrap; }
+    nav.toc a:hover { text-decoration: underline; }
+    main { max-width: 1100px; margin: 0 auto; padding: 2rem 2rem 3rem; }
+    section { margin-bottom: 2.5rem; }
+    h2 {
+      font-size: 1.35rem;
+      margin: 0 0 1rem;
+      color: var(--text);
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 0.4rem;
+    }
+    h3 {
+      font-size: 1.05rem;
+      margin: 1.25rem 0 0.5rem;
+      color: var(--text);
+    }
+    h4 {
+      font-size: 0.95rem;
+      margin: 1rem 0 0.4rem;
+      color: var(--muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    p { margin: 0.65rem 0; }
+    ul, ol { margin: 0.5rem 0 0.75rem 1.25rem; padding: 0; }
+    li { margin: 0.35rem 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      margin: 1rem 0;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.55rem 0.7rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: var(--blue-light);
+      color: var(--text);
+      font-weight: 600;
+    }
+    tr:nth-child(even) td { background: #f8fafc; }
+    .callout {
+      background: var(--success-bg);
+      border: 1px solid #b8ddb0;
+      border-left: 4px solid var(--success);
+      padding: 1.1rem 1.25rem;
+      margin: 1.25rem 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .callout.warn {
+      background: var(--warn-bg);
+      border-color: #f0d9b8;
+      border-left-color: var(--warn-border);
+    }
+    .callout.danger {
+      background: var(--danger-bg);
+      border-color: #f5c6c6;
+      border-left-color: var(--danger-border);
+    }
+    .callout.accent {
+      background: #fff0f7;
+      border-color: #ffb8d9;
+      border-left-color: var(--accent);
+    }
+    .callout h3 {
+      margin-top: 0;
+      border: none;
+      padding: 0;
+      font-size: 1.1rem;
+      color: var(--success);
+    }
+    .callout.warn h3 { color: #8a5a00; }
+    .callout.danger h3 { color: var(--danger-border); }
+    .callout.accent h3 { color: var(--accent); }
+    .pillars {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .pillar {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.1rem;
+      border-top: 3px solid var(--accent);
+    }
+    .pillar.choa { border-top-color: var(--choa); }
+    .pillar.rq { border-top-color: var(--rq); }
+    .pillar.gm { border-top-color: var(--gm); }
+    .pillar.soar { border-top-color: var(--blue); }
+    .pillar strong {
+      display: block;
+      font-size: 0.95rem;
+      margin-bottom: 0.35rem;
+    }
+    .pillar span {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .practice-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem 1.35rem;
+      margin: 1.25rem 0;
+      border-left: 4px solid var(--blue);
+    }
+    .practice-card h3 {
+      margin-top: 0;
+      color: var(--blue);
+    }
+    .practice-card.step-1 { border-left-color: var(--choa); }
+    .practice-card.step-1 h3 { color: var(--choa); }
+    .practice-card.step-2 { border-left-color: var(--gm); }
+    .practice-card.step-2 h3 { color: var(--gm); }
+    .practice-card.step-3 { border-left-color: var(--rq); }
+    .practice-card.step-3 h3 { color: var(--rq); }
+    .practice-card.step-4 { border-left-color: var(--blue); }
+    .practice-card.step-5 { border-left-color: var(--accent); }
+    .practice-card.step-6 { border-left-color: var(--success); }
+    .practice-card.step-6 h3 { color: var(--success); }
+    .checklist {
+      list-style: none;
+      margin-left: 0;
+      padding: 0;
+    }
+    .checklist li {
+      position: relative;
+      padding-left: 1.6rem;
+      margin: 0.5rem 0;
+    }
+    .checklist li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--success);
+      font-weight: 700;
+    }
+    .flow-diagram {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      overflow-x: auto;
+    }
+    .flow-zone {
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.15rem;
+      margin: 0.75rem 0;
+      position: relative;
+    }
+    .flow-zone.choa {
+      border-color: var(--choa);
+      background: linear-gradient(180deg, #f0f4fa 0%, #fff 100%);
+    }
+    .flow-zone.greymatter {
+      border-color: var(--gm);
+      background: linear-gradient(180deg, #eefaf7 0%, #fff 100%);
+    }
+    .flow-zone h4 {
+      margin: 0 0 0.65rem;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: inherit;
+    }
+    .flow-zone.choa h4 { color: var(--choa); }
+    .flow-zone.greymatter h4 { color: var(--gm); }
+    .flow-steps {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.4rem 0.5rem;
+      font-size: 0.82rem;
+    }
+    .flow-step {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.4rem 0.6rem;
+      white-space: nowrap;
+    }
+    .flow-arrow {
+      color: var(--blue);
+      font-weight: 700;
+      font-size: 1.1rem;
+      text-align: center;
+      padding: 0.25rem 0;
+    }
+    .flow-arrow .label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--muted);
+      margin-top: 0.15rem;
+      max-width: 280px;
+      margin-left: auto;
+      margin-right: auto;
+      white-space: normal;
+      line-height: 1.35;
+    }
+    .flow-branch {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 0.75rem;
+    }
+    @media (max-width: 640px) {
+      .flow-branch { grid-template-columns: 1fr; }
+    }
+    .flow-branch .branch {
+      border-radius: 6px;
+      padding: 0.65rem 0.85rem;
+      font-size: 0.82rem;
+    }
+    .flow-branch .branch.fp {
+      background: var(--success-bg);
+      border: 1px solid #b8ddb0;
+    }
+    .flow-branch .branch.tp {
+      background: var(--warn-bg);
+      border: 1px solid #f0d9b8;
+    }
+    .flow-branch .branch strong {
+      display: block;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.25rem;
+    }
+    .decision-diamond {
+      display: inline-block;
+      background: #fff8e6;
+      border: 2px solid var(--warn-border);
+      padding: 0.5rem 1rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-align: center;
+      transform: rotate(0deg);
+      border-radius: 4px;
+      margin: 0.5rem auto;
+    }
+    .decision-row {
+      text-align: center;
+      margin: 0.5rem 0;
+    }
+    .hitl-gate {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-top: 0.75rem;
+    }
+    @media (max-width: 640px) {
+      .hitl-gate { grid-template-columns: 1fr; }
+    }
+    .hitl-gate .gate-option {
+      border-radius: 6px;
+      padding: 0.65rem 0.85rem;
+      font-size: 0.82rem;
+    }
+    .hitl-gate .gate-option.auto {
+      background: var(--blue-light);
+      border: 1px solid #b3d4ff;
+    }
+    .hitl-gate .gate-option.approve {
+      background: var(--warn-bg);
+      border: 1px solid #f0d9b8;
+    }
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem 1.5rem;
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 1rem;
+      padding-top: 0.75rem;
+      border-top: 1px dashed var(--border);
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .legend-box {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      border: 1px solid var(--border);
+    }
+    .legend-box.process { background: #fff; }
+    .legend-box.decision { background: #fff8e6; border-color: var(--warn-border); }
+    .legend-box.choa { background: #f0f4fa; border-color: var(--choa); }
+    .legend-box.gm { background: #eefaf7; border-color: var(--gm); }
+    code {
+      font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, monospace;
+      font-size: 0.85em;
+      background: #f1f5f9;
+      padding: 0.1rem 0.35rem;
+      border-radius: 3px;
+    }
+    pre {
+      background: #0d1117;
+      color: #e6edf3;
+      padding: 1rem 1.15rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 0.78rem;
+      line-height: 1.45;
+      margin: 1rem 0;
+    }
+    footer {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1rem 2rem 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    @media print {
+      nav.toc { position: static; }
+      header { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <p class="eyebrow">Security operations best practices · Healthcare MSSP integration</p>
+    <h1>CHOA + ReliaQuest GreyMatter MSSP with Splunk Enterprise Security</h1>
+    <p class="subtitle">
+      A best-practice operating model for coordinated L1 triage in ReliaQuest GreyMatter and escalated investigation, correlation, and SOAR-driven response in CHOA's Splunk ES environment—with auditable handoffs, healthcare guardrails, and closed-loop feedback.
+    </p>
+    <div class="meta">
+      <span>Audience: CHOA SecOps, ReliaQuest analysts, integration engineers</span>
+      <span>Platforms: GreyMatter · Splunk ES · Splunk SOAR</span>
+      <span>Focus: MSSP L1 triage + customer-owned L2/L3</span>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Table of contents">
+  <ul>
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#data-flow">Data flow</a></li>
+    <li><a href="#l1-triage">L1 triage</a></li>
+    <li><a href="#escalation">Escalation</a></li>
+    <li><a href="#soar">SOAR response</a></li>
+    <li><a href="#investigation">Investigation</a></li>
+    <li><a href="#closure">Closure &amp; tuning</a></li>
+    <li><a href="#flow-diagram">Flow diagram</a></li>
+    <li><a href="#swimlane">Swimlane</a></li>
+    <li><a href="#success-factors">Success factors</a></li>
+  </ul>
+</nav>
+
+<main>
+
+<section id="architecture">
+  <h2>Key architectural change</h2>
+  <p>
+    This workflow represents a deliberate shift in how CHOA and ReliaQuest collaborate. ReliaQuest analysts work entirely within their own GreyMatter instance for L1 triage—they do not require direct access to CHOA's Splunk ES. Splunk ES remains CHOA's system of record for escalated investigation, correlation, and SOAR response. The integration focus moves from shared-console access to disciplined <strong>data flow into GreyMatter</strong> and <strong>escalation flow back into Splunk ES</strong>.
+  </p>
+
+  <div class="pillars">
+    <div class="pillar gm">
+      <strong>GreyMatter</strong>
+      <span>L1 triage engine — ReliaQuest analysts operate here exclusively for 24/7 monitoring, validation, and enrichment.</span>
+    </div>
+    <div class="pillar choa">
+      <strong>Splunk ES</strong>
+      <span>CHOA system of record — receives escalations, drives L2/L3 investigation, and maintains case history.</span>
+    </div>
+    <div class="pillar soar">
+      <strong>Splunk SOAR</strong>
+      <span>Automated response layer — triggered by Splunk ES escalations, CHOA-owned with human-in-the-loop gates.</span>
+    </div>
+    <div class="pillar rq">
+      <strong>Bidirectional API</strong>
+      <span>Connective tissue — shared case ID, standardized payloads, and closed-loop status sync.</span>
+    </div>
+  </div>
+
+  <div class="callout accent">
+    <h3>Integration summary</h3>
+    <ul>
+      <li><strong>GreyMatter</strong> = L1 triage engine — ReliaQuest analysts operate here exclusively.</li>
+      <li><strong>Splunk ES</strong> = CHOA system of record — receives escalations and drives investigation.</li>
+      <li><strong>Splunk SOAR</strong> = automated response layer — triggered by Splunk ES escalations, CHOA-owned.</li>
+      <li><strong>Bidirectional API + shared case ID</strong> = the connective tissue enabling seamless, auditable handoffs.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="data-flow">
+  <h2>1. Detection &amp; data flow into GreyMatter</h2>
+
+  <div class="practice-card step-1">
+    <h3>CHOA telemetry → Splunk ES → GreyMatter</h3>
+    <ul class="checklist">
+      <li>CHOA telemetry (endpoint, network, identity, cloud, healthcare apps) is ingested into Splunk ES and normalized to CIM.</li>
+      <li>Relevant notables, risk-based alerts, and raw log context are forwarded from Splunk ES into GreyMatter via API/connector.</li>
+      <li>Map detections to MITRE ATT&amp;CK so threats are described consistently across both platforms.</li>
+      <li>Ensure only in-scope data flows to GreyMatter to respect PHI handling and data-residency requirements.</li>
+    </ul>
+  </div>
+
+  <div class="callout warn">
+    <h3>Healthcare guardrail: PHI &amp; data residency</h3>
+    <p>
+      Define a clean data contract before integration goes live. Specify exactly which telemetry fields, enrichment artifacts, and log sources are permitted to leave CHOA's environment. Escalation payloads should carry the minimum context ReliaQuest needs for triage—not full patient records or unnecessary clinical data. Document residency requirements and audit forwarding rules quarterly.
+    </p>
+  </div>
+
+  <h3>Data contract checklist</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Element</th>
+        <th>Source</th>
+        <th>Destination</th>
+        <th>Requirement</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Notables &amp; RBA alerts</td>
+        <td>Splunk ES</td>
+        <td>GreyMatter</td>
+        <td>MITRE ATT&amp;CK mapped; severity and rule metadata included</td>
+      </tr>
+      <tr>
+        <td>Raw log context</td>
+        <td>Splunk ES</td>
+        <td>GreyMatter</td>
+        <td>Scoped to in-scope sources only; PHI fields redacted or excluded</td>
+      </tr>
+      <tr>
+        <td>Asset &amp; identity context</td>
+        <td>Splunk ES (CIM)</td>
+        <td>GreyMatter</td>
+        <td>Operational identifiers only; no unnecessary clinical attributes</td>
+      </tr>
+      <tr>
+        <td>Correlation ID</td>
+        <td>Splunk ES notable</td>
+        <td>GreyMatter case</td>
+        <td><code>shared_case_id</code> assigned at creation; immutable across lifecycle</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="l1-triage">
+  <h2>2. Level 1 triage (within GreyMatter)</h2>
+
+  <div class="practice-card step-2">
+    <h3>ReliaQuest L1 operating model</h3>
+    <p>ReliaQuest analysts perform all monitoring, validation, and triage inside GreyMatter—no direct Splunk ES access required.</p>
+    <ul>
+      <li>Apply standardized triage criteria: true/false positive, severity, and business-impact scoring.</li>
+      <li>Enrich alerts within GreyMatter using its native threat intel, asset, and user context.</li>
+      <li>Auto-close confirmed benign events in GreyMatter to prevent unnecessary escalation noise to CHOA.</li>
+    </ul>
+  </div>
+
+  <h3>Standardized triage criteria</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Dimension</th>
+        <th>ReliaQuest action in GreyMatter</th>
+        <th>Outcome</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>True / false positive</td>
+        <td>Validate against TI, asset context, and known-good baselines</td>
+        <td>FP → auto-close; TP → continue triage</td>
+      </tr>
+      <tr>
+        <td>Severity</td>
+        <td>Apply agreed severity matrix (critical / high / medium / low)</td>
+        <td>Drives SLA timer and escalation threshold</td>
+      </tr>
+      <tr>
+        <td>Business impact</td>
+        <td>Score clinical, operational, and PHI exposure risk</td>
+        <td>Healthcare-specific weighting for escalation decisions</td>
+      </tr>
+      <tr>
+        <td>Enrichment completeness</td>
+        <td>Attach TI, user, asset, and timeline context before decision</td>
+        <td>Required fields in escalation payload if escalating</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="escalation">
+  <h2>3. Escalation handoff (GreyMatter → Splunk ES)</h2>
+
+  <div class="practice-card step-3">
+    <h3>Escalation without manual re-keying</h3>
+    <ul class="checklist">
+      <li>Define agreed escalation thresholds (e.g., confirmed malware, PHI access anomalies, privileged account misuse).</li>
+      <li>On escalation, GreyMatter pushes the case into Splunk ES (or CHOA's ticketing system) via bidirectional API/webhook.</li>
+      <li>Standardize the escalation payload: original notable ID, ATT&amp;CK mapping, GreyMatter enrichment, timeline, and recommended actions.</li>
+      <li>Preserve a shared case/correlation ID linking the GreyMatter case to the corresponding Splunk ES notable for chain-of-custody.</li>
+      <li>Attach SLA timers per severity so handoff accountability is measurable on both sides.</li>
+    </ul>
+  </div>
+
+  <h3>Escalation threshold examples</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Scenario</th>
+        <th>Escalate when</th>
+        <th>Severity</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Confirmed malware</td>
+        <td>Active execution or persistence on endpoint; TI match confirms malicious</td>
+        <td>Critical / High</td>
+      </tr>
+      <tr>
+        <td>PHI access anomaly</td>
+        <td>Unusual volume, off-hours access, or role-inappropriate EHR queries</td>
+        <td>Critical</td>
+      </tr>
+      <tr>
+        <td>Privileged account misuse</td>
+        <td>Admin credential use from anomalous location, impossible travel, or lateral movement</td>
+        <td>High</td>
+      </tr>
+      <tr>
+        <td>Phishing with credential capture</td>
+        <td>User-reported or detected credential submission to known phishing infra</td>
+        <td>High</td>
+      </tr>
+      <tr>
+        <td>Data exfiltration indicators</td>
+        <td>Large egress to untrusted destination; DLP or network anomaly corroborated</td>
+        <td>Critical</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Standard escalation payload fields</h3>
+  <pre>{
+  "shared_case_id": "CHOA-2026-00012345",
+  "splunk_notable_id": "notable_event_id",
+  "severity": "critical",
+  "mitre_attack": ["T1566.001", "T1078"],
+  "greyMatter_enrichment": { "ti", "asset", "user", "timeline" },
+  "recommended_actions": ["isolate_host", "reset_credentials"],
+  "soar_playbook_hint": "endpoint_compromise",
+  "sla_due": "2026-07-08T18:51:00Z",
+  "analyst_notes": "Confirmed C2 beacon; host in clinical VLAN"
+}</pre>
+</section>
+
+<section id="soar">
+  <h2>4. SOAR-driven response (Splunk SOAR, CHOA-owned)</h2>
+
+  <div class="practice-card step-4">
+    <h3>Automated response triggered by Splunk ES escalation</h3>
+    <p>Escalation into Splunk ES automatically triggers the relevant Splunk SOAR playbook. Use human-in-the-loop approval for high-impact actions affecting clinical or patient-care systems.</p>
+  </div>
+
+  <h3>Suggested playbook actions by scenario</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Scenario</th>
+        <th>SOAR playbook actions</th>
+        <th>Human-in-the-loop?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Phishing</td>
+        <td>Detonate URLs/attachments, retrieve related emails, disable accounts</td>
+        <td>Account disable on clinical staff → approval required</td>
+      </tr>
+      <tr>
+        <td>Endpoint compromise</td>
+        <td>Isolate host via EDR, collect forensics, block IOCs</td>
+        <td>Isolate clinical/system-critical host → approval required</td>
+      </tr>
+      <tr>
+        <td>Identity / IAM anomaly</td>
+        <td>Force credential reset, revoke sessions, notify IAM owner</td>
+        <td>Privileged admin reset → approval required</td>
+      </tr>
+      <tr>
+        <td>Data exfiltration (PHI risk)</td>
+        <td>Block egress, alert compliance, preserve evidence</td>
+        <td>Always require compliance + SecOps approval</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout warn">
+    <h3>Human-in-the-loop gate (healthcare)</h3>
+    <p>
+      High clinical-impact actions—such as isolating a host on a patient-care VLAN, disabling accounts for clinical staff, or blocking egress from EHR-adjacent systems—must route through a CHOA analyst approval step in Splunk SOAR before execution. Low-impact actions (block known-bad IOC, quarantine non-clinical endpoint) may auto-execute per agreed runbook.
+    </p>
+  </div>
+
+  <p>Where feasible, sync SOAR action status back to GreyMatter so ReliaQuest has closed-loop visibility into containment progress.</p>
+</section>
+
+<section id="investigation">
+  <h2>5. CHOA team investigation &amp; containment (in Splunk ES)</h2>
+
+  <div class="practice-card step-5">
+    <h3>L2/L3 ownership in Splunk ES</h3>
+    <ul class="checklist">
+      <li>CHOA L2/L3 analysts own the escalated case within Splunk ES with full GreyMatter context attached.</li>
+      <li>Use Splunk ES Investigation Workbench to pivot across correlated events and assets.</li>
+      <li>Coordinate containment with clinical and operational stakeholders given healthcare uptime sensitivity.</li>
+      <li>Document root cause and remediation in the Splunk ES case record.</li>
+    </ul>
+  </div>
+
+  <div class="callout danger">
+    <h3>Patient safety &amp; uptime context</h3>
+    <p>
+      Healthcare containment decisions must balance security urgency against clinical continuity. Before isolating systems, disabling accounts, or blocking network paths, confirm impact with the appropriate clinical or operational owner. Splunk ES case notes should capture stakeholder coordination, approval decisions, and any deferred actions.
+    </p>
+  </div>
+</section>
+
+<section id="closure">
+  <h2>6. Closure, feedback &amp; continuous improvement</h2>
+
+  <div class="practice-card step-6">
+    <h3>Closed-loop tuning</h3>
+    <ul class="checklist">
+      <li>Push closed-case outcomes back to GreyMatter to tune ReliaQuest detection fidelity.</li>
+      <li>Hold recurring joint tuning reviews to refine correlation searches, escalation thresholds, and RBA weights.</li>
+      <li>Track metrics: MTTD, MTTR, escalation accuracy, false-positive rate, and SLA adherence.</li>
+      <li>Run periodic tabletop exercises to validate the cross-platform escalation and SOAR paths.</li>
+    </ul>
+  </div>
+
+  <h3>Joint metrics dashboard</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Metric</th>
+        <th>Owner</th>
+        <th>Purpose</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>MTTD (mean time to detect)</td>
+        <td>CHOA + ReliaQuest</td>
+        <td>Measure detection pipeline effectiveness end-to-end</td>
+      </tr>
+      <tr>
+        <td>MTTR (mean time to respond)</td>
+        <td>CHOA</td>
+        <td>Track L2/L3 containment and remediation speed</td>
+      </tr>
+      <tr>
+        <td>Escalation accuracy</td>
+        <td>ReliaQuest</td>
+        <td>% of escalations confirmed as true positives by CHOA</td>
+      </tr>
+      <tr>
+        <td>False-positive rate</td>
+        <td>ReliaQuest</td>
+        <td>FP closures in GreyMatter vs. total alerts triaged</td>
+      </tr>
+      <tr>
+        <td>SLA adherence</td>
+        <td>Both</td>
+        <td>Handoff and response timers met per severity tier</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="flow-diagram">
+  <h2>Visual escalation flow diagram</h2>
+  <p>End-to-end escalation flow across CHOA Splunk ES, ReliaQuest GreyMatter, and Splunk SOAR.</p>
+
+  <div class="flow-diagram" role="img" aria-label="End-to-end escalation flow diagram">
+
+    <div class="flow-zone choa">
+      <h4>CHOA Environment — Splunk ES</h4>
+      <div class="flow-steps">
+        <span class="flow-step">Log Sources</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">Splunk ES</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">CIM Normalize</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">Notables / RBA</span>
+      </div>
+      <p style="font-size:0.8rem; color:var(--muted); margin:0.5rem 0 0;">
+        Endpoint · network · IAM · cloud · EHR — system of record
+      </p>
+    </div>
+
+    <div class="flow-arrow">
+      ↓
+      <span class="label">Forward notables + context (API) · ATT&amp;CK mapped · in-scope data only</span>
+    </div>
+
+    <div class="flow-zone greymatter">
+      <h4>ReliaQuest GreyMatter — MSSP L1 Triage 24/7</h4>
+      <div class="flow-steps">
+        <span class="flow-step">Receive Alert</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">Validate</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">Enrich</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">Triage Decision</span>
+      </div>
+      <div class="decision-row">
+        <span class="decision-diamond">Triage Decision</span>
+      </div>
+      <div class="flow-branch">
+        <div class="branch fp">
+          <strong>False positive / benign</strong>
+          Auto-close in GreyMatter — no CHOA escalation
+        </div>
+        <div class="branch tp">
+          <strong>True positive / meets threshold</strong>
+          Prepare escalation payload with <code>shared_case_id</code>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-arrow">
+      ↓
+      <span class="label">Escalation payload (JSON via API/webhook): shared_case_id · ATT&amp;CK · enrichment · timeline · recommended actions · SOAR block</span>
+    </div>
+
+    <div class="flow-zone choa">
+      <h4>CHOA Environment — Splunk ES + SOAR</h4>
+      <div class="flow-steps">
+        <span class="flow-step">Create / Link Case</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">Trigger Splunk SOAR</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">Run Playbook</span>
+      </div>
+      <div class="decision-row">
+        <span class="decision-diamond">Human-in-the-loop gate?</span>
+      </div>
+      <div class="hitl-gate">
+        <div class="gate-option auto">
+          <strong>No — low impact</strong>
+          Auto-execute: block IOC, isolate non-clinical host, reset creds
+        </div>
+        <div class="gate-option approve">
+          <strong>Yes — clinical impact</strong>
+          CHOA analyst approves (e.g., isolate clinical system) → execute
+        </div>
+      </div>
+      <p style="font-size:0.82rem; margin:0.75rem 0 0;">
+        <strong>CHOA L2/L3 Investigation (Workbench):</strong> pivot / correlate · coordinate with clinical · contain · root cause · remediate
+      </p>
+    </div>
+
+    <div class="flow-arrow">
+      ↓
+      <span class="label">Closure / response payload (API) — outcome, root cause, remediation status</span>
+    </div>
+
+    <div class="flow-zone greymatter">
+      <h4>ReliaQuest GreyMatter — Closed-loop feedback</h4>
+      <div class="flow-steps">
+        <span class="flow-step">Update Case Status</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">Detection Tuning</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">Joint Review</span>
+      </div>
+      <p style="font-size:0.8rem; color:var(--muted); margin:0.5rem 0 0;">
+        Reduce false positives · refine thresholds · track MTTD / MTTR / SLA metrics
+      </p>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item"><span class="legend-box process"></span> Process / action step</div>
+      <div class="legend-item"><span class="legend-box decision"></span> Decision point</div>
+      <div class="legend-item"><span class="legend-box choa"></span> CHOA environment (Splunk ES / SOAR)</div>
+      <div class="legend-item"><span class="legend-box gm"></span> ReliaQuest GreyMatter</div>
+      <div class="legend-item"><code>shared_case_id</code> = correlation ID for chain-of-custody</div>
+    </div>
+  </div>
+</section>
+
+<section id="swimlane">
+  <h2>Swimlane summary — who owns what</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Stage</th>
+        <th>Owner</th>
+        <th>Platform</th>
+        <th>Key action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Detection &amp; normalization</td>
+        <td>CHOA</td>
+        <td>Splunk ES</td>
+        <td>Generate notables / RBA</td>
+      </tr>
+      <tr>
+        <td>Data forwarding</td>
+        <td>Integration</td>
+        <td>API connector</td>
+        <td>Push alerts to GreyMatter</td>
+      </tr>
+      <tr>
+        <td>L1 triage &amp; enrichment</td>
+        <td>ReliaQuest</td>
+        <td>GreyMatter</td>
+        <td>Validate, enrich, decide</td>
+      </tr>
+      <tr>
+        <td>False-positive closure</td>
+        <td>ReliaQuest</td>
+        <td>GreyMatter</td>
+        <td>Auto-close; no escalation</td>
+      </tr>
+      <tr>
+        <td>Escalation handoff</td>
+        <td>ReliaQuest</td>
+        <td>API / webhook</td>
+        <td>Push payload with <code>shared_case_id</code></td>
+      </tr>
+      <tr>
+        <td>Case creation &amp; SOAR trigger</td>
+        <td>CHOA</td>
+        <td>Splunk ES / SOAR</td>
+        <td>Link case; invoke playbook</td>
+      </tr>
+      <tr>
+        <td>Approval gate</td>
+        <td>CHOA</td>
+        <td>Splunk SOAR</td>
+        <td>Approve high-impact actions</td>
+      </tr>
+      <tr>
+        <td>Investigation &amp; containment</td>
+        <td>CHOA</td>
+        <td>Splunk ES Workbench</td>
+        <td>Own L2/L3 response</td>
+      </tr>
+      <tr>
+        <td>Closed-loop feedback</td>
+        <td>Both</td>
+        <td>API + review</td>
+        <td>Tune detections; track metrics</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Decision points</h3>
+  <ul>
+    <li><strong>Triage decision (GreyMatter):</strong> True positive and meets threshold → escalate; otherwise auto-close.</li>
+    <li><strong>Human-in-the-loop gate (SOAR):</strong> High clinical-impact action → require CHOA approval; low-impact → auto-execute.</li>
+  </ul>
+</section>
+
+<section id="success-factors">
+  <h2>Critical success factors</h2>
+
+  <div class="callout">
+    <h3>What makes this model work</h3>
+    <ul class="checklist">
+      <li><strong>Clean data contract:</strong> Define exactly what telemetry flows into GreyMatter and what triggers escalation back.</li>
+      <li><strong>Shared case ID:</strong> Maintain a single correlation ID linking GreyMatter and Splunk ES cases.</li>
+      <li><strong>Closed-loop visibility:</strong> Sync SOAR/response outcomes back to GreyMatter for MSSP awareness.</li>
+      <li><strong>Healthcare guardrails:</strong> PHI handling and patient-safety context shape data sharing and containment.</li>
+    </ul>
+  </div>
+
+  <h3>Implementation readiness checklist</h3>
+  <ul class="checklist">
+    <li>Data contract signed: in-scope sources, PHI exclusions, residency rules documented</li>
+    <li>API connector tested: notables forward to GreyMatter with ATT&amp;CK mapping</li>
+    <li>Escalation payload schema agreed: all required fields validated in test environment</li>
+    <li><code>shared_case_id</code> reconciliation tested: GreyMatter case ↔ Splunk ES notable linkage verified</li>
+    <li>SOAR playbooks mapped to escalation scenarios with HITL gates for clinical systems</li>
+    <li>SLA timers configured per severity on both platforms</li>
+    <li>Closed-loop sync enabled: case closure and SOAR status return to GreyMatter</li>
+    <li>Joint tabletop exercise completed: end-to-end escalation and SOAR path validated</li>
+    <li>Metrics dashboard live: MTTD, MTTR, escalation accuracy, FP rate, SLA adherence</li>
+    <li>Recurring joint tuning review cadence established (monthly or quarterly)</li>
+  </ul>
+</section>
+
+</main>
+
+<footer>
+  <p>
+    <strong>CHOA + ReliaQuest GreyMatter MSSP with Splunk ES</strong> — Security Operations Best Practices Workflow.
+    GreyMatter operates as the ReliaQuest L1 triage platform; Splunk ES remains CHOA's system of record for investigation and Splunk SOAR drives automated response with healthcare-appropriate human-in-the-loop controls.
+  </p>
+</footer>
+
+</body>
+</html>
