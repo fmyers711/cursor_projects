@@ -354,7 +354,7 @@
     </div>
     <div class="pillar">
       <strong>AI-ready by design</strong>
-      <span>Parquet, vector indexes, GenAI APIs, MCP—zero data prep for state AI programs and academic research.</span>
+      <span>Parquet, vector indexes, GenAI APIs, Splunk MCP Server—zero data prep for state AI programs and academic research.</span>
     </div>
     <div class="pillar">
       <strong>Compliance-ready</strong>
@@ -672,8 +672,8 @@
       </tr>
       <tr>
         <td>Open AI / data tooling</td>
-        <td>Parquet export, GenAI APIs, vector indexes, MCP Server</td>
-        <td>ML training, semantic search, AI reasoning, zero data prep</td>
+        <td>Splunk MCP Server; Parquet export, GenAI APIs, vector indexes</td>
+        <td>ML training, semantic search, governed agent tool-use via SPL, zero data prep</td>
         <td>B</td>
         <td><span class="tag success">GA</span> <span class="tag">emerging</span></td>
         <td><span class="bool-yes">Yes</span></td>
@@ -723,20 +723,259 @@
 <section id="ai">
   <h2>AI-ready capabilities — zero data prep</h2>
   <p>
-    State AI initiatives, research programs, and governed enterprise AI all require machine data in consumable formats—not months of ETL. MDL delivers AI-ready outputs directly from the lake:
+    State AI initiatives, research programs, and governed enterprise AI all require machine data in consumable formats—not months of ETL. CDF and MDL deliver AI-ready outputs directly from the lake, while the <strong>Splunk MCP Server</strong> and companion interfaces give frontier models <em>governed, tool-based access</em> to that data instead of raw retrieval.
   </p>
   <ul>
     <li><strong>Parquet export</strong> — Direct feed for ML training pipelines and research workloads.</li>
     <li><strong>GenAI-ready APIs</strong> — Programmatic data access for AI applications and campus-developed tools.</li>
     <li><strong>Vector indexes</strong> — Built for semantic search across security and operational corpora.</li>
-    <li><strong>MCP readiness</strong> — Data made consumable for AI reasoning agents with appropriate governance boundaries.</li>
+    <li><strong>Splunk MCP Server</strong> — Governed Model Context Protocol endpoint so frontier agents query Splunk via SPL and receive compact, auditable results under existing RBAC.</li>
     <li><strong>Open formats</strong> — JSON, Parquet, Iceberg, Delta Lake for interoperability with existing analytics stacks.</li>
   </ul>
 
   <div class="callout">
     <h3>For AI GRC and responsible-AI programs</h3>
     <p style="margin:0;">
-      MDL provides <strong>governed discoverability</strong> and <strong>controlled promotion</strong>—so AI systems access only approved data slices with audit trails, rather than unconstrained dumps from unmanaged lakes. This supports state executive orders on AI, higher-ed research ethics boards, and federal compliance frameworks that require data lineage and access control.
+      MDL provides <strong>governed discoverability</strong> and <strong>controlled promotion</strong>—so AI systems access only approved data slices with audit trails, rather than unconstrained dumps from unmanaged lakes. The Splunk MCP Server extends that governance to agent tool calls: every query runs through Splunk access controls and is logged, supporting state executive orders on AI, higher-ed research ethics boards, and frameworks (CJIS, FERPA) that require lineage and access control before model consumption.
+    </p>
+  </div>
+</section>
+
+<section id="frontier-ai-stack">
+  <h2>Frontier AI access stack — MCP Server and supporting components</h2>
+  <p>
+    Frontier models do not need a bigger data dump—they need a <strong>governed semantic access layer</strong> between the model and machine data. Splunk delivers that layer as a stack: CDF/MDL retains and promotes data economically; ES, ITSI, and SPL curate meaning; and the <strong>Splunk MCP Server</strong> plus GenAI APIs, vector indexes, and open formats expose compact, auditable context to agents and campus-built tools.
+  </p>
+
+  <div class="callout dark">
+    <h3>Architecture in one line</h3>
+    <p style="margin:0;font-size:1.02rem;">
+      <strong>Land &amp; promote (CDF/MDL) → Curate meaning (ES/ITSI/SPL) → Access via governed tools (MCP, APIs, vectors) → Reason &amp; act (frontier agents)</strong>
+    </p>
+  </div>
+
+  <h3>Four layers of the Frontier AI access stack</h3>
+  <div class="workflow">
+    <div class="workflow-step">
+      <div class="step-num">1</div>
+      <strong>Data foundation</strong>
+      <span>MDL landing, tiered promotion, federated search across Splunk and external lakes</span>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">2</div>
+      <strong>Semantic curation</strong>
+      <span>CIM/OCSF normalization, ES notables &amp; risk objects, ITSI episodes &amp; KPIs, SPL aggregation</span>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">3</div>
+      <strong>Governed access</strong>
+      <span>Splunk MCP Server, GenAI APIs, vector indexes, Parquet export, open formats</span>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">4</div>
+      <strong>Agent experiences</strong>
+      <span>AI Assistants, Agent Builder (roadmap), campus and third-party frontier agents via MCP</span>
+    </div>
+  </div>
+
+  <h3>Splunk MCP Server — the governed agent interface</h3>
+  <p>
+    The <strong>Splunk MCP Server</strong> implements the Model Context Protocol (MCP) as Splunk's primary interface for frontier AI assistants and agentic workflows. Instead of stuffing raw events into model context—a pattern that explodes token cost and bypasses access controls—the agent <strong>invokes Splunk as a tool</strong>. Splunk executes governed SPL, returns compact summaries or tables, and enforces the same RBAC, index-level permissions, and audit logging that human analysts already rely on.
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>MCP capability</th>
+        <th>What it delivers for Frontier AI</th>
+        <th>SLED relevance</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>SPL-first tool use</strong></td>
+        <td>Agents ask aggregated questions ("top failed logins by user," "error rate by service") and receive compact result sets—not raw event firehoses</td>
+        <td>SPL acts as a <strong>compression engine</strong>; typical investigations stay in the 3K–15K token range vs. millions for raw retrieval</td>
+      </tr>
+      <tr>
+        <td><strong>Result-size guardrails</strong></td>
+        <td>Execution and result caps encourage summary/table outputs over bulk raw export</td>
+        <td>Prevents runaway token spend and reduces quantitative hallucination risk on noisy input</td>
+      </tr>
+      <tr>
+        <td><strong>RBAC inheritance</strong></td>
+        <td>Every MCP tool call respects existing Splunk roles, index restrictions, and data scopes</td>
+        <td>Critical for CJIS-scoped criminal justice data, FERPA-bound student systems, and multi-agency estates</td>
+      </tr>
+      <tr>
+        <td><strong>Audit trail</strong></td>
+        <td>Agent queries and retrievals are logged like analyst searches—who asked, what ran, what returned</td>
+        <td>Supports AI GRC, public records, and legislative oversight of automated decision support</td>
+      </tr>
+      <tr>
+        <td><strong>Deterministic retrieval</strong></td>
+        <td>SPL queries return reproducible results; the model reasons over evidence, not probabilistic chunk retrieval</td>
+        <td>Clearer defensibility than raw RAG over unstructured log chunks</td>
+      </tr>
+      <tr>
+        <td><strong>Cross-tier reach</strong></td>
+        <td>Queryable across hot indexes, MDL Analytics Table, promoted slices, and federated sources (per entitlements)</td>
+        <td>Agents can start from curated hot-tier context and reach into archive or external lakes on demand</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout accent">
+    <h3>Raw-data RAG vs. MCP tool-use</h3>
+    <p><strong>Raw-data RAG</strong> embeds and retrieves bulk log chunks into the LLM context—repetitive, expensive, and hard to govern.</p>
+    <p style="margin-bottom:0;"><strong>MCP tool-use</strong> lets the frontier model invoke Splunk, receive compact SPL results, and sample raw events only when fine-grained evidence is required. Queries stay deterministic, auditable, and typically <strong>orders of magnitude cheaper</strong> in token usage. Position SPL-first via MCP; reserve raw event samples for forensic deep-dives.</p>
+  </div>
+
+  <h3>Supporting components — full stack map</h3>
+  <p>Frontier AI access in Splunk is not a single SKU. Sellers should map each component to the buyer's mission and maturity.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Component</th>
+        <th>Role in Frontier AI access</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Splunk MCP Server</strong></td>
+        <td>Primary governed tool interface for frontier agents and MCP-compatible assistants; SPL execution under RBAC with result guardrails</td>
+        <td><span class="tag success">GA</span></td>
+      </tr>
+      <tr>
+        <td><strong>GenAI APIs</strong></td>
+        <td>Programmatic data access for custom campus tools, state AI platforms, and integration with non-MCP agent frameworks</td>
+        <td><span class="tag success">GA</span></td>
+      </tr>
+      <tr>
+        <td><strong>Vector indexes</strong></td>
+        <td>Semantic search over security and operational corpora—complements SPL tool-use for unstructured or narrative content</td>
+        <td><span class="tag success">GA</span> <span class="tag">emerging</span></td>
+      </tr>
+      <tr>
+        <td><strong>Parquet export</strong></td>
+        <td>Direct feed from MDL Analytics Table and promoted tiers into ML training, research pipelines, and external model workflows</td>
+        <td><span class="tag success">GA</span></td>
+      </tr>
+      <tr>
+        <td><strong>SPL / SPL2 Pipelines</strong></td>
+        <td>Token-reduction engine—agents generate targeted aggregations instead of retrieving raw events; streaming detections on roadmap</td>
+        <td><span class="tag success">GA</span> <span class="tag warn">streaming roadmap</span></td>
+      </tr>
+      <tr>
+        <td><strong>Enterprise Security (ES)</strong></td>
+        <td>Semantic security layer—notables, risk-based alerting, CIM normalization, investigation timelines for frontier security agents</td>
+        <td><span class="tag success">GA</span></td>
+      </tr>
+      <tr>
+        <td><strong>IT Service Intelligence (ITSI)</strong></td>
+        <td>Service semantics—episodes, KPIs, health scores, dependency maps for outage and degradation reasoning</td>
+        <td><span class="tag success">GA</span></td>
+      </tr>
+      <tr>
+        <td><strong>AI Toolkit (ES / ITSI)</strong></td>
+        <td>Embedded ML—anomaly detection, risk correlation, adaptive thresholds; produces curated signals agents can reason over</td>
+        <td><span class="tag success">GA</span></td>
+      </tr>
+      <tr>
+        <td><strong>AI Assistant for SPL / Security</strong></td>
+        <td>Natural-language SPL generation, triage acceleration, and investigation summaries within governed Splunk workflows</td>
+        <td><span class="tag success">GA</span></td>
+      </tr>
+      <tr>
+        <td><strong>Federated Search &amp; Analytics</strong></td>
+        <td>Cross-silo tool reach—agents query Splunk deployments, S3, Security Lake, and expanding external sources in place</td>
+        <td><span class="tag success">GA</span> <span class="tag warn">mixed</span></td>
+      </tr>
+      <tr>
+        <td><strong>Machine Data Lake (MDL)</strong></td>
+        <td>Economic retention and promotion—agents access archive and analytics tiers without hot-index pricing on everything</td>
+        <td><span class="tag success">GA</span> <span class="tag warn">controlled availability</span></td>
+      </tr>
+      <tr>
+        <td><strong>Auto data schematization / Self-Healing Pipeline</strong></td>
+        <td>AI-driven CIM normalization and pipeline remediation—improves semantic readiness for agent consumption</td>
+        <td><span class="tag warn">Alpha</span></td>
+      </tr>
+      <tr>
+        <td><strong>Agent Builder; Triage, Guided Response, Malware Reversing, Incident Analysis agents</strong></td>
+        <td>No-code and pre-built agentic investigation workflows consuming governed Splunk context</td>
+        <td><span class="tag warn">Roadmap</span> <span class="tag">Fall 2026 GA</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>What frontier agents receive — curated vs. raw</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Access pattern</th>
+        <th>What the model sees</th>
+        <th>Typical token profile</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Raw MELT / raw RAG</strong></td>
+        <td>Millions of repetitive log lines, metric samples, or embedding chunks</td>
+        <td>~1.5M–2M+ per investigation</td>
+      </tr>
+      <tr>
+        <td><strong>MCP + SPL aggregation</strong></td>
+        <td>50–200 summarized rows, time buckets, top-N entities, anomaly lists</td>
+        <td>~3K–15K per investigation</td>
+      </tr>
+      <tr>
+        <td><strong>ES-curated context</strong></td>
+        <td>Notables, risk objects, timelines, TI matches, asset/identity enrichment</td>
+        <td>~3K–8K (up to ~15K with detail)</td>
+      </tr>
+      <tr>
+        <td><strong>ITSI-curated context</strong></td>
+        <td>Service health, impacted KPIs, episodes, dependency maps, critical-path trace summaries</td>
+        <td>~5K–15K</td>
+      </tr>
+      <tr>
+        <td><strong>MDL promoted + MCP</strong></td>
+        <td>Structured analytics slices, Parquet summaries, or search-in-place results from archive tiers</td>
+        <td>Pay query cost once; compact context to model</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Example agent workflow via MCP</h3>
+  <ol>
+    <li><strong>Trigger</strong> — Analyst or autonomous agent receives a notable, KPI breach, or natural-language question.</li>
+    <li><strong>Tool call</strong> — Frontier model invokes Splunk MCP Server with governed SPL (e.g., correlate auth failures to endpoint alerts for a high-risk user).</li>
+    <li><strong>Compact return</strong> — Splunk returns aggregated evidence under RBAC—entity list, timeline summary, top contributing events—not the full raw corpus.</li>
+    <li><strong>Reason &amp; recommend</strong> — Model synthesizes narrative, proposes follow-up SPL, or suggests SOAR playbook steps.</li>
+    <li><strong>Audit</strong> — Every tool invocation logged for AI GRC and incident reconstruction.</li>
+  </ol>
+
+  <h3>Messaging for Frontier AI conversations</h3>
+  <div class="quote-block">
+    "Splunk MCP Server turns frontier models into governed analysts—they query, they don't hoard. SPL does the compression; RBAC does the governance."
+    <br><em>vs. raw RAG and unmanaged lake pilots</em>
+  </div>
+  <div class="quote-block">
+    "Core Splunk gives frontier AI access to machine data. ES, ITSI, and MDL give frontier AI access to meaning—and MCP delivers it under the access controls you already enforce."
+    <br><em>full-stack positioning</em>
+  </div>
+  <div class="quote-block">
+    "Campus and state AI programs don't need a parallel data platform. They need governed tool access to the machine data you already retain in CDF."
+    <br><em>SLED AI initiative buyers</em>
+  </div>
+
+  <div class="callout">
+    <h3>Seller planning note</h3>
+    <p style="margin:0;">
+      MCP Server is GA, but maximum token-reduction value requires <strong>semantic readiness</strong> on the data agents query—CIM coverage, ES/ITSI enrichment, and promoted MDL slices. Lead with MCP for governance and economics; attach ES, ITSI, and MDL when buyers need cross-domain, archive-depth, or compliance-grade context. Treat Agent Builder and packaged agents as roadmap accelerators, not prerequisites for today's MCP value.
     </p>
   </div>
 </section>
@@ -1087,6 +1326,7 @@
         <li>Hot tier for real-time CIM detections; analytics tier for OCSF batch detections.</li>
         <li>Promote cold evidence on demand for deeper investigations.</li>
         <li>Search-in-place across Security Lake and Splunk without replatforming.</li>
+        <li>Governed agent connectivity via Splunk MCP Server under existing RBAC.</li>
         <li>Future agentic triage and guided response on governed data (roadmap).</li>
       </ul>
     </div>
@@ -1107,7 +1347,7 @@
         <li>Controlled discoverability and promotion support responsible AI access.</li>
         <li>Audit-friendly retention tiers for records and compliance mandates.</li>
         <li>Lineage from landed raw data through promoted analytics slices.</li>
-        <li>MCP and API access with enterprise access controls.</li>
+        <li>MCP and Splunk MCP Server access with enterprise RBAC and audit logging.</li>
       </ul>
     </div>
     <div class="audience-card">
@@ -1115,7 +1355,7 @@
       <ul>
         <li>Parquet export and GenAI-ready APIs—zero data prep for ML pipelines.</li>
         <li>Vector indexes for semantic search applications.</li>
-        <li>MCP consumption for agent and application development.</li>
+        <li>Splunk MCP Server for governed agent tool-use—SPL-first, not raw RAG.</li>
         <li>Search-in-place to explore data before committing to promotion.</li>
         <li>Standard open formats for integration with campus research stacks.</li>
       </ul>
@@ -1132,7 +1372,7 @@
       <li>Tiered use cases and promotion lifecycle</li>
       <li>MDL landing zone, Analytics Table, and long-term retention</li>
       <li>Core federated search (Splunk Enterprise/Cloud/O11y, Amazon S3, Amazon Security Lake)</li>
-      <li>Parquet export, GenAI APIs, vector indexes (emerging), MCP readiness</li>
+      <li>Parquet export, GenAI APIs, vector indexes, Splunk MCP Server</li>
       <li>Edge Processor / Ingest Processor for routing</li>
     </ul>
   </div>
@@ -1175,7 +1415,11 @@
     "Seamless tiering with no data engineering; land, discover, promote is the differentiator."
   </div>
   <div class="quote-block">
-    "AI-ready by design — open formats, Parquet, vector indexes, MCP, zero data prep."
+    "AI-ready by design — open formats, Parquet, vector indexes, Splunk MCP Server, zero data prep."
+  </div>
+  <div class="quote-block">
+    "Splunk MCP Server — frontier agents query governed machine data; they don't ingest raw firehoses."
+    <br><em>Frontier AI / agentic investigation</em>
   </div>
 
   <h4>Machine Data Lake specific</h4>
