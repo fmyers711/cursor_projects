@@ -465,7 +465,7 @@
       <span class="tag">Tier A — Hot</span>
       <strong>Real-time operations</strong>
       <span><strong>Products:</strong> Splunk Index, Enterprise Security, Observability Cloud</span>
-      <span style="display:block;margin-top:0.5rem;"><strong>Retention:</strong> 7–14 days (security example)</span>
+      <span style="display:block;margin-top:0.5rem;"><strong>Retention:</strong> 30–90 days (security example)</span>
       <span style="display:block;margin-top:0.35rem;"><strong>Use cases:</strong> CIM detections, active investigation, monitoring, troubleshooting</span>
     </div>
     <div class="pillar tier-b">
@@ -1270,7 +1270,7 @@
   <p>A typical SLED security operations flow through CDF tiers:</p>
   <ol>
     <li><strong>Data intake</strong> — Routed via Edge Processor / Ingest Processor.</li>
-    <li><strong>Immediate operations (Tier A)</strong> — High-value CIM detections remain in Splunk Index (Hot) with Enterprise Security; 7–14 day retention for active investigation.</li>
+    <li><strong>Immediate operations (Tier A)</strong> — High-value CIM detections remain in Splunk Index (Hot) with Enterprise Security; 30–90 day retention for active investigation.</li>
     <li><strong>Scaled analytics (Tier B)</strong> — Batch OCSF detections and extended investigations land in MDL Analytics Table; 90–180 day retention.</li>
     <li><strong>Long-term evidence (Tier C)</strong> — Raw and long-tail evidence held in MDL Long-Term Retention; small raw scans and promotion back up when deeper investigation is needed.</li>
     <li><strong>Agentic response (future)</strong> — Feeds Triage, Guided Response, and Malware Reversing agents as they become available.</li>
@@ -1400,7 +1400,7 @@
     <li>More than 90% of operational data sits in low-cost storage today—largely unstructured and inaccessible; MDL unlocks it.</li>
     <li>10× visibility with Machine Data Lake.</li>
     <li>No upfront cost to land data.</li>
-    <li>Tiered retention bands: Hot 7–14 days → Analytics Table 90–180 days → MDL long-term.</li>
+    <li>Tiered retention bands: Hot 30–90 days → Analytics Table 90–180 days → MDL long-term.</li>
     <li>Named GA products and tiers as documented above.</li>
   </ul>
   <p><em>Treat roadmap items as forward-looking and clearly caveated in procurement and architecture discussions.</em></p>
