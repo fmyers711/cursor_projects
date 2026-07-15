@@ -193,6 +193,58 @@
       font-size: 0.85rem;
       color: var(--muted);
     }
+    .csuite-banner {
+      background: linear-gradient(135deg, #07182d 0%, #12275c 100%);
+      color: #fff;
+      border-radius: 10px;
+      padding: 1.5rem 1.75rem;
+      margin: 1.5rem 0;
+    }
+    .csuite-banner h3 {
+      margin: 0 0 0.5rem;
+      color: #7ae2ff;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .csuite-banner p {
+      margin: 0 0 1.25rem;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1rem;
+      max-width: 52rem;
+    }
+    .csuite-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+    }
+    .csuite-card {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      padding: 1.15rem 1.25rem;
+      border-top: 3px solid var(--accent);
+    }
+    .csuite-card .num {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.06em;
+      margin-bottom: 0.35rem;
+    }
+    .csuite-card strong {
+      display: block;
+      font-size: 1rem;
+      margin-bottom: 0.4rem;
+      color: #fff;
+    }
+    .csuite-card span {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.75);
+      line-height: 1.45;
+    }
     .stat-row {
       display: flex;
       flex-wrap: wrap;
@@ -295,7 +347,7 @@
     <p class="eyebrow">Executive brief · State government &amp; higher education</p>
     <h1>Preparing for the Zero-Day Era: A Practical Operating Model</h1>
     <p class="subtitle">
-      Actionable guidance for CIOs, CISOs, CTOs, and CDOs leading mission-critical IT, security, and data programs—when patching alone is no longer enough and frontier AI has compressed the window between vulnerability discovery and exploitation.
+      Actionable guidance for CIOs, CISOs, CTOs, and CDOs—when patching alone is no longer enough and Zero Trust fundamentals (MFA, segmentation, immutable backups) require C-suite sponsorship to survive the post-Mythos threat landscape.
     </p>
     <div class="meta">
       <span>Audience: CIO · CISO · CTO · CDO</span>
@@ -308,9 +360,10 @@
 <nav class="toc" aria-label="Table of contents">
   <ul>
     <li><a href="#executive">Executive summary</a></li>
+    <li><a href="#csuite">C-suite must champion</a></li>
     <li><a href="#mythos">Why Mythos changed the conversation</a></li>
     <li><a href="#why">Why your environment is exposed</a></li>
-    <li><a href="#strategy">Three-part strategy</a></li>
+    <li><a href="#strategy">Zero Trust strategy</a></li>
     <li><a href="#vuln-mgmt">Risk-based vulnerability management</a></li>
     <li><a href="#identity">Identity &amp; authentication</a></li>
     <li><a href="#case-study">Case study lessons</a></li>
@@ -333,11 +386,35 @@
     Frontier AI models such as Anthropic's Claude Mythos Preview have made this urgency concrete. Vulnerability discovery is no longer a human-speed activity. Near-zero-day windows—sometimes measured in hours, not weeks—are functionally equivalent to zero days for most public-sector and campus environments with legacy systems, complex dependencies, and slow validation cycles.
   </p>
   <p>
-    As a CIO, CISO, CTO, or CDO, your board, legislature, regents, and constituents will ask whether you are prepared for a breach—not whether you have perfect security. The defensible operating model below focuses on controls that leading programs have demonstrated under real-world pressure.
+    As a CIO, CISO, CTO, or CDO, your board, legislature, regents, and constituents will ask whether you are prepared for a breach—not whether you have perfect security. <strong>These outcomes depend on executive sponsorship.</strong> Zero Trust is not an architecture slide deck; it is an operating commitment your leadership team must visibly champion—starting with three non-negotiable controls that hold when patching fails.
   </p>
 
+  <div class="csuite-banner" id="csuite">
+    <h3>C-suite must champion · Zero Trust in practice</h3>
+    <p>
+      When zero-days outpace patch deployment, the controls that survive real incidents are unglamorous and well-known. They fail in breached organizations not because they are ineffective, but because leadership never mandated rigorous execution. <strong>The C-suite must sponsor these three priorities—not delegate them to security operations alone.</strong>
+    </p>
+    <div class="csuite-grid">
+      <div class="csuite-card">
+        <span class="num">01</span>
+        <strong>Rigorous adherence to multi-factor authentication</strong>
+        <span>MFA on every remote-access path, admin console, VPN, and privileged account—no exceptions, no grace periods. Credential theft remains the most common initial access vector; MFA is the control that most reliably stops it.</span>
+      </div>
+      <div class="csuite-card">
+        <span class="num">02</span>
+        <strong>Network segmentation</strong>
+        <span>Isolate critical systems, research enclaves, and citizen-facing services so a single zero-day cannot cascade across your environment. Segmentation limits blast radius when exploitation gets through the perimeter.</span>
+      </div>
+      <div class="csuite-card">
+        <span class="num">03</span>
+        <strong>Verified, immutable backups</strong>
+        <span>Backups that are tested, air-gapped or write-once, and proven restorable—not backup jobs that exist on paper. Recovery is the final line of defense when prevention and containment fail.</span>
+      </div>
+    </div>
+  </div>
+
   <div class="callout accent">
-    <h3>The operating model executive leaders should champion</h3>
+    <h3>The broader operating model executive leaders should champion</h3>
     <ul>
       <li><strong>Reduce what attackers can reach</strong> — exposure control through Zero Trust and authenticated access</li>
       <li><strong>Reduce what they can steal</strong> — data minimization and lifecycle hygiene (a CDO priority)</li>
@@ -374,9 +451,9 @@
 
   <h3>What Mythos means for your leadership team</h3>
   <ul>
-    <li><strong>CIO / CTO:</strong> Budget and architecture decisions must assume patching will lag exploitation. Invest in exposure reduction (ZTNA, authenticated access) and infrastructure hardening—not more patch velocity alone.</li>
-    <li><strong>CISO:</strong> Detection and response are now primary survival capabilities, not afterthoughts. Behavioral detection matters when signatures cannot keep pace with unknown exploits.</li>
-    <li><strong>CDO:</strong> Data retained beyond business need is breach liability. Minimization is impact reduction when prevention fails.</li>
+    <li><strong>CIO / CTO:</strong> Champion Zero Trust as funded operating discipline—MFA enforcement, segmentation architecture, and backup verification are executive priorities, not optional security projects.</li>
+    <li><strong>CISO:</strong> Detection and response are primary survival capabilities, but they depend on segmentation boundaries and identity controls the C-suite has mandated org-wide.</li>
+    <li><strong>CDO:</strong> Data retained beyond business need is breach liability; immutable backups protect what must be retained for continuity and compliance.</li>
     <li><strong>All executives:</strong> The question boards and oversight bodies will ask is no longer <em>if</em> you will be tested, but <em>how quickly</em> you detect, contain, and recover.</li>
   </ul>
 
@@ -389,12 +466,12 @@
 
   <h3>Three-stage fallback when patching fails</h3>
   <p>
-    Leading guidance from Cisco's post-Mythos operational framework defines a clear fallback sequence when vulnerability management cannot keep pace:
+    Leading guidance from Cisco's post-Mythos operational framework defines a clear fallback sequence when vulnerability management cannot keep pace. <strong>The C-suite champions the second and third pillars directly:</strong>
   </p>
   <ol>
     <li><strong>Vulnerability management</strong> — scan, prioritize, patch. Still essential, but no longer the primary line of defense at AI-scale CVE volumes.</li>
-    <li><strong>Hardening fundamentals</strong> — MFA everywhere (especially VPN and admin access), CIS benchmarks and golden images, network segmentation to limit blast radius.</li>
-    <li><strong>Detection and response</strong> — EDR/XDR, behavioral detection, threat hunting, and well-exercised incident response for when exploitation gets through.</li>
+    <li><strong>Zero Trust hardening fundamentals</strong> — <em>executive-sponsored:</em> rigorous MFA everywhere (especially VPN and admin access), network segmentation to limit blast radius, CIS benchmarks and golden images.</li>
+    <li><strong>Detection, response, and recovery</strong> — EDR/XDR, behavioral detection, threat hunting, well-exercised incident response, and <em>verified, immutable backups</em> for when exploitation gets through.</li>
   </ol>
   <p>
     Mythos belongs in every zero-day executive briefing because it gives leadership a shared, credible reference point: the threat landscape has structurally changed, and the controls that survived real breaches are the ones worth funding now.
@@ -435,9 +512,9 @@
 </section>
 
 <section id="strategy">
-  <h2>Three-part strategy</h2>
+  <h2>Three-part strategy — anchored in Zero Trust</h2>
   <p>
-    The defensible recommendation for executive leadership rests on three principles that work together: <strong>reduce exposure, reduce impact, and build resilience.</strong>
+    The defensible recommendation for executive leadership rests on three principles that work together: <strong>reduce exposure, reduce impact, and build resilience.</strong> Zero Trust is the connective tissue: never trust, always verify—at the identity layer (MFA), the network layer (segmentation), and the recovery layer (immutable backups).
   </p>
 
   <div class="pillars">
@@ -456,24 +533,31 @@
   </div>
 
   <div class="practice-card">
-    <h3>1. Reduce exposure — the "moat" strategy</h3>
-    <p><strong>Goal:</strong> Buy time when patch windows collapse from weeks to hours.</p>
+    <h3>1. Reduce exposure — Zero Trust as the moat</h3>
+    <p><strong>Goal:</strong> Buy time when patch windows collapse from weeks to hours. <strong>C-suite role:</strong> Mandate authenticated access and fund ZTNA—not as a multi-year strategy deck, but as an immediate operating requirement.</p>
     <h4>Proven practices</h4>
     <ul>
-      <li><strong>Adopt Zero Trust Network Access (ZTNA).</strong> Require users and devices to authenticate before traffic can reach protected systems. ZTNA is positioned as a more granular, better user-experience replacement for traditional VPNs—not merely a strategic architecture discussion, but a practical near-zero-day mitigation.</li>
-      <li><strong>Move critical internet-facing systems behind authentication immediately.</strong> For systems that cannot be patched quickly, deploy an emergency "tiger team" operation: place them behind a VPN or load balancer that mandates authentication—even if full ZTNA rollout will take 1–2 years.</li>
+      <li><strong>Adopt Zero Trust Network Access (ZTNA).</strong> Require users and devices to authenticate before traffic can reach protected systems. ZTNA replaces perimeter-trust VPN models with verify-before-connect access—a practical near-zero-day mitigation, not a future-state architecture.</li>
+      <li><strong>Enforce rigorous MFA as a Zero Trust prerequisite.</strong> Every remote-access path, admin console, VPN session, and privileged account requires MFA—no exceptions. Executive leadership must back enforcement when departments push back on friction.</li>
+      <li><strong>Move critical internet-facing systems behind authentication immediately.</strong> For systems that cannot be patched quickly, deploy an emergency "tiger team" operation: place them behind authenticated access—even if full ZTNA rollout will take 1–2 years.</li>
       <li><strong>Prioritize internet-facing systems first.</strong> Non-public systems that do not truly need anonymous internet access should not have it.</li>
       <li><strong>Assume reachability equals exploitability.</strong> If attackers can see it, scan it, and reach it, they can exploit it faster than most teams can patch it.</li>
     </ul>
     <blockquote>
-      "Zero Trust is no longer just a strategic architecture discussion; it is a practical mitigation for near-zero-day exposure."
+      "Zero Trust is no longer a strategic architecture discussion—it is a C-suite operating commitment. MFA and authenticated access are the first controls that hold when patching fails."
     </blockquote>
   </div>
 
   <div class="practice-card">
-    <h3>2. Reduce impact — data risk minimization</h3>
-    <p><strong>Goal:</strong> Assume some compromise will happen. Limit what attackers can exfiltrate when it does.</p>
-    <h4>Best practices</h4>
+    <h3>2. Reduce impact — segmentation and data risk minimization</h3>
+    <p><strong>Goal:</strong> Assume some compromise will happen. Limit spread and exfiltration when it does. <strong>C-suite role:</strong> Fund segmentation projects and hold line-of-business owners accountable for east-west traffic boundaries.</p>
+    <h4>Network segmentation (C-suite priority #2)</h4>
+    <ul>
+      <li><strong>Segment critical systems from general-purpose networks.</strong> ERP, identity, research HPC, and citizen-facing services should not share flat network zones with student or guest traffic.</li>
+      <li><strong>Test segmentation boundaries with breakout assessments.</strong> Can a compromised endpoint reach critical infrastructure? From IT to OT? From one agency bureau to another? Find broken boundaries before adversaries do.</li>
+      <li><strong>Treat segmentation as architectural property, not a firewall project.</strong> In a post-Mythos world, a zero-day providing initial access to one segment should not cascade across your entire environment.</li>
+    </ul>
+    <h4>Data risk minimization</h4>
     <ul>
       <li><strong>Identify stale, unused, or forgotten sensitive data.</strong> Old SharePoint repositories, expired research datasets, legacy file shares, and unnecessary exports are common high-risk retention problems in campus and agency environments.</li>
       <li><strong>Assume a significant share of stored sensitive data has outlived its business purpose</strong>—leading programs treat unnecessary retention as liability, not asset.</li>
@@ -481,14 +565,21 @@
       <li><strong>Build a multi-year data minimization program</strong> with policies, ownership, and automation—not a one-time cleanup project.</li>
     </ul>
     <blockquote>
-      "Data minimization is breach impact reduction."
+      "Segmentation limits blast radius. Data minimization limits what attackers can steal. Both require executive sponsorship to overcome organizational inertia."
     </blockquote>
   </div>
 
   <div class="practice-card">
-    <h3>3. Build resilience — prepare for inevitable compromise</h3>
-    <p><strong>Goal:</strong> Detect faster, investigate faster, recover faster. Resilience matters as much as prevention in the zero-day era.</p>
-    <h4>Best practices</h4>
+    <h3>3. Build resilience — detection, response, and verified recovery</h3>
+    <p><strong>Goal:</strong> Detect faster, investigate faster, recover faster. Resilience matters as much as prevention in the zero-day era. <strong>C-suite role:</strong> Mandate backup verification and fund immutable backup architecture—not assume backups exist because IT reports green status.</p>
+    <h4>Verified, immutable backups (C-suite priority #3)</h4>
+    <ul>
+      <li><strong>Backups must be immutable.</strong> Use write-once, air-gapped, or object-lock storage so ransomware and destructive attackers cannot encrypt or delete recovery copies.</li>
+      <li><strong>Backups must be verified.</strong> Regular restore tests—not backup job success logs—prove you can recover mission-critical systems within your RTO/RPO commitments.</li>
+      <li><strong>Backups must be independent of production identity.</strong> Compromised domain credentials should not grant access to backup infrastructure.</li>
+      <li><strong>Executive leadership must ask: "When did we last prove a full restore?"</strong> Boards and oversight bodies will ask this after an incident; ask it before one.</li>
+    </ul>
+    <h4>Detection and response</h4>
     <ul>
       <li><strong>Maintain a well-exercised incident response plan</strong>—not a document on a shelf, but an operationally mature capability that is tested regularly.</li>
       <li><strong>Improve detection, triage, and response speed</strong> so analysts focus on high-value response work, not repetitive alert triage.</li>
@@ -496,7 +587,7 @@
       <li><strong>Provide secure, agency- or institution-supported tools</strong> to users so they do not seek higher-risk, unvetted alternatives.</li>
     </ul>
     <blockquote>
-      "In the zero-day era, resilience matters as much as prevention. You need to know what happened, what was touched, what data was exposed, and what action to take—quickly."
+      "In the zero-day era, resilience matters as much as prevention. Immutable, verified backups are the control that determines whether you recover—or negotiate."
     </blockquote>
   </div>
 </section>
@@ -559,22 +650,24 @@
 </section>
 
 <section id="identity">
-  <h2>Identity and authentication</h2>
+  <h2>Identity and authentication — rigorous MFA</h2>
   <p>
-    <strong>Identity is a critical defensive layer</strong>—often the difference between an attempted exploit and a successful breach path. Cisco's post-Mythos guidance identifies MFA as the control that most reliably stops credential-based initial access.
+    <strong>MFA is C-suite priority #1 within the Zero Trust framework.</strong> Identity is often the difference between an attempted exploit and a successful breach path. Cisco's post-Mythos guidance identifies MFA as the control that most reliably stops credential-based initial access—and it only works when leadership mandates universal enforcement, not selective adoption.
   </p>
 
-  <h3>Passwordless authentication</h3>
+  <h3>What "rigorous adherence" means in practice</h3>
   <ul>
-    <li><strong>Move aggressively toward passwordless authentication.</strong> Leading programs report highly effective results against credential phishing—the most common first step in adversary playbooks.</li>
-    <li><strong>Require strong authentication before granting access to sensitive systems.</strong> If authentication becomes the moat, weak authentication becomes the bridge for attackers.</li>
+    <li><strong>MFA on every remote-access path</strong> — VPN, ZTNA, cloud admin consoles, and vendor remote support sessions</li>
+    <li><strong>MFA on every privileged account</strong> — domain admin, cloud root, database admin, and emergency break-glass accounts (with monitored, time-limited use)</li>
+    <li><strong>No exceptions without documented, time-bound risk acceptance signed by executive leadership</strong> — not by individual managers</li>
+    <li><strong>Phishing-resistant factors where feasible</strong> — move toward passwordless and FIDO2/WebAuthn for high-value accounts; TOTP/SMS only as interim, not destination state</li>
     <li><strong>Integrate identity telemetry into security analytics.</strong> Authentication events, anomalous access patterns, and privilege changes should feed detection and investigation workflows—not live in a separate silo.</li>
   </ul>
 
   <div class="callout accent">
-    <h3>Why this matters for zero-day readiness</h3>
+    <h3>Why the C-suite must own MFA enforcement</h3>
     <p>
-      Gaining VPN or credential access is typically the first step in most adversary playbooks. Passwordless is not just a convenience initiative—it is a <strong>zero-day readiness control</strong> that reduces the probability that exposure reduction measures can be bypassed through stolen credentials.
+      Gaining VPN or credential access is typically the first step in most adversary playbooks. Security teams can deploy Duo or equivalent tools, but only executive leadership can override the organizational resistance that leaves gaps in MFA coverage. <strong>Partial MFA is not Zero Trust.</strong>
     </p>
   </div>
 </section>
@@ -615,14 +708,19 @@
         <td>Zero days arrive before intel feeds; assume unknown threats</td>
       </tr>
       <tr>
-        <td>SSO</td>
+        <td>SSO / MFA</td>
         <td>Helped authenticated users; did not protect server-level vulns</td>
-        <td>Identity controls must be paired with authenticated network access</td>
+        <td>Identity controls must be universal and paired with authenticated network access—partial MFA is not Zero Trust</td>
       </tr>
       <tr>
         <td>Network segmentation</td>
         <td>Limited lateral movement; data on host still exposed</td>
-        <td>Segmentation reduces spread but not initial data loss</td>
+        <td>Segmentation works when funded and tested—C-suite must champion boundaries, not assume flat networks are acceptable</td>
+      </tr>
+      <tr>
+        <td>Backups</td>
+        <td>Not cited in incident—recovery posture unknown</td>
+        <td>Verified, immutable backups are the control that determines whether you recover; executive leadership must mandate restore testing</td>
       </tr>
       <tr>
         <td>Egress controls</td>
@@ -648,7 +746,8 @@
 
   <h3>What CIOs and CISOs must drive culturally</h3>
   <ul>
-    <li><strong>Security is operating discipline, not a tooling problem.</strong> Leadership must treat exposure reduction, data hygiene, and response speed as funded, ongoing programs with measurable outcomes.</li>
+    <li><strong>Zero Trust is an executive commitment, not a security project.</strong> MFA enforcement, segmentation funding, and backup verification require C-suite sponsorship to overcome organizational resistance.</li>
+    <li><strong>Security is operating discipline, not a tooling problem.</strong> Leadership must treat exposure reduction, segmentation, data hygiene, and recovery testing as funded programs with measurable outcomes.</li>
     <li><strong>Absolute security is impossible.</strong> Adopt informed risk acceptance: minimize risk, provide sanctioned secure tools, and steer users away from high-risk alternatives.</li>
     <li><strong>Empower internal talent.</strong> Many state and campus organizations already have skilled staff who can build dashboards, analytics, and AI-driven workflows—when given the right data platform and executive air cover.</li>
   </ul>
@@ -695,13 +794,13 @@
   <p>
     Leading higher-education programs responding to the post-Mythos landscape share a clear thesis: <strong>patching alone is insufficient</strong> when exploitation can outpace deployment. Their model shifts defense from comparative safety to <strong>reduce exposure, prioritize ruthlessly, and prepare for inevitable compromise</strong>.
   </p>
-  <p>Five operating principles validated in production environments:</p>
+  <p>Five operating principles validated in production environments—anchored in Zero Trust:</p>
   <ul>
-    <li><strong>Reduce exposure</strong> — minimize internet-facing infrastructure (ZTNA before VPN)</li>
-    <li><strong>Strengthen authentication</strong> — go passwordless to eliminate credential-based entry</li>
+    <li><strong>Reduce exposure</strong> — ZTNA and rigorous MFA before VPN; authenticate before connect</li>
+    <li><strong>Segment the network</strong> — limit blast radius when zero-days provide initial access</li>
     <li><strong>Prioritize by local risk context</strong> — fix the riskiest ~5% first</li>
     <li><strong>Minimize data liability</strong> — dispose of sensitive data that no longer serves a business purpose</li>
-    <li><strong>Prepare for compromise</strong> — well-exercised IR plus AI-accelerated investigation</li>
+    <li><strong>Prepare for compromise</strong> — verified immutable backups, well-exercised IR, and AI-accelerated investigation</li>
   </ul>
 
   <h3>Mapping Cisco + Splunk capabilities to the operating model</h3>
@@ -764,17 +863,21 @@
 
   <h3>Immediate (0–30 days)</h3>
   <ul class="checklist">
+    <li>Audit MFA coverage gaps across VPN, admin, and privileged accounts—report exceptions to executive leadership</li>
+    <li>Inventory network segmentation boundaries; identify flat zones where critical systems share networks with general traffic</li>
+    <li>Validate backup restore capability for top 5 mission-critical systems (prove recovery, not backup job status)</li>
     <li>Inventory internet-facing systems that hold sensitive data or support critical operations</li>
-    <li>Launch a "tiger team" to move highest-risk exposed systems behind VPN or authenticated load balancers</li>
+    <li>Launch a "tiger team" to move highest-risk exposed systems behind authenticated access</li>
     <li>Define a contextual vulnerability scoring model (exposure + criticality + data sensitivity + severity)</li>
-    <li>Identify top 5% of vulnerabilities for immediate remediation focus</li>
     <li>Validate incident response plan readiness with a tabletop exercise focused on zero-day scenarios</li>
   </ul>
 
   <h3>Near-term (30–60 days)</h3>
   <ul class="checklist">
+    <li>Close all MFA exceptions or require executive-signed risk acceptance for each remaining gap</li>
     <li>Begin ZTNA pilot for highest-risk application tiers</li>
-    <li>Launch passwordless authentication rollout for privileged and remote-access users</li>
+    <li>Implement segmentation for highest-criticality systems (ERP, identity, research HPC)</li>
+    <li>Deploy immutable backup architecture for tier-1 systems; schedule quarterly restore tests</li>
     <li>Start data minimization assessment: stale SharePoint, research archives, legacy exports</li>
     <li>Build executive and operational dashboards for exposure, patch status, and critical assets</li>
     <li>Establish governance for internal AI tools and Shadow IT applications</li>
@@ -783,10 +886,12 @@
   <h3>Strategic (60–90 days and beyond)</h3>
   <ul class="checklist">
     <li>Scale ZTNA program with phased rollout plan (accept 1–2 year full deployment timeline)</li>
+    <li>Achieve org-wide MFA with phishing-resistant factors for privileged and remote-access populations</li>
+    <li>Complete east-west segmentation roadmap with breakout assessment validation</li>
     <li>Operationalize multi-year data lifecycle and retention automation</li>
     <li>Deploy AI-augmented alert triage for repetitive SecOps workflows</li>
     <li>Integrate identity, vulnerability, network, and application telemetry for unified investigation</li>
-    <li>Provide secure, institution-supported collaboration and AI tools to reduce risky user workarounds</li>
+    <li>Institutionalize annual executive review of backup restore test results</li>
   </ul>
 
   <h3>Cisco and Splunk's role in the plan</h3>
@@ -795,10 +900,11 @@
     <h4>Phase 1 — Tactical / Immediate (0–90 days): Stop the bleeding</h4>
     <p class="phase-meta">Insulate critical systems fast—the first post-Mythos priority.</p>
     <ul>
-      <li><strong>Inventory exposure</strong> — use Splunk Asset &amp; Identity + Cisco visibility to enumerate every internet-facing, non-public critical system</li>
+      <li><strong>Audit MFA gaps</strong> — use Duo Identity Intelligence to find accounts without MFA; escalate exceptions to executive leadership</li>
+      <li><strong>Inventory exposure and segmentation</strong> — use Splunk Asset &amp; Identity + Cisco visibility to map internet-facing systems and flat network zones</li>
+      <li><strong>Validate backup restore</strong> — prove recovery for tier-1 systems before the next zero-day event</li>
       <li><strong>Insulate fast</strong> — move top-priority systems behind Duo-authenticated access / load balancers</li>
-      <li><strong>Stand up risk-based triage</strong> — deploy ES with RBA to begin scoring notables by entity risk, ending raw-alert overload</li>
-      <li><strong>Quick passwordless pilot</strong> — enable Duo passwordless for highest-privilege accounts first</li>
+      <li><strong>Stand up risk-based triage</strong> — deploy ES with RBA to begin scoring notables by entity risk</li>
     </ul>
   </div>
 
@@ -806,9 +912,9 @@
     <h4>Phase 2 — Operational (3–9 months): Build the moat</h4>
     <p class="phase-meta">ZTNA and risk-scoring programs that scale beyond tiger-team fixes.</p>
     <ul>
-      <li><strong>Roll out ZTNA</strong> — replace VPN with Cisco Secure Access for granular, authenticate-before-connect access</li>
-      <li><strong>Operationalize risk-based vulnerability management</strong> — integrate Cisco Vulnerability Management scoring with Splunk exposure/criticality/data-sensitivity context; focus on the riskiest ~5%</li>
-      <li><strong>Expand passwordless</strong> — prioritize privileged, remote-access, and high-risk user populations</li>
+      <li><strong>Roll out ZTNA with universal MFA</strong> — replace VPN with Cisco Secure Access; close MFA exceptions org-wide</li>
+      <li><strong>Implement segmentation</strong> — deploy Cisco Secure Firewall and Hypershield for east-west boundaries on critical tiers</li>
+      <li><strong>Operationalize risk-based vulnerability management</strong> — integrate Cisco Vulnerability Management scoring with Splunk context; focus on the riskiest ~5%</li>
       <li><strong>Automate response</strong> — deploy SOAR playbooks with approval gates for the most common incident types</li>
     </ul>
   </div>
@@ -834,6 +940,18 @@
     </thead>
     <tbody>
       <tr>
+        <td>We are championing Zero Trust—starting with universal MFA</td>
+        <td>Names the #1 control that stops credential-based initial access; demonstrates executive ownership</td>
+      </tr>
+      <tr>
+        <td>We are segmenting critical systems to limit blast radius</td>
+        <td>Shows architectural discipline; a zero-day in one zone should not cascade across the environment</td>
+      </tr>
+      <tr>
+        <td>We have verified, immutable backups—not just backup jobs</td>
+        <td>Addresses the recovery question boards ask after incidents; proves resilience beyond prevention</td>
+      </tr>
+      <tr>
         <td>Mythos proved the threat timeline has structurally changed</td>
         <td>Grounds urgency in a credible, widely discussed inflection point—not fear-mongering</td>
       </tr>
@@ -847,7 +965,7 @@
       </tr>
       <tr>
         <td>We are putting authentication in front of critical applications now</td>
-        <td>Immediate, practical mitigation while longer ZTNA programs mature</td>
+        <td>Immediate Zero Trust mitigation while longer ZTNA programs mature</td>
       </tr>
       <tr>
         <td>We are reducing stale sensitive data (CDO-led)</td>
@@ -869,18 +987,26 @@
   <h2>Bottom line</h2>
 
   <div class="callout accent">
-    <h3>The practical operating model for surviving the zero-day era</h3>
+    <h3>What the C-suite must champion</h3>
+    <ol>
+      <li><strong>Rigorous adherence to multi-factor authentication.</strong> Universal MFA on every remote-access and privileged path—no exceptions without executive risk acceptance. The first Zero Trust control that holds when patching fails.</li>
+      <li><strong>Network segmentation.</strong> Isolate critical systems so a single zero-day cannot cascade. Segmentation is architectural property, not a firewall project.</li>
+      <li><strong>Verified, immutable backups.</strong> Backups that are tested, write-once, and proven restorable—the final line of defense when prevention and containment fail.</li>
+    </ol>
+  </div>
+
+  <div class="callout">
+    <h3>The broader operating model</h3>
     <ol>
       <li><strong>Reduce what attackers can reach.</strong> ZTNA, authenticated access, and immediate exposure controls buy time when patch windows collapse.</li>
-      <li><strong>Reduce what they can steal.</strong> Data minimization shrinks blast radius when prevention fails.</li>
+      <li><strong>Reduce what they can steal.</strong> Segmentation and data minimization shrink blast radius when prevention fails.</li>
       <li><strong>Prioritize what must be fixed first.</strong> Contextual vulnerability scoring focuses scarce resources on the riskiest ~5%.</li>
-      <li><strong>Strengthen identity.</strong> Passwordless authentication eliminates the most common initial access path.</li>
-      <li><strong>Prepare to respond fast.</strong> Mature incident response and AI-augmented investigation are now core survival capabilities—not optional enhancements.</li>
+      <li><strong>Prepare to respond and recover fast.</strong> Mature incident response, AI-augmented investigation, and verified backups are core survival capabilities.</li>
     </ol>
   </div>
 
   <p>
-    This is not a call to abandon defense-in-depth. It is a call to <strong>evolve it</strong> for the post-Mythos era: complement traditional controls with exposure reduction, impact minimization, contextual prioritization, stronger identity, and faster response. For state agencies and campuses, the oversight question is not <em>if</em> your controls will be tested, but <em>how quickly</em> you can detect, contain, and recover when they are.
+    This is not a call to abandon defense-in-depth. It is a call to <strong>evolve it</strong> for the post-Mythos era under executive-sponsored Zero Trust: rigorous MFA, network segmentation, and verified immutable backups first—then contextual prioritization and faster response. For state agencies and campuses, the oversight question is not <em>if</em> your controls will be tested, but <em>how quickly</em> you can detect, contain, and recover when they are.
   </p>
 </section>
 
