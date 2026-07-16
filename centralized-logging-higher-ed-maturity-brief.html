@@ -392,7 +392,7 @@
     </p>
     <div class="meta">
       <span>Audience: Higher Education IT &amp; Security Leadership</span>
-      <span>Maturity model: Crawl · Walk · Run</span>
+      <span>Maturity model: Crawl · Walk · Run (OMB M-21-31 aligned)</span>
       <span>Focus: Security Ops + IT Ops maturity acceleration</span>
     </div>
   </div>
@@ -440,6 +440,14 @@
       <b>$2.86M</b>
       <span>Average data breach cost in public sector (2025)</span>
     </div>
+    <div class="stat danger">
+      <b>$551K</b>
+      <span>Avg. direct cost to recover from a security breach (enterprise)</span>
+    </div>
+    <div class="stat danger">
+      <b>+$69K</b>
+      <span>Avg. indirect breach recovery costs (enterprise)</span>
+    </div>
     <div class="stat success">
       <b>1 platform</b>
       <span>Single source of truth vs. fragmented silos across campuses and clouds</span>
@@ -471,19 +479,23 @@
   <div class="pillars">
     <div class="pillar">
       <strong>Enhanced visibility &amp; accelerated troubleshooting</strong>
-      <span>A single source of truth for system, network, and user activity. IT teams identify patterns, spot anomalies, and correlate events across the entire campus environment from one location—reducing downtime during peak periods like registration and finals.</span>
+      <span><strong>Quantifiable impact:</strong> A single source of truth for system, network, and user activity makes it easier to identify patterns, spot anomalies, and correlate events across the entire campus—from one location instead of manually sifting through disparate logs.</span>
+      <span style="display:block;margin-top:0.5rem;"><strong>Operational efficiency:</strong> Simplified log management frees IT teams to focus on critical tasks during peak periods like registration and finals, improving overall operational efficiency and reducing downtime.</span>
     </div>
     <div class="pillar">
       <strong>Strengthened security posture &amp; incident response</strong>
-      <span>Continuous monitoring and correlation of security events improves detection of unauthorized access, malware, and insider threats. Comprehensive event records enable attack timeline reconstruction and proactive threat response.</span>
+      <span><strong>Quantifiable impact:</strong> Continuous monitoring and correlation of security events significantly improves detection of unauthorized access, malware, and insider threats. Comprehensive records aid attack timeline reconstruction and uncovering hidden threats.</span>
+      <span style="display:block;margin-top:0.5rem;"><strong>Real-time response:</strong> Monitoring and alerting capabilities enable proactive threat response—critical when research IP, student PII, and credential-stuffing campaigns target open academic networks.</span>
     </div>
     <div class="pillar">
       <strong>Simplified compliance &amp; auditing</strong>
-      <span>Reliable, consistent activity records for FERPA, HIPAA (campus health centers), PCI-DSS (payment systems), SOC 2, SOX (foundation finances), and NIST 800-53 (FISMA-aligned research grants). Automated retention and integrity controls streamline audit trails.</span>
+      <span><strong>Quantifiable impact:</strong> Reliable, consistent activity records demonstrate adherence to FERPA, HIPAA (campus health centers), PCI-DSS, SOC 2, SOX (foundation finances), and NIST 800-53 (FISMA-aligned research grants).</span>
+      <span style="display:block;margin-top:0.5rem;"><strong>Audit readiness:</strong> Automated log retention, integrity controls, and streamlined audit trail generation reduce the administrative burden of compliance and board risk reporting.</span>
     </div>
     <div class="pillar">
       <strong>Cost reduction &amp; resource optimization</strong>
-      <span>Eliminates redundant log storage, reduces manual log collection effort, and makes downstream SIEM and SOAR investments more efficient. Frees scarce security and IT staff for higher-value work.</span>
+      <span><strong>Quantifiable impact:</strong> Streamlined log management saves valuable staff time; redundant log storage can be eliminated; sophisticated centralized platforms improve ROI on downstream SIEM and SOAR investments.</span>
+      <span style="display:block;margin-top:0.5rem;"><strong>Resource multiplier:</strong> Scarce higher-ed security and IT teams gain effective capacity without proportional headcount growth—essential when staffing cannot scale with hybrid cloud and multi-campus complexity.</span>
     </div>
   </div>
 
@@ -549,8 +561,8 @@
       </tr>
       <tr>
         <td><span class="tag risk">High</span> Escalating breach costs</td>
-        <td>Average public sector breach: $2.86M (2025). Enterprise recovery averages $551K direct + $69K indirect costs.</td>
-        <td>Diverted funds from academic mission; potential litigation and regulatory penalties</td>
+        <td>Average public sector breach: $2.86M (2025). Breaches taking 200+ days to resolve cost substantially more—UK public sector delays can add nearly £1M (£3.74M vs. £2.84M). Enterprise recovery averages $551K direct + $69K indirect.</td>
+        <td>Diverted funds from academic mission; potential litigation, notification costs, and regulatory penalties</td>
       </tr>
       <tr>
         <td><span class="tag risk">High</span> Compliance failures</td>
@@ -581,27 +593,27 @@
     <div class="log-card">
       <h3>Security event logs</h3>
       <p class="sources"><strong>Sources:</strong> Firewalls, IDS/IPS, antivirus/EDR, SIEM, email security gateways</p>
-      <p>Frontline detection of malicious activity—unauthorized access, malware, network intrusions. Centralization enables real-time correlation across the entire campus infrastructure, drastically reducing time to detect and contain threats targeting research networks and student systems.</p>
+      <p><strong>Why critical:</strong> Frontline detection of malicious activity—unauthorized access, malware, network intrusions. Centralization enables real-time correlation across the entire campus infrastructure, drastically reducing time to detect and contain threats. Directly mitigates delayed incident detection and escalating breach costs.</p>
     </div>
     <div class="log-card">
       <h3>Authentication &amp; access logs</h3>
       <p class="sources"><strong>Sources:</strong> Active Directory, LDAP, SSO (Shibboleth, SAML), VPN, application access logs</p>
-      <p>Records who accessed what, when, and from where. Essential for identifying unauthorized access, privilege escalation, and insider threats. Critical for FERPA access audits and NIST 800-53 access control monitoring.</p>
+      <p><strong>Why critical:</strong> Records who accessed what, when, and from where. Essential for identifying unauthorized access, privilege escalation, and insider threats. Without centralization, institutions face compliance failures and compromised forensics—unable to prove FERPA adherence or trace breach origins (NIST 800-53 access control monitoring).</p>
     </div>
     <div class="log-card">
       <h3>Operating system logs</h3>
       <p class="sources"><strong>Sources:</strong> Windows Event Logs, Linux syslog, macOS unified logging</p>
-      <p>Granular host-level insights into system health, configuration changes, and local security events. Vital for troubleshooting endpoint and server issues and detecting suspicious behavior that bypasses network-level controls.</p>
+      <p><strong>Why critical:</strong> Granular host-level insights into system health, configuration changes, and local security events. Their absence leads to reduced operational visibility and ineffective troubleshooting—prolonging LMS, Wi-Fi, and SIS outages. Also vital for detailed forensic analysis during security incidents.</p>
     </div>
     <div class="log-card">
       <h3>Network device logs</h3>
       <p class="sources"><strong>Sources:</strong> Routers, switches, DNS, DHCP, load balancers, wireless controllers</p>
-      <p>Visibility into traffic patterns, connectivity issues, and network-based attacks. Enables monitoring of campus-wide network health, bottleneck identification, and detection of anomalous traffic across residence halls and academic buildings.</p>
+      <p><strong>Why critical:</strong> Visibility into traffic patterns, connectivity issues, and network-based attacks or misconfigurations. Centralization enables campus-wide network health monitoring, bottleneck identification, and detection of anomalous traffic—reducing delayed incident detection for network-level threats across residence halls and academic buildings.</p>
     </div>
     <div class="log-card">
       <h3>Application logs</h3>
       <p class="sources"><strong>Sources:</strong> Web servers, databases, LMS (Canvas, Blackboard), SIS (Banner, PeopleSoft), cloud SaaS</p>
-      <p>Application performance, errors, and security events at the layer where student data and business logic reside. Critical for maintaining availability of essential services and detecting sophisticated application-layer attacks.</p>
+      <p><strong>Why critical:</strong> Application performance, errors, and security events (failed logins, data manipulation, exploited vulnerabilities) at the layer where student data and business logic reside. Without them, reduced operational visibility and compromised forensic analysis become significant risks—potentially leading to service disruptions or data breaches at the application layer.</p>
     </div>
   </div>
 </section>
@@ -609,7 +621,7 @@
 <section id="maturity">
   <h2>Centralized logging enables rapid security and IT maturity</h2>
   <p>
-    In a phased <strong>crawl-walk-run</strong> maturity model, centralized logging is the essential <strong>Crawl</strong> phase—the foundation upon which integrated detection (<strong>Walk</strong>) and automated predictive operations (<strong>Run</strong>) are built. Each phase progressively accelerates both cybersecurity operations and IT operations maturity.
+    The phased <strong>Crawl · Walk · Run</strong> approach—aligned with the <strong>OMB M-21-31</strong> Federal Zero Trust Strategy and widely adopted across public-sector maturity programs—positions centralized logging as the essential <strong>Crawl</strong> phase. Integrated detection (<strong>Walk</strong>) and automated predictive operations (<strong>Run</strong>) build on this foundation. Each phase progressively accelerates both cybersecurity operations and IT operations maturity for campus environments.
   </p>
 
   <div class="diagram-wrap">
@@ -621,9 +633,11 @@
         </div>
         <div class="phase-body">
           <h3>Centralized logging — the foundation</h3>
-          <p><strong>Why it's "Crawl":</strong> Before any sophisticated analysis or automation can occur, telemetry must be collected, aggregated, and made accessible. This is data aggregation—not yet intelligence.</p>
-          <p><strong>Security ops impact:</strong> Unified repository of security events, authentication, OS, and network logs. Mitigates delayed detection, compliance gaps, and forensic blind spots.</p>
-          <p><strong>IT ops impact:</strong> Single searchable platform for troubleshooting across campuses and clouds. Reduces manual log collection during outages.</p>
+          <p><strong>Why it's "Crawl":</strong> Before any sophisticated analysis or automation can occur, telemetry must be collected, aggregated, and made accessible. Centralized logging provides critical data aggregation—not yet intelligence.</p>
+          <p><strong>Addresses major risks:</strong> Without centralization, institutions face delayed incident detection, compliance failures, reduced operational visibility, and compromised forensics. Centralization mitigates these by providing a single, accessible source of truth for security events, authentication, OS, network, and application logs.</p>
+          <p><strong>Enables major benefits:</strong> Enhanced visibility and accelerated troubleshooting; strengthened security posture; simplified compliance; and initial cost reduction through streamlined log management.</p>
+          <p><strong>Security ops impact:</strong> Unified repository across campuses, research enclaves, and cloud services.</p>
+          <p><strong>IT ops impact:</strong> Single searchable platform for troubleshooting—reducing manual log collection during registration outages and network incidents.</p>
           <div class="phase-outcome">
             <strong>Outcome:</strong> A unified, accessible repository of all relevant IT and security data. Without this phase, Walk and Run investments are impossible or highly inefficient.
           </div>
@@ -636,9 +650,10 @@
         </div>
         <div class="phase-body">
           <h3>Integrated issue and threat detection</h3>
-          <p><strong>Why it's "Walk":</strong> With data centralized, organizations implement SIEM correlation, analytics, and meaningful alerting—moving from collection to intelligence.</p>
-          <p><strong>Security ops impact:</strong> Correlate failed logins with unusual network traffic, detect multi-stage attack chains, reduce MTTD/MTTR. Example: authentication anomaly on a research server followed by outbound data transfer from the same host.</p>
-          <p><strong>IT ops impact:</strong> Detect operational anomalies—disk saturation trends, service degradation patterns, configuration drift—before they cause registration-system or Wi-Fi outages.</p>
+          <p><strong>Why it's "Walk":</strong> With data centralized, organizations implement SIEM platforms, advanced analytics, and meaningful alerting—moving from collection to intelligence.</p>
+          <p><strong>Builds on visibility:</strong> Centralized logs become the input for real-time correlation across sources—detecting complex attack chains or operational issues invisible in isolated logs.</p>
+          <p><strong>Deepens security posture:</strong> Correlate security events with authentication, OS, and network logs (e.g., failed login on a research server followed by unusual outbound traffic from the same IP)—significantly reducing MTTD and MTTR.</p>
+          <p><strong>IT ops impact:</strong> Detect operational anomalies—disk saturation, service degradation, configuration drift—before they cause registration-system or Wi-Fi outages during peak demand.</p>
           <div class="phase-outcome">
             <strong>Outcome:</strong> Proactive identification of security incidents and operational issues through intelligent correlation—faster, more accurate responses.
           </div>
@@ -651,9 +666,10 @@
         </div>
         <div class="phase-body">
           <h3>Automated predictive operations</h3>
-          <p><strong>Why it's "Run":</strong> Organizations automate responses, predict problems before they occur, and optimize operations proactively via SOAR, machine learning, and AI.</p>
-          <p><strong>Security ops impact:</strong> Automated threat containment within seconds; ML models identify subtle anomalies and zero-day indicators; automated threat hunting across centralized data.</p>
-          <p><strong>IT ops impact:</strong> Predict impending failures (disk, capacity, service health) and trigger remediation before student-facing outages; automated runbooks for common operational alerts.</p>
+          <p><strong>Why it's "Run":</strong> Organizations automate responses, predict problems before they occur, and optimize operations proactively via SOAR, machine learning, and AI—reserving human expertise for complex or novel challenges.</p>
+          <p><strong>Maximizes cost optimization:</strong> Automated responses to common alerts reduce manual workload; predictive analytics anticipate failures or vulnerabilities before costly downtime or breaches.</p>
+          <p><strong>Prevents escalation:</strong> Automated threat containment can limit breach impact within seconds; ML models trained on centralized log data identify subtle zero-day indicators and enable proactive threat hunting.</p>
+          <p><strong>IT ops impact:</strong> Predict impending disk or capacity failures and trigger remediation before student-facing outages; automated runbooks for common operational alerts.</p>
           <div class="phase-outcome">
             <strong>Outcome:</strong> A highly efficient, resilient campus IT environment where many tasks are automated, issues are predicted and prevented, and human expertise focuses on complex challenges.
           </div>
@@ -788,7 +804,7 @@
 
 <footer>
   <p>
-    Executive brief for higher education IT and security leadership. Metrics cited reflect public sector and enterprise benchmarks (IBM Cost of a Data Breach 2025, OWASP Top 10). Adapt retention and compliance references to your institution's specific regulatory obligations.
+    Executive brief for higher education IT and security leadership. Maturity model aligned with OMB M-21-31 (Federal Zero Trust Strategy). Metrics cited reflect public sector and enterprise benchmarks (IBM Cost of a Data Breach 2025, OWASP Top 10). Adapt retention and compliance references to your institution's specific regulatory obligations.
   </p>
 </footer>
 
