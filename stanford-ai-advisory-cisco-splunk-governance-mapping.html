@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Stanford AI Advisory Committee → Cisco + Splunk Governance Mapping</title>
+  <style>
+    :root {
+      --bg: #f2f5f7;
+      --panel: #ffffff;
+      --text: #07182d;
+      --muted: #536070;
+      --accent: #ff007f;
+      --blue: #0a60ff;
+      --blue-light: #e0eeff;
+      --border: #ced4db;
+      --stanford: #8c1515;
+      --stanford-light: #f5e8e8;
+      --success: #2d6a1e;
+      --success-bg: #eef8ea;
+      --warn-bg: #fff8f0;
+      --warn-border: #e8a020;
+      --partial-bg: #f0f4ff;
+      --gap-bg: #fff5f5;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      font-size: 15px;
+    }
+    header {
+      background: linear-gradient(135deg, #07182d 0%, #12275c 55%, #0f214d 100%);
+      color: #fff;
+      padding: 1.75rem 2rem 2rem;
+    }
+    header .inner { max-width: 1200px; margin: 0 auto; }
+    header .eyebrow {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #7ae2ff;
+      margin: 0 0 0.5rem;
+    }
+    header h1 {
+      margin: 0;
+      font-size: clamp(1.35rem, 3vw, 1.85rem);
+      font-weight: 700;
+      line-height: 1.25;
+      max-width: 58rem;
+    }
+    header .subtitle {
+      margin: 0.75rem 0 0;
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.95rem;
+      max-width: 54rem;
+    }
+    header .meta {
+      margin-top: 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.65);
+    }
+    header .meta span {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 0.25rem 0.65rem;
+      border-radius: 4px;
+    }
+    nav.toc {
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      overflow-x: auto;
+    }
+    nav.toc ul {
+      list-style: none;
+      margin: 0 auto;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem 1.25rem;
+      max-width: 1200px;
+      font-size: 0.85rem;
+    }
+    nav.toc a { color: var(--blue); text-decoration: none; white-space: nowrap; }
+    nav.toc a:hover { text-decoration: underline; }
+    main { max-width: 1200px; margin: 0 auto; padding: 2rem 2rem 3rem; }
+    section { margin-bottom: 2.5rem; }
+    h2 {
+      font-size: 1.35rem;
+      margin: 0 0 1rem;
+      color: var(--text);
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 0.4rem;
+    }
+    h3 {
+      font-size: 1.05rem;
+      margin: 1.25rem 0 0.5rem;
+      color: var(--text);
+    }
+    h4 {
+      font-size: 0.95rem;
+      margin: 1rem 0 0.4rem;
+      color: var(--muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    p { margin: 0.65rem 0; }
+    ul, ol { margin: 0.5rem 0 0.75rem 1.25rem; padding: 0; }
+    li { margin: 0.35rem 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.86rem;
+      margin: 1rem 0;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.55rem 0.65rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: var(--blue-light);
+      font-weight: 600;
+    }
+    tr:nth-child(even) td { background: #f8fafc; }
+    .callout {
+      padding: 1.1rem 1.25rem;
+      margin: 1.25rem 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .callout.accent {
+      background: #fff0f7;
+      border: 1px solid #ffb8d9;
+      border-left: 4px solid var(--accent);
+    }
+    .callout.warn {
+      background: var(--warn-bg);
+      border: 1px solid #f0d9b8;
+      border-left: 4px solid var(--warn-border);
+    }
+    .callout.success {
+      background: var(--success-bg);
+      border: 1px solid #b8ddb0;
+      border-left: 4px solid var(--success);
+    }
+    .callout.stanford {
+      background: var(--stanford-light);
+      border: 1px solid #d4a0a0;
+      border-left: 4px solid var(--stanford);
+    }
+    .callout h3 { margin-top: 0; font-size: 1.1rem; }
+    .callout.accent h3 { color: var(--accent); }
+    .callout.warn h3 { color: #8a5a00; }
+    .callout.success h3 { color: var(--success); }
+    .callout.stanford h3 { color: var(--stanford); }
+    .tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.15rem 0.45rem;
+      border-radius: 3px;
+      background: var(--blue-light);
+      color: var(--blue);
+      margin: 0.1rem 0.15rem 0.1rem 0;
+      white-space: nowrap;
+    }
+    .tag.stanford { background: var(--stanford-light); color: var(--stanford); }
+    .tag.nist { background: #e8f4ea; color: #1a5c2e; }
+    .tag.atlas { background: #f0e8f8; color: #4a2d6e; }
+    .coverage {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+    }
+    .coverage--full { background: var(--success-bg); color: var(--success); }
+    .coverage--strong { background: #e0f0ff; color: #0a4a8a; }
+    .coverage--partial { background: var(--partial-bg); color: #3a4a8a; }
+    .coverage--policy { background: var(--warn-bg); color: #8a5a00; }
+    .coverage--gap { background: var(--gap-bg); color: #8a2020; }
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem 1.5rem;
+      margin: 1rem 0;
+      font-size: 0.84rem;
+    }
+    .legend-item { display: flex; align-items: center; gap: 0.4rem; }
+    .principle-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .principle-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.15rem;
+      border-top: 3px solid var(--stanford);
+    }
+    .principle-card h3 {
+      margin: 0 0 0.5rem;
+      font-size: 0.98rem;
+      color: var(--stanford);
+    }
+    .principle-card .coverage { margin-bottom: 0.5rem; }
+    .summary-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0.75rem;
+      margin: 1.25rem 0;
+    }
+    .stat {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+      text-align: center;
+    }
+    .stat .num {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--blue);
+      line-height: 1.2;
+    }
+    .stat .label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 0.2rem;
+    }
+    footer {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 2rem 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+    a { color: var(--blue); }
+    @media print {
+      nav.toc { position: static; }
+      header { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <p class="eyebrow">Higher education · AI governance alignment</p>
+    <h1>Stanford AI Advisory Committee Report — Mapped to Cisco + Splunk AI Governance</h1>
+    <p class="subtitle">
+      Crosswalk of Stanford's January 2025 advisory committee recommendations and guiding principles to the Cisco + Splunk SLED AI governance framework (NIST AI RMF · MITRE ATLAS), showing where technology closes policy gaps and where institutional policy remains primary.
+    </p>
+    <div class="meta">
+      <span>Source: Stanford Office of the Provost, Jan 9, 2025</span>
+      <span>Framework: sled-ai-governance-cisco-splunk-nist-atlas.html</span>
+      <span>Audience: CIO, CISO, Provost office, AI GRC</span>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Table of contents">
+  <ul>
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#principles">Guiding principles</a></li>
+    <li><a href="#administration">Administration</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#research">Research</a></li>
+    <li><a href="#gaps">Gaps &amp; recommendations</a></li>
+    <li><a href="#summary">Executive summary</a></li>
+  </ul>
+</nav>
+
+<main>
+
+<section id="overview">
+  <h2>Mapping overview</h2>
+
+  <div class="callout stanford">
+    <h3>Stanford committee posture</h3>
+    <p>
+      The AI at Stanford Advisory Committee (March–June 2024) recommended <strong>flexible guardrails over rigid policy</strong>, human-centered AI that augments rather than replaces people, and resistance to "AI exceptionalism"—existing laws, privacy rules, and professional standards still apply. The committee identified policy gaps across administration, education, and research while encouraging experimentation through sandboxes, equitable LLM access, and regularly updated guidance.
+    </p>
+  </div>
+
+  <div class="callout accent">
+    <h3>How this mapping works</h3>
+    <p>
+      Each Stanford recommendation is mapped to capabilities in the existing <a href="sled-ai-governance-cisco-splunk-nist-atlas.html">Cisco + Splunk AI Governance document</a>. Coverage ratings reflect whether the technology stack can <em>operationalize</em> the recommendation—not merely whether a policy statement exists.
+    </p>
+  </div>
+
+  <div class="legend" aria-label="Coverage legend">
+    <div class="legend-item"><span class="coverage coverage--full">Full</span> Technology directly operationalizes the recommendation</div>
+    <div class="legend-item"><span class="coverage coverage--strong">Strong</span> Major technical support; minor policy/process needed</div>
+    <div class="legend-item"><span class="coverage coverage--partial">Partial</span> Technology supports a subset; institutional policy leads</div>
+    <div class="legend-item"><span class="coverage coverage--policy">Policy-led</span> Primarily governance/process; technology is enabler only</div>
+    <div class="legend-item"><span class="coverage coverage--gap">Gap</span> Outside current stack scope; complementary investment needed</div>
+  </div>
+
+  <div class="summary-stats">
+    <div class="stat"><div class="num">7</div><div class="label">Guiding principles</div></div>
+    <div class="stat"><div class="num">28</div><div class="label">Policy areas mapped</div></div>
+    <div class="stat"><div class="num">12</div><div class="label">Full / strong coverage</div></div>
+    <div class="stat"><div class="num">10</div><div class="label">Partial coverage</div></div>
+    <div class="stat"><div class="num">6</div><div class="label">Policy-led / gap</div></div>
+  </div>
+
+  <h3>Stanford themes → governance framework alignment</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Stanford theme</th>
+        <th>Committee concern</th>
+        <th>Cisco + Splunk governance response</th>
+        <th>NIST RMF</th>
+        <th>MITRE ATLAS</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Human-centered AI</strong></td>
+        <td>Augment humans; avoid replacement; fair benefit distribution</td>
+        <td>Runtime guardrails + human-in-the-loop SOAR approvals; owner attribution via Astrix Identity Graph; continuous evaluation via Splunk AI Observability (Galileo)</td>
+        <td><span class="tag nist">GOVERN 1.2</span> <span class="tag nist">MEASURE 2.6</span></td>
+        <td><span class="tag atlas">Impact</span></td>
+      </tr>
+      <tr>
+        <td><strong>No AI exceptionalism</strong></td>
+        <td>Existing laws/policies apply to AI use</td>
+        <td>Splunk dashboards map posture to FERPA, HIPAA, CJIS, state AI mandates; AI Defense PII/PHI leakage prevention; audit-ready evidence packages</td>
+        <td><span class="tag nist">GOVERN 1.1</span> <span class="tag nist">MEASURE 2.10</span></td>
+        <td><span class="tag atlas">Exfiltration</span></td>
+      </tr>
+      <tr>
+        <td><strong>Flexible guardrails</strong></td>
+        <td>Avoid rigid policies; update regularly</td>
+        <td>Continuous production monitoring (drift, bias, safety); runtime policy adjustment without redeployment; framework-mapped telemetry for periodic review</td>
+        <td><span class="tag nist">MANAGE 4.1</span> <span class="tag nist">MEASURE 2.4</span></td>
+        <td><span class="tag atlas">Defense Evasion</span></td>
+      </tr>
+      <tr>
+        <td><strong>Shadow AI &amp; procurement risk</strong></td>
+        <td>Community experiments with unvetted tools; equity in LLM access</td>
+        <td>Three-layer inventory (Splunk ITSI + AI Defense AI Cloud Visibility + Astrix); supply-chain scanning; sanctioned vs. shadow tool discovery</td>
+        <td><span class="tag nist">GOVERN 1.6</span> <span class="tag nist">GOVERN 6.1</span></td>
+        <td><span class="tag atlas">Reconnaissance</span> <span class="tag atlas">Resource Development</span></td>
+      </tr>
+      <tr>
+        <td><strong>Confidential data to GenAI</strong></td>
+        <td>ChatGPT and similar tools save/share inputs; privileged data prohibited</td>
+        <td>AI Defense runtime data guardrails; PII/PCI/PHI leakage prevention; in-environment inference (metadata only to Cisco); Splunk ES correlation of policy violations</td>
+        <td><span class="tag nist">MEASURE 2.10</span> <span class="tag nist">MANAGE 2.4</span></td>
+        <td><span class="tag atlas">Collection</span> <span class="tag atlas">Exfiltration</span></td>
+      </tr>
+      <tr>
+        <td><strong>Bias, fairness &amp; validation</strong></td>
+        <td>LLMs not systematically assessed; misplaced confidence in output</td>
+        <td>Splunk AI Observability (Galileo) bias/fairness metrics, hallucination detection, drift alerts; AI Defense red-teaming and safety categories</td>
+        <td><span class="tag nist">MEASURE 2.11</span> <span class="tag nist">MEASURE 1.1</span></td>
+        <td><span class="tag atlas">AI Attack Staging</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="principles">
+  <h2>Stanford guiding principles → Cisco + Splunk mapping</h2>
+  <p>
+    The committee adapted Cornell's human-centeredness framework into seven guiding principles. Below, each principle is mapped to specific capabilities from the SLED AI governance stack.
+  </p>
+
+  <div class="principle-grid">
+    <div class="principle-card">
+      <h3>1. Human Oversight</h3>
+      <span class="coverage coverage--strong">Strong</span>
+      <p><strong>Stanford:</strong> Clear authority for procurement, maintenance, monitoring, sunsetting; contingency plans for high-risk AI; re-engage human control when systems fail.</p>
+      <p><strong>Mapping:</strong></p>
+      <ul>
+        <li><strong>Astrix Identity Graph</strong> — maps each agent/NHI to a human owner (GOVERN 2.1)</li>
+        <li><strong>Three-layer inventory</strong> — Splunk ITSI + AI Defense AI Cloud Visibility + Astrix (GOVERN 1.6)</li>
+        <li><strong>Splunk SOAR</strong> — playbooks for decommissioning, credential revocation, human approval gates (GOVERN 1.7, MANAGE 2.4)</li>
+        <li><strong>AI Defense</strong> — runtime disengagement of misbehaving agent chains</li>
+      </ul>
+    </div>
+
+    <div class="principle-card">
+      <h3>2. Human Alignment</h3>
+      <span class="coverage coverage--partial">Partial</span>
+      <p><strong>Stanford:</strong> AI supports mission and values; stakeholder consultation; documented scope, capabilities, and limitations evaluated regularly.</p>
+      <p><strong>Mapping:</strong></p>
+      <ul>
+        <li><strong>Splunk AI Observability (Galileo)</strong> — traces intended use and task boundaries (MAP 1.1, MAP 2.1–2.3)</li>
+        <li><strong>AI Defense</strong> — AI-traffic flow mapping; shadow AI surfacing (MAP 1.1)</li>
+        <li><strong>Gap:</strong> Stakeholder consultation and mission-alignment review are institutional processes; technology supplies documentation and monitoring evidence</li>
+      </ul>
+    </div>
+
+    <div class="principle-card">
+      <h3>3. Human Professionalism</h3>
+      <span class="coverage coverage--policy">Policy-led</span>
+      <p><strong>Stanford:</strong> Community members exercise judgment; responsible for work quality and veracity regardless of AI assistance; abide by laws and professional norms.</p>
+      <p><strong>Mapping:</strong></p>
+      <ul>
+        <li><strong>Splunk AI Observability (Galileo)</strong> — hallucination detection supports author verification</li>
+        <li><strong>AI Defense validation</strong> — red-teaming surfaces quality risks before deployment</li>
+        <li><strong>Gap:</strong> Professional responsibility and Honor Code adherence are policy/education matters; technology provides detection and disclosure support, not judgment</li>
+      </ul>
+    </div>
+
+    <div class="principle-card">
+      <h3>4. Ethical and Safe Use</h3>
+      <span class="coverage coverage--strong">Strong</span>
+      <p><strong>Stanford:</strong> Understand implications before deployment; promote justice and autonomy; free from bias and unlawful discrimination; decommission unsafe systems.</p>
+      <p><strong>Mapping:</strong></p>
+      <ul>
+        <li><strong>Splunk AI Observability (Galileo)</strong> — bias/fairness metrics, safety evaluation (MEASURE 2.11, 2.6)</li>
+        <li><strong>AI Defense</strong> — 50+ runtime safety categories; supply-chain scanning (GOVERN 6.1, MANAGE 3.1)</li>
+        <li><strong>Splunk SOAR + AI Defense</strong> — decommissioning and blocklist workflows (GOVERN 1.7, MANAGE 2.4)</li>
+      </ul>
+    </div>
+
+    <div class="principle-card">
+      <h3>5. Privacy, Security &amp; Confidentiality</h3>
+      <span class="coverage coverage--full">Full</span>
+      <p><strong>Stanford:</strong> Assess legality of personal data use; transparency in AI decisions; no confidential/privileged data to generative AI tools.</p>
+      <p><strong>Mapping:</strong></p>
+      <ul>
+        <li><strong>AI Defense</strong> — PII/PCI/PHI leakage prevention; runtime data guardrails (MEASURE 2.10)</li>
+        <li><strong>Cisco segmentation + Hypershield</strong> — controlled inference environments for FERPA/CJIS</li>
+        <li><strong>Splunk ES/SOAR</strong> — detect and respond to policy violations; audit trails</li>
+        <li><strong>In-environment inference</strong> — metadata only to Cisco; supports data-residency requirements</li>
+      </ul>
+    </div>
+
+    <div class="principle-card">
+      <h3>6. Data Quality and Control</h3>
+      <span class="coverage coverage--strong">Strong</span>
+      <p><strong>Stanford:</strong> Legal/ethical data collection; documented provenance; tested systems with documented risks; controls against bad actors.</p>
+      <p><strong>Mapping:</strong></p>
+      <ul>
+        <li><strong>AI Defense Supply Chain Risk Management</strong> — scans models, datasets, MCP repositories (GOVERN 6.1, MAP 4.1)</li>
+        <li><strong>Splunk AI Observability (Galileo)</strong> — production drift and integrity monitoring (MEASURE 2.4)</li>
+        <li><strong>Cisco Secure Workload + WideField/Astrix</strong> — segmentation and identity controls against exploitation</li>
+      </ul>
+    </div>
+
+    <div class="principle-card">
+      <h3>7. AI Golden Rule</h3>
+      <span class="coverage coverage--partial">Partial</span>
+      <p><strong>Stanford:</strong> "Use or share AI outputs as you would have others use or share AI output with you"; consider role reversal and transparent disclosure.</p>
+      <p><strong>Mapping:</strong></p>
+      <ul>
+        <li><strong>Splunk AI Observability (Galileo)</strong> — tracing and explainability support disclosure (MEASURE 2.8–2.9)</li>
+        <li><strong>AI Defense validation reporting</strong> — documents how systems were tested</li>
+        <li><strong>Gap:</strong> Norm-setting and community standards are cultural; technology enables transparency and audit, not ethical judgment</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="administration">
+  <h2>AI in university administration</h2>
+  <p>Stanford identified high-risk administrative use cases and cross-cutting recommendations for HR, admissions, communications, and privacy offices.</p>
+
+  <h3>Administrative policy areas</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Stanford area</th>
+        <th>Committee concern</th>
+        <th>Coverage</th>
+        <th>Cisco + Splunk mapping</th>
+        <th>Responsible office (Stanford)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Hiring</strong></td>
+        <td>AI screening bias; litigation risk; biased job descriptions/ads</td>
+        <td><span class="coverage coverage--strong">Strong</span></td>
+        <td>
+          Splunk AI Observability (Galileo) bias/fairness evaluation on screening models; AI Defense red-teaming before deployment; Splunk dashboards for audit evidence; supply-chain scan of third-party hiring AI
+        </td>
+        <td>University Human Resources</td>
+      </tr>
+      <tr>
+        <td><strong>Performance reviews</strong></td>
+        <td>Trust and morale; legal implications of AI-generated review materials</td>
+        <td><span class="coverage coverage--partial">Partial</span></td>
+        <td>
+          AI Defense detects GenAI-generated content patterns; Splunk AI Observability traces provenance; policy disclosure requirements are institutional
+        </td>
+        <td>University Human Resources</td>
+      </tr>
+      <tr>
+        <td><strong>Admissions</strong></td>
+        <td>Bias, litigation, reputational harm; avoid GenAI in review without documented assessment</td>
+        <td><span class="coverage coverage--strong">Strong</span></td>
+        <td>
+          Documented bias/fairness evaluation (Galileo); AI Defense validation red-teaming; runtime monitoring if AI assists communication only; inventory of admissions AI tools (GOVERN 1.6)
+        </td>
+        <td>Faculty Senate — UG Admissions &amp; Grad Studies</td>
+      </tr>
+      <tr>
+        <td><strong>Communications</strong></td>
+        <td>Guidance needed for AI-generated university content</td>
+        <td><span class="coverage coverage--partial">Partial</span></td>
+        <td>
+          AI Defense content safety guardrails; Galileo output quality monitoring; Splunk retention for audit; editorial standards remain policy-led
+        </td>
+        <td>University Communications</td>
+      </tr>
+      <tr>
+        <td><strong>Surveillance</strong></td>
+        <td>Privacy, autonomy, trust; attendance tracking needs transparency, consent, data lifecycle</td>
+        <td><span class="coverage coverage--partial">Partial</span></td>
+        <td>
+          Splunk ES logging and retention policies; Cisco ISE access controls; WideField identity monitoring; consent/transparency frameworks are institutional
+        </td>
+        <td>Privacy Office · Faculty Senate CACIS</td>
+      </tr>
+      <tr>
+        <td><strong>Letters of recommendation</strong></td>
+        <td>AI-generated letters diminish value; draft+edit may be acceptable under Golden Rule</td>
+        <td><span class="coverage coverage--policy">Policy-led</span></td>
+        <td>
+          AI Defense can flag bulk GenAI patterns; Galileo supports quality review; authorship norms and Golden Rule application are faculty policy
+        </td>
+        <td>Faculty governance</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Administrative cross-cutting recommendations</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Stanford recommendation</th>
+        <th>Coverage</th>
+        <th>Cisco + Splunk mapping</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Education on sensitive data risks</strong> — community may treat AI as exceptional; easy to paste data into ChatGPT</td>
+        <td><span class="coverage coverage--strong">Strong</span></td>
+        <td>
+          AI Defense runtime blocks PII/PHI/privileged data exfiltration to external LLMs; Splunk ES alerts on policy violations; GenAI Evaluation Matrix-style risk classification via inventory + supply-chain scanning; awareness campaigns complement technical controls
+        </td>
+      </tr>
+      <tr>
+        <td><strong>University-provided LLM access</strong> — equity; vendor transparency; education on outputs</td>
+        <td><span class="coverage coverage--strong">Strong</span></td>
+        <td>
+          Sanctioned LLM deployment with AI Defense in-environment guardrails; supply-chain characterization of vendor models; Galileo continuous evaluation; Splunk dashboards for equitable usage telemetry across campus
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Vision: augment, not replace staff</strong></td>
+        <td><span class="coverage coverage--policy">Policy-led</span></td>
+        <td>
+          Technology enables augmentation (SOAR human-approval gates, owner attribution); workforce vision and change management are HR/leadership policy
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Streamlined procurement for high-risk AI</strong></td>
+        <td><span class="coverage coverage--full">Full</span></td>
+        <td>
+          AI Defense Supply Chain Risk Management pre-production scanning; GOVERN 6.1/6.2 third-party risk; Astrix third-party agent identity exposure; Splunk procurement-risk dashboards
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Central AI guidelines website</strong> (UIT GenAI site, Evaluation Matrix)</td>
+        <td><span class="coverage coverage--partial">Partial</span></td>
+        <td>
+          Splunk dashboards and framework-mapped evidence feed portal content; inventory data populates risk classifications; web publishing is institutional
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="education">
+  <h2>Applications of AI to support education</h2>
+  <p>Stanford emphasized Honor Code updates, instructor disclosure, equitable student access, and pedagogical experimentation through sandboxes.</p>
+
+  <h3>Education policy areas</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Stanford area</th>
+        <th>Committee concern</th>
+        <th>Coverage</th>
+        <th>Cisco + Splunk mapping</th>
+        <th>Responsible office (Stanford)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Assessment &amp; grading</strong></td>
+        <td>Quality, accuracy, fairness, bias; FERPA; instructor disclosure when AI used</td>
+        <td><span class="coverage coverage--strong">Strong</span></td>
+        <td>
+          Galileo bias/fairness and hallucination metrics on grading AI; AI Defense runtime safety; FERPA-aligned in-environment processing; Splunk audit trails for instructor disclosure compliance
+        </td>
+        <td>Faculty Senate — UG Standards &amp; Grad Studies</td>
+      </tr>
+      <tr>
+        <td><strong>Student use of AI</strong></td>
+        <td>Honor Code unclear/unenforceable; need finer distinctions (ideas vs. wholesale use)</td>
+        <td><span class="coverage coverage--partial">Partial</span></td>
+        <td>
+          AI Defense detects policy-violating usage patterns; Galileo supports integrity review; Honor Code revision and pedagogy are Board on Conduct Affairs / faculty policy
+        </td>
+        <td>Board on Conduct Affairs</td>
+      </tr>
+      <tr>
+        <td><strong>Accommodations</strong></td>
+        <td>AI as accessibility tool; equity and legal complexity</td>
+        <td><span class="coverage coverage--partial">Partial</span></td>
+        <td>
+          Sanctioned, evaluated assistive AI with Galileo safety monitoring; equitable campus LLM access; accommodation decisions are legal/educational policy
+        </td>
+        <td>Disability services · Legal</td>
+      </tr>
+      <tr>
+        <td><strong>Sandbox / makerspace</strong> (AI Tinkery, AI Playground)</td>
+        <td>Lack of sanctioned services deters experimentation</td>
+        <td><span class="coverage coverage--strong">Strong</span></td>
+        <td>
+          Controlled sandbox with AI Defense guardrails, supply-chain scanning, and Galileo evaluation; inventory tracks experiments; SOAR containment for sandbox escape; mirrors CTL/LTS makerspace model with enterprise controls
+        </td>
+        <td>CTL · Learning Technology Services</td>
+      </tr>
+      <tr>
+        <td><strong>Universal student LLM access</strong></td>
+        <td>Equity; financial aid / cost-of-college; site license evaluation</td>
+        <td><span class="coverage coverage--strong">Strong</span></td>
+        <td>
+          Campus-wide sanctioned LLM with usage telemetry; Galileo evaluation for accuracy/bias; AI Defense data protection; procurement evidence for site-license decisions
+        </td>
+        <td>University IT</td>
+      </tr>
+      <tr>
+        <td><strong>Teaching with AI resources</strong></td>
+        <td>Variability across fields; sample course policies; pedagogy frameworks</td>
+        <td><span class="coverage coverage--partial">Partial</span></td>
+        <td>
+          Framework-mapped dashboards and evaluation templates support CTL/GSE workshops; pedagogy content is educational, not security product
+        </td>
+        <td>GSE · CTL</td>
+      </tr>
+      <tr>
+        <td><strong>Plagiarism checker licenses</strong></td>
+        <td>Researchers need self-checking tools</td>
+        <td><span class="coverage coverage--partial">Partial</span></td>
+        <td>
+          Galileo integrity and hallucination detection complements plagiarism tools; Stanford Libraries licensing is procurement, not Cisco/Splunk core
+        </td>
+        <td>Stanford Libraries</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="research">
+  <h2>Uses of AI in research</h2>
+  <p>Stanford flagged authorship, misconduct volume, proposal integrity, student-data training, and IRB gaps for health AI research.</p>
+
+  <h3>Research policy areas</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Stanford area</th>
+        <th>Committee concern</th>
+        <th>Coverage</th>
+        <th>Cisco + Splunk mapping</th>
+        <th>Responsible office (Stanford)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Authorship</strong></td>
+        <td>Attribution between authors and AI; quoting beyond academic standards</td>
+        <td><span class="coverage coverage--partial">Partial</span></td>
+        <td>
+          Galileo tracing documents AI contribution; AI Defense detects synthetic text patterns; authorship policy is VPDOR / Faculty Senate Research
+        </td>
+        <td>VPDOR · Faculty Senate Research</td>
+      </tr>
+      <tr>
+        <td><strong>Misconduct</strong></td>
+        <td>AI plagiarism detectors increase allegations (including spurious); federal policy updates</td>
+        <td><span class="coverage coverage--strong">Strong</span></td>
+        <td>
+          Galileo reduces false positives via multi-signal evaluation; Splunk ES/SOAR triages misconduct workflows with evidence packages; audit-ready records for investigations
+        </td>
+        <td>VPDOR</td>
+      </tr>
+      <tr>
+        <td><strong>Proposal review &amp; writing</strong></td>
+        <td>AI in proposals/reviews; agencies developing rules; proxy AI review violates standards</td>
+        <td><span class="coverage coverage--partial">Partial</span></td>
+        <td>
+          AI Defense flags unauthorized GenAI in review pipelines; Galileo supports copy-edit/brainstorm quality checks; academic integrity norms are policy
+        </td>
+        <td>VPDOR · Research offices</td>
+      </tr>
+      <tr>
+        <td><strong>Training AI on student work</strong></td>
+        <td>Permission and approval for student work-product in AI training</td>
+        <td><span class="coverage coverage--strong">Strong</span></td>
+        <td>
+          Data provenance tracking; AI Defense supply-chain scanning of training datasets; FERPA leakage prevention; SDOC-aligned access controls via Cisco segmentation
+        </td>
+        <td>SDOC</td>
+      </tr>
+      <tr>
+        <td><strong>Oversight for AI research data</strong></td>
+        <td>Health AI often exempt from IRB; clarify review for legal/ethical data use</td>
+        <td><span class="coverage coverage--partial">Partial</span></td>
+        <td>
+          Splunk dashboards document data-handling controls; AI Defense PHI controls; IRB process design is VPDOR governance, not technology
+        </td>
+        <td>VPDOR</td>
+      </tr>
+      <tr>
+        <td><strong>Legal issues in research</strong></td>
+        <td>Copyright, contracts, tort/defamation, privacy violations; litigation shifting to users</td>
+        <td><span class="coverage coverage--strong">Strong</span></td>
+        <td>
+          Supply-chain scanning for copyrighted training data; AI Defense runtime prevents harmful/defamatory output; exfiltration controls; Splunk evidence for legal response
+        </td>
+        <td>OGC · VPDOR</td>
+      </tr>
+      <tr>
+        <td><strong>Computing support for campus AI</strong></td>
+        <td>Expand resources for AI-powered research and experimentation</td>
+        <td><span class="coverage coverage--gap">Gap</span></td>
+        <td>
+          Cisco/Splunk govern and secure AI workloads; HPC/GPU research infrastructure is complementary investment (not core governance stack)
+        </td>
+        <td>University IT · Research computing</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="gaps">
+  <h2>Gaps, complementary investments &amp; implementation priorities</h2>
+
+  <div class="callout warn">
+    <h3>Where institutional policy must lead</h3>
+    <p>Stanford correctly notes that flexible guidelines often suffice over rigid policy. The Cisco + Splunk stack <strong>operationalizes</strong> technical guardrails but cannot replace:</p>
+    <ul>
+      <li>Honor Code and academic integrity policy revision (Board on Conduct Affairs)</li>
+      <li>Human professionalism and AI Golden Rule cultural norms</li>
+      <li>Workforce "augment not replace" vision and change management (UHR)</li>
+      <li>IRB and SDOC governance process design for research data</li>
+      <li>Central guidelines website content and AI literacy curricula (UIT, CTL, GSE)</li>
+      <li>Research computing / HPC capacity expansion</li>
+    </ul>
+  </div>
+
+  <h3>Prioritized implementation aligned to Stanford gaps</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Priority</th>
+        <th>Stanford gap addressed</th>
+        <th>Cisco + Splunk action</th>
+        <th>Expected outcome</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>P1</strong></td>
+        <td>Confidential data pasted into external GenAI; AI exceptionalism</td>
+        <td>Deploy AI Defense runtime guardrails + Splunk ES violation alerting on sanctioned and shadow LLM traffic</td>
+        <td>Technical enforcement of "no privileged data to GenAI" with audit evidence</td>
+      </tr>
+      <tr>
+        <td><strong>P2</strong></td>
+        <td>No enterprise AI inventory; procurement risk</td>
+        <td>Three-layer inventory (Splunk ITSI + AI Defense + Astrix) + supply-chain scanning for new purchases</td>
+        <td>Living inventory replacing spreadsheets; pre-production risk assessment</td>
+      </tr>
+      <tr>
+        <td><strong>P3</strong></td>
+        <td>Equitable LLM access; sandbox experimentation</td>
+        <td>Campus-sanctioned LLM with Galileo evaluation in AI Playground/sandbox environment</td>
+        <td>Safe experimentation without shadow-tool data leakage</td>
+      </tr>
+      <tr>
+        <td><strong>P4</strong></td>
+        <td>Admissions, hiring, grading bias concerns</td>
+        <td>Galileo bias/fairness evaluation + documented AI Defense red-team results before high-impact deployment</td>
+        <td>Documented assessment satisfying committee's "careful and documented" standard</td>
+      </tr>
+      <tr>
+        <td><strong>P5</strong></td>
+        <td>Misconduct allegation volume; spurious AI plagiarism flags</td>
+        <td>Galileo multi-signal integrity evaluation + Splunk SOAR triage workflows with evidence packages</td>
+        <td>Faster, evidence-based adjudication; reduced false-positive burden</td>
+      </tr>
+      <tr>
+        <td><strong>P6</strong></td>
+        <td>Guidelines website and GenAI Evaluation Matrix</td>
+        <td>Feed Splunk framework-mapped dashboards and inventory risk tiers into UIT GenAI portal</td>
+        <td>Dynamic, telemetry-backed risk classifications vs. static lists</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Stanford-referenced frameworks → existing governance mapping</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Stanford citation</th>
+        <th>Relevance to committee</th>
+        <th>Already mapped in SLED governance doc</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Stanford Research Policy Handbook §1.1</td>
+        <td>Research integrity principles</td>
+        <td><span class="tag nist">GOVERN 1.2</span> Trustworthy-AI characteristics; Galileo + AI Defense validation</td>
+      </tr>
+      <tr>
+        <td>White House EO on Safe, Secure and Trustworthy AI</td>
+        <td>Federal trustworthy-AI baseline</td>
+        <td>Full NIST AI RMF alignment (Govern, Map, Measure, Manage)</td>
+      </tr>
+      <tr>
+        <td>NIST AI RMF 1.0</td>
+        <td>Risk management framework</td>
+        <td>Primary framework in sled-ai-governance document; subcategory tables</td>
+      </tr>
+      <tr>
+        <td>National Academies AI publications</td>
+        <td>Research and education guidance</td>
+        <td>Partial — research data controls via supply-chain + FERPA; pedagogy is institutional</td>
+      </tr>
+      <tr>
+        <td>HHS 45 CFR 92.210 (non-discrimination in decision support)</td>
+        <td>Framework for fair AI decision-making</td>
+        <td><span class="tag nist">MEASURE 2.11</span> Galileo bias/fairness; <span class="tag nist">MEASURE 2.6</span> safety guardrails</td>
+      </tr>
+      <tr>
+        <td>US DHHS research misconduct rule</td>
+        <td>Updated misconduct investigation</td>
+        <td>Splunk ES/SOAR evidence packages; Galileo integrity evaluation</td>
+      </tr>
+      <tr>
+        <td>Peer institution reports (Cornell, Michigan, Harvard, Yale, Princeton)</td>
+        <td>Human-centered principles source</td>
+        <td>Human Oversight, Privacy, and Ethical Use mappings above</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="summary">
+  <h2>Executive summary for higher-ed leadership</h2>
+
+  <div class="callout success">
+    <h3>Alignment conclusion</h3>
+    <p>
+      Stanford's advisory committee and the Cisco + Splunk SLED AI governance framework share the same foundational premise: <strong>AI adoption requires guardrails that enable experimentation while honoring human-centered values, existing law, and accountable oversight.</strong> The committee's emphasis on inventory, bias assessment, confidential-data protection, equitable access, procurement review, and audit-ready evidence maps directly to the technical capabilities already articulated in the governance document.
+    </p>
+  </div>
+
+  <h3>Coverage by Stanford domain</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Stanford domain</th>
+        <th>Policy items</th>
+        <th>Full / strong</th>
+        <th>Partial</th>
+        <th>Policy-led / gap</th>
+        <th>Primary stack components</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Guiding principles (7)</strong></td>
+        <td>7</td>
+        <td>3</td>
+        <td>3</td>
+        <td>1</td>
+        <td>AI Defense, Galileo, Astrix, Splunk ES/SOAR</td>
+      </tr>
+      <tr>
+        <td><strong>Administration (11)</strong></td>
+        <td>11</td>
+        <td>4</td>
+        <td>4</td>
+        <td>3</td>
+        <td>Supply-chain scanning, bias evaluation, leakage prevention, inventory</td>
+      </tr>
+      <tr>
+        <td><strong>Education (7)</strong></td>
+        <td>7</td>
+        <td>3</td>
+        <td>4</td>
+        <td>0</td>
+        <td>Sandbox guardrails, FERPA controls, Galileo grading integrity</td>
+      </tr>
+      <tr>
+        <td><strong>Research (7)</strong></td>
+        <td>7</td>
+        <td>3</td>
+        <td>3</td>
+        <td>1</td>
+        <td>Dataset provenance, misconduct triage, legal evidence, PHI controls</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout accent">
+    <h3>Recommended narrative for Stanford-style institutions</h3>
+    <ul>
+      <li><strong>Policy sets intent;</strong> Stanford's principles and flexible guidelines define <em>what</em> the community should do.</li>
+      <li><strong>Technology proves control;</strong> Cisco + Splunk supplies the inventory, evaluation, runtime protection, and audit evidence that make guidelines enforceable at campus scale.</li>
+      <li><strong>Build on existing investments;</strong> Institutions already running Splunk ES/SOAR and Cisco Duo/ISE/Firewall extend those platforms rather than standing up parallel AI governance tools.</li>
+      <li><strong>Close the highest-risk gaps first:</strong> confidential data to external GenAI, unvetted procurement, and high-impact decisions (admissions, hiring, grading) without documented bias assessment.</li>
+      <li><strong>Complement with culture:</strong> sandboxes, CTL workshops, Honor Code updates, and the AI Golden Rule remain essential—and are strengthened when backed by telemetry, not replaced by it.</li>
+    </ul>
+  </div>
+
+  <p>
+    <strong>NIST AI RMF structures the compliance program; MITRE ATLAS hardens against adversarial techniques; Stanford's advisory committee defines the institutional values and policy priorities.</strong> Together, they form a complete higher-education AI governance model—principles, policies, and provable controls.
+  </p>
+</section>
+
+</main>
+
+<footer>
+  <p>
+    <strong>Sources:</strong> Stanford University Office of the Provost, "Report of the AI at Stanford Advisory Committee" (January 9, 2025). Cisco + Splunk mapping derived from <a href="sled-ai-governance-cisco-splunk-nist-atlas.html">sled-ai-governance-cisco-splunk-nist-atlas.html</a>.
+  </p>
+  <p>
+    <strong>Accuracy note:</strong> Coverage ratings are indicative positioning for executive alignment conversations—not certified equivalencies or contractual commitments. Validate product capabilities against current Cisco and Splunk documentation before deployment decisions. Institutional policy, legal review (OGC), and faculty governance remain authoritative for academic integrity, admissions, and research conduct matters.
+  </p>
+</footer>
+
+</body>
+</html>
