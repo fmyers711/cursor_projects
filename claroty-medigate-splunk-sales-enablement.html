@@ -308,6 +308,35 @@
       margin: 0.75rem 0;
     }
     .discovery-q strong { color: var(--blue); }
+    .case-study {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin: 1.25rem 0;
+      border-left: 4px solid var(--clinical);
+    }
+    .case-study h3 { margin-top: 0; color: var(--clinical); }
+    .case-study .cs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.75rem;
+      margin-top: 0.75rem;
+    }
+    .case-study .cs-block {
+      background: #f8fafc;
+      border-radius: 6px;
+      padding: 0.75rem 0.9rem;
+      font-size: 0.9rem;
+    }
+    .case-study .cs-block strong {
+      display: block;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      margin-bottom: 0.3rem;
+    }
     footer {
       max-width: 1100px;
       margin: 0 auto;
@@ -351,6 +380,8 @@
   <ul>
     <li><a href="#thesis">Positioning</a></li>
     <li><a href="#stats">ROI stats</a></li>
+    <li><a href="#case-studies">Case studies</a></li>
+    <li><a href="#org-impact">Org impact</a></li>
     <li><a href="#discovery">Discovery</a></li>
     <li><a href="#architecture">Architecture</a></li>
     <li><a href="#ingestion">Data ingestion</a></li>
@@ -360,6 +391,7 @@
     <li><a href="#spl">SPL examples</a></li>
     <li><a href="#es-soar">ES &amp; SOAR</a></li>
     <li><a href="#objections">Objections</a></li>
+    <li><a href="#webinars">Webinars</a></li>
     <li><a href="#references">References</a></li>
   </ul>
 </nav>
@@ -461,11 +493,170 @@
     </tbody>
   </table>
 
+  <h3>Quantifiable benefits matrix</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Benefit category</th>
+        <th>Quantifiable outcome</th>
+        <th>Organizational impact</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Breach mitigation</strong></td>
+        <td>Avoids healthcare breach costs averaging $9.77M (2024); early anomaly detection prevents lateral movement</td>
+        <td>SOC demonstrates ROI to board; compliance posture strengthened</td>
+      </tr>
+      <tr>
+        <td><strong>Incident response time</strong></td>
+        <td>Rapid containment of ransomware and anomalous behavior (minutes vs. hours/days without visibility)</td>
+        <td>Reduced dwell time; faster recovery with minimal patient-care disruption</td>
+      </tr>
+      <tr>
+        <td><strong>Device discovery</strong></td>
+        <td>Passive DPI discovers previously unknown/shadow medical devices and risks not visible to traditional IT tools</td>
+        <td>Complete IoMT inventory for audit, patching, and segmentation planning</td>
+      </tr>
+      <tr>
+        <td><strong>Device search time</strong></td>
+        <td>Clinical engineering locate/patch time cut from hours to minutes via network-based location intelligence</td>
+        <td>Faster maintenance, recall response, and audit readiness</td>
+      </tr>
+      <tr>
+        <td><strong>Capital expenditure</strong></td>
+        <td>10–20% reduction in over-purchasing of expensive assets (infusion pumps, monitors, etc.)</td>
+        <td>Data-driven capex; CFO and supply chain alignment</td>
+      </tr>
+      <tr>
+        <td><strong>Workflow optimization</strong></td>
+        <td>Context-aware alerts and enforcement avoid disrupting clinical workflows during security actions</td>
+        <td>Patient safety preserved; Biomedical trusts security enforcement policies</td>
+      </tr>
+      <tr>
+        <td><strong>IT–Biomed collaboration</strong></td>
+        <td>Unified dashboards and shared KPIs across Security and Clinical Engineering</td>
+        <td>Single Clinical SOC; eliminates siloed tools and conflicting priorities</td>
+      </tr>
+    </tbody>
+  </table>
+
   <div class="callout accent">
     <h3>Seller tip</h3>
     <p style="margin:0;">
       Lead with <strong>breach cost avoidance</strong> for CISO conversations and <strong>utilization / capex savings</strong> for Biomedical Engineering and CFO. The dual-audience story is what differentiates this from generic OT security plays.
     </p>
+  </div>
+</section>
+
+<section id="case-studies">
+  <h2>Healthcare case studies &amp; success stories</h2>
+  <p>
+    Use these validated customer narratives in executive briefings, POC business cases, and RFP responses.
+    Each story maps to a distinct buyer pain point—ransomware containment, operational efficiency, or enterprise-scale modernization.
+  </p>
+
+  <div class="case-study">
+    <h3>Bupa Cromwell Hospital — Ransomware containment</h3>
+    <div class="cs-grid">
+      <div class="cs-block">
+        <strong>Challenge</strong>
+        Legacy medical device vulnerabilities not addressed by traditional security tools, increasing ransomware risk across the clinical network.
+      </div>
+      <div class="cs-block">
+        <strong>Solution</strong>
+        Deployed Claroty Medigate with network segmentation. Medigate discovered previously unknown devices and risks invisible to IT asset management. Alerts ingested into Splunk for SOC investigation and response orchestration.
+      </div>
+      <div class="cs-block">
+        <strong>Result</strong>
+        In <strong>March 2024</strong>, detected and contained a ransomware attempt. Security teams responded rapidly to anomalous device behavior, preventing lateral movement—without disrupting patient care.
+      </div>
+    </div>
+    <p style="margin:0.75rem 0 0;font-size:0.9rem;"><strong>Seller angle:</strong> Lead with "contained, not just detected." Pair with ES/SOAR for automated ISE quarantine narrative.</p>
+  </div>
+
+  <div class="case-study">
+    <h3>Interior Health Authority (IHA) — Device locate &amp; audit readiness</h3>
+    <div class="cs-grid">
+      <div class="cs-block">
+        <strong>Challenge</strong>
+        Needed to satisfy cybersecurity audits and prevent loss of expensive medical devices across a distributed health authority.
+      </div>
+      <div class="cs-block">
+        <strong>Solution</strong>
+        Medigate for automated networked asset discovery; device locations mapped by integrating Medigate data with <strong>Cisco DNA Spaces</strong>. Operational telemetry routed into Splunk for Biomedical dashboards.
+      </div>
+      <div class="cs-block">
+        <strong>Result</strong>
+        Biomedical Engineering staff saved significant time finding devices for maintenance, patching, and recalls—reducing search from <strong>hours to minutes</strong>. Improved operational workflows and device security posture.
+      </div>
+    </div>
+    <p style="margin:0.75rem 0 0;font-size:0.9rem;"><strong>Seller angle:</strong> Biomedical champion story. Cisco DNA Spaces co-sell; Splunk add-on attaches to existing Medigate deployment.</p>
+  </div>
+
+  <div class="case-study">
+    <h3>Large healthcare provider — EHR modernization &amp; global IoT security</h3>
+    <div class="cs-grid">
+      <div class="cs-block">
+        <strong>Challenge</strong>
+        Modernizing EHR systems while securing a large, distributed IoT/IoMT footprint across multiple sites and geographies.
+      </div>
+      <div class="cs-block">
+        <strong>Solution</strong>
+        Leveraged <strong>Cisco ACI</strong> and <strong>Cisco Secure Workload</strong> for context-aware segmentation. Medigate visibility and telemetry integrated into Splunk; <strong>Cisco ISE</strong> for access control and automated policy enforcement.
+      </div>
+      <div class="cs-block">
+        <strong>Result</strong>
+        Achieved geographic redundancy and centralized management. <strong>Drastic reduction in security incidents</strong> through automatic, context-aware network policy enforcement. Utilization insights reduced capex over-purchasing by 10–20%.
+      </div>
+    </div>
+    <p style="margin:0.75rem 0 0;font-size:0.9rem;"><strong>Seller angle:</strong> Platform co-sell—Splunk + ES + Medigate + Cisco ACI/ISE/Secure Workload. Enterprise transformation, not point product.</p>
+  </div>
+
+  <div class="talk-track">
+    <h4>Case study talk track (combined)</h4>
+    <p>
+      "Hospitals using Medigate plus Splunk aren't just finding devices—they're stopping ransomware in minutes, cutting Biomedical search time from hours to minutes, and saving 10 to 20 percent on capital purchases. Bupa Cromwell contained an attack in March 2024. IHA integrated with Cisco DNA Spaces for location intelligence. A major provider tied Medigate into Splunk with Cisco ACI and ISE for global policy enforcement. Same platform, three different ROI stories—pick the one that matches your buyer."
+    </p>
+  </div>
+</section>
+
+<section id="org-impact">
+  <h2>Organizational impact — IT &amp; Biomedical alignment</h2>
+  <p>
+    The Clinical SOC model resolves a structural problem in healthcare: IT Security and Biomedical Engineering traditionally operate in separate tools with conflicting priorities.
+    Medigate plus Splunk creates a <strong>shared operational layer</strong> with role-based views for each team.
+  </p>
+
+  <div class="grid-2">
+    <div class="audience-card">
+      <h3><span class="tag tag-ops">IT Security / SOC</span></h3>
+      <ul>
+        <li>Unified incident queue—IoMT alerts alongside IT notables in ES</li>
+        <li>Clinical context on every alert (device type, department, risk score)</li>
+        <li>Automated enforcement via ISE/NAC with Biomedical-approved allow-lists</li>
+        <li>Defensible metrics for board and compliance reporting</li>
+      </ul>
+    </div>
+    <div class="audience-card" style="border-left-color: var(--clinical);">
+      <h3 style="color:var(--clinical);"><span class="tag tag-biomed">Biomedical / Clinical Engineering</span></h3>
+      <ul>
+        <li>Real-time asset inventory—manufacturer, OS, firmware, VLAN, location</li>
+        <li>Utilization dashboards for capex planning and right-sizing</li>
+        <li>Missing-device and last-seen tracking for audits and recalls</li>
+        <li>Confidence that security actions won't disrupt patient care workflows</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout clinical">
+    <h3>Shared KPIs both teams care about</h3>
+    <ul style="margin-bottom:0;">
+      <li><strong>Mean time to locate device</strong> (Biomedical) ↔ correlates with <strong>mean time to isolate</strong> (SOC)</li>
+      <li><strong>Device utilization %</strong> (Biomedical/CFO) ↔ correlates with <strong>attack surface reduction</strong> (SOC)</li>
+      <li><strong>Unknown/shadow device count</strong> (both)—discovery metric that opens budget conversations</li>
+      <li><strong>Incidents contained without clinical disruption</strong> (both)—the Clinical SOC success metric</li>
+    </ul>
   </div>
 </section>
 
@@ -586,10 +777,21 @@
     </tbody>
   </table>
 
+  <h3>Reference deployment scenario</h3>
+  <div class="callout dark">
+    <h3>Example: Acute-care hospital</h3>
+    <p style="margin:0;">
+      Network taps feed clinical VLAN traffic to <strong>Medigate</strong> (DPI and asset profiling for infusion pumps, MRIs, patient monitors).
+      Medigate identifies abnormal activity—a device communicating externally or scanning laterally—and pushes enriched alerts to Splunk via <strong>HEC or Syslog</strong>.
+      Splunk ES correlates the alert with existing IT security context; a <strong>SOAR playbook</strong> triggers automated enforcement through <strong>Cisco ISE</strong>, isolating the compromised device on a quarantine VLAN without disrupting adjacent clinical workflows.
+      Biomedical Engineering simultaneously views the same device in the <strong>Asset Inventory dashboard</strong>—manufacturer, location, last-seen switch, and utilization history.
+    </p>
+  </div>
+
   <div class="callout warn">
     <h3>SE note — deployment dependencies</h3>
     <p style="margin:0;">
-      Claroty xDome requires network visibility (TAP/SPAN/broker). If the customer lacks this, scope network engineering alongside the Splunk add-on. Cisco Gigamon and ISE integrations are common co-sell paths.
+      Claroty xDome requires network visibility (TAP/SPAN/broker). If the customer lacks this, scope network engineering alongside the Splunk add-on. Cisco Gigamon and ISE integrations are common co-sell paths. For multi-site deployments, reference architectures often include Cisco ACI and Secure Workload for context-aware segmentation.
     </p>
   </div>
 </section>
@@ -909,13 +1111,48 @@
     </p>
   </div>
 
-  <h3>Cisco co-sell alignment</h3>
-  <ul>
-    <li><strong>Cisco ISE</strong> — enforcement node for safe device isolation; common Medigate integration path</li>
-    <li><strong>Cisco DNA Spaces</strong> — location services layered on Medigate asset data (IHA reference)</li>
-    <li><strong>Gigamon</strong> — network visibility broker feeding Claroty xDome DPI</li>
-    <li><strong>Fortinet FortiNAC</strong> — alternative enforcement for mixed-vendor environments</li>
-  </ul>
+  <h3>Cisco &amp; partner co-sell alignment</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Partner / technology</th>
+        <th>Role in architecture</th>
+        <th>Reference</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Cisco ISE</strong></td>
+        <td>Enforcement node—safe device isolation and quarantine VLAN assignment</td>
+        <td>All three case studies; HIMSS 2025 joint presence</td>
+      </tr>
+      <tr>
+        <td><strong>Cisco DNA Spaces</strong></td>
+        <td>Location intelligence layered on Medigate asset discovery</td>
+        <td>Interior Health Authority</td>
+      </tr>
+      <tr>
+        <td><strong>Cisco ACI + Secure Workload</strong></td>
+        <td>Context-aware microsegmentation for distributed IoMT footprint</td>
+        <td>Large healthcare provider (EHR modernization)</td>
+      </tr>
+      <tr>
+        <td><strong>Gigamon</strong></td>
+        <td>Network visibility broker feeding traffic to Medigate DPI</td>
+        <td>Joint webinars with Optiv and Medigate on reference architectures</td>
+      </tr>
+      <tr>
+        <td><strong>Fortinet FortiNAC</strong></td>
+        <td>Alternative enforcement for mixed-vendor environments</td>
+        <td>General deployment pattern</td>
+      </tr>
+      <tr>
+        <td><strong>Optiv</strong></td>
+        <td>Systems integrator—deployment guides and Clinical SOC roadmaps</td>
+        <td>Joint webinar series on Splunk integration best practices</td>
+      </tr>
+    </tbody>
+  </table>
 </section>
 
 <section id="objections">
@@ -953,6 +1190,70 @@
   </table>
 </section>
 
+<section id="webinars">
+  <h2>Webinars &amp; learning resources</h2>
+  <p>
+    Industry webinars, partner sessions, and solution briefs consistently highlight Medigate + Splunk as a reference architecture for healthcare cyber resilience and digital transformation.
+    Use these for pre-call research, customer education, and SE onboarding.
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Resource type</th>
+        <th>Content focus</th>
+        <th>Audience / use</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Medigate Clinical SOC launch webinars</strong></td>
+        <td>Real-world deployment roadmaps; quantifiable outcomes (incident response, workflow efficiency)</td>
+        <td>Executive briefings; digital transformation narrative</td>
+      </tr>
+      <tr>
+        <td><strong>Gigamon + Optiv + Medigate joint sessions</strong></td>
+        <td>Reference architectures; traffic visibility integration; routing data into Splunk for clinical incident response automation</td>
+        <td>SE technical win; architecture workshops</td>
+      </tr>
+      <tr>
+        <td><strong>Cisco at HIMSS 2025</strong></td>
+        <td>Healthcare security innovation; Claroty/Cisco joint solutions (Booth #1227, Las Vegas)</td>
+        <td>Event follow-up; healthcare vertical credibility</td>
+      </tr>
+      <tr>
+        <td><strong>Deployment guides &amp; solution briefs</strong></td>
+        <td>Step-by-step Medigate-to-Splunk mapping; before/after operational metrics; CIM field alignment</td>
+        <td>POC scoping; implementation planning</td>
+      </tr>
+      <tr>
+        <td><strong>White paper — Medical Device Security</strong></td>
+        <td>IoMT threat landscape; passive monitoring approach; regulatory context</td>
+        <td>CISO/GRC conversations; compliance framing</td>
+      </tr>
+      <tr>
+        <td><strong>Modernizing Cybersecurity for Healthcare (solution brief)</strong></td>
+        <td>End-to-end platform story: visibility → analytics → enforcement</td>
+        <td>Leave-behind for healthcare accounts</td>
+      </tr>
+      <tr>
+        <td><strong>Provider Executive Overview</strong></td>
+        <td>Board-level ROI framing; breach cost, operational efficiency, collaboration benefits</td>
+        <td>CIO/CFO executive summaries</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <h3>Evaluation summary</h3>
+    <p style="margin:0;">
+      Research confirms the integration is <strong>widely deployed and consistently validated</strong> across security, operational, and organizational dimensions.
+      Hospitals have prevented ransomware, eliminated device management inefficiencies, and driven cross-team collaboration.
+      The combined platform optimizes both <strong>risk mitigation</strong> (faster incident response, shadow device discovery) and <strong>operational performance</strong> (utilization rates, capex optimization)—positioning Splunk as the central hub for healthcare cyber resilience, not a passive log store.
+    </p>
+  </div>
+</section>
+
 <section id="references">
   <h2>Resources &amp; next steps</h2>
 
@@ -971,7 +1272,13 @@
     <li><a href="https://www.claroty.com" target="_blank" rel="noopener">Claroty xDome</a> — platform overview and healthcare solutions</li>
     <li><a href="https://www.splunk.com/en_us/solutions/healthcare.html" target="_blank" rel="noopener">Splunk for Healthcare</a> — vertical solutions page</li>
     <li><a href="https://www.cisco.com/c/en/us/products/security/claroty.html" target="_blank" rel="noopener">Cisco Security and Claroty</a> — joint solution brief</li>
+    <li><a href="https://www.cisco.com/c/en/us/training-events/events/enterprise-networks/himss.html" target="_blank" rel="noopener">Cisco at HIMSS 2025</a> — healthcare security innovation (Booth #1227)</li>
     <li>OT Security Add-On for Splunk — CIM compliance and OT dashboards</li>
+    <li>White Paper — Medical Device Security (Claroty)</li>
+    <li>Modernizing Cybersecurity for Healthcare — solution brief (Cisco + Claroty)</li>
+    <li>Provider Executive Overview — board-level ROI framing</li>
+    <li>Claroty vs. competitive battlecard — differentiation for competitive deals</li>
+    <li>GPRS Channel Insights — IIoT networking vendor landscape context</li>
   </ul>
 
   <div class="callout accent">
@@ -991,7 +1298,7 @@
     Verify ROI figures and customer references with Claroty and Splunk healthcare vertical marketing before customer-facing use.
   </p>
   <p style="margin-top:0.5rem;">
-    Sources: Claroty, Splunk, IBM Cost of a Data Breach Report 2024, customer case studies (Bupa Cromwell, Interior Health Authority).
+    Sources: Claroty, Splunk, Cisco, IBM Cost of a Data Breach Report 2024, customer case studies (Bupa Cromwell, Interior Health Authority, large healthcare provider), Gigamon/Optiv joint webinars, HIMSS 2025.
   </p>
 </footer>
 
