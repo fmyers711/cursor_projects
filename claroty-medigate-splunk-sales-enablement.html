@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Claroty xDome (Medigate) + Splunk — Clinical SOC Sales Enablement</title>
+  <style>
+    :root {
+      --bg: #f2f5f7;
+      --panel: #ffffff;
+      --text: #07182d;
+      --muted: #536070;
+      --accent: #ff007f;
+      --accent-dark: #bd0d5f;
+      --blue: #0a60ff;
+      --blue-light: #e0eeff;
+      --border: #ced4db;
+      --success: #2d6a1e;
+      --success-bg: #eef8ea;
+      --warn-bg: #fff8f0;
+      --warn-border: #e8a020;
+      --clinical: #0d6e5c;
+      --clinical-bg: #e8f7f3;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      font-size: 15px;
+    }
+    header {
+      background: linear-gradient(135deg, #07182d 0%, #12275c 55%, #0f214d 100%);
+      color: #fff;
+      padding: 1.75rem 2rem 2rem;
+    }
+    header .inner { max-width: 1100px; margin: 0 auto; }
+    header .eyebrow {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #7ae2ff;
+      margin: 0 0 0.5rem;
+    }
+    header h1 {
+      margin: 0;
+      font-size: clamp(1.35rem, 3vw, 1.85rem);
+      font-weight: 700;
+      line-height: 1.25;
+      max-width: 54rem;
+    }
+    header .subtitle {
+      margin: 0.75rem 0 0;
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.95rem;
+      max-width: 52rem;
+    }
+    header .meta {
+      margin-top: 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.65);
+    }
+    header .meta span {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 0.25rem 0.65rem;
+      border-radius: 4px;
+    }
+    nav.toc {
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      overflow-x: auto;
+    }
+    nav.toc ul {
+      list-style: none;
+      margin: 0 auto;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem 1.25rem;
+      max-width: 1100px;
+      font-size: 0.85rem;
+    }
+    nav.toc a { color: var(--blue); text-decoration: none; white-space: nowrap; }
+    nav.toc a:hover { text-decoration: underline; }
+    main { max-width: 1100px; margin: 0 auto; padding: 2rem 2rem 3rem; }
+    section { margin-bottom: 2.5rem; }
+    h2 {
+      font-size: 1.35rem;
+      margin: 0 0 1rem;
+      color: var(--text);
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 0.4rem;
+    }
+    h3 {
+      font-size: 1.05rem;
+      margin: 1.25rem 0 0.5rem;
+      color: var(--text);
+    }
+    h4 {
+      font-size: 0.95rem;
+      margin: 1rem 0 0.4rem;
+      color: var(--muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    p { margin: 0.65rem 0; }
+    ul, ol { margin: 0.5rem 0 0.75rem 1.25rem; padding: 0; }
+    li { margin: 0.35rem 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      margin: 1rem 0;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.55rem 0.7rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: var(--blue-light);
+      color: var(--text);
+      font-weight: 600;
+    }
+    tr:nth-child(even) td { background: #f8fafc; }
+    .callout {
+      background: var(--success-bg);
+      border: 1px solid #b8ddb0;
+      border-left: 4px solid var(--success);
+      padding: 1.1rem 1.25rem;
+      margin: 1.25rem 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .callout.warn {
+      background: var(--warn-bg);
+      border-color: #f0d9b8;
+      border-left-color: var(--warn-border);
+    }
+    .callout.accent {
+      background: #fff0f7;
+      border-color: #ffb8d9;
+      border-left-color: var(--accent);
+    }
+    .callout.clinical {
+      background: var(--clinical-bg);
+      border-color: #a8e0d4;
+      border-left-color: var(--clinical);
+    }
+    .callout.dark {
+      background: #07182d;
+      border-color: #1e3a5f;
+      border-left-color: #7ae2ff;
+      color: rgba(255, 255, 255, 0.92);
+    }
+    .callout h3 { margin-top: 0; border: none; padding: 0; font-size: 1.05rem; }
+    .callout.dark h3 { color: #7ae2ff; }
+    .talk-track {
+      background: #fff2f9;
+      border: 1px solid #ffb2d6;
+      border-left: 4px solid var(--accent);
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .talk-track h4 {
+      margin: 0 0 0.5rem;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent-dark);
+    }
+    .talk-track p { margin: 0; font-style: italic; }
+    .hero-stat {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 1.25rem 0;
+    }
+    .stat-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.1rem 1.25rem;
+      border-top: 3px solid var(--accent);
+    }
+    .stat-card .value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--accent-dark);
+      line-height: 1.1;
+    }
+    .stat-card .label {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-top: 0.35rem;
+    }
+    .stat-card.blue { border-top-color: var(--blue); }
+    .stat-card.blue .value { color: var(--blue); }
+    .stat-card.clinical { border-top-color: var(--clinical); }
+    .stat-card.clinical .value { color: var(--clinical); }
+    .tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 0.15rem 0.45rem;
+      border-radius: 3px;
+      margin-right: 0.35rem;
+    }
+    .tag-es { background: #ffe8ea; color: #850f14; }
+    .tag-soar { background: #fff4d1; color: #5c4411; }
+    .tag-clinical { background: var(--clinical-bg); color: #0a5244; }
+    .tag-ops { background: #e0eeff; color: #0e3a99; }
+    .tag-biomed { background: #f3e8ff; color: #5b21b6; }
+    .use-case {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin: 1.25rem 0;
+    }
+    .use-case h3 { margin-top: 0; }
+    .workflow {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.75rem;
+      margin: 1.25rem 0;
+    }
+    .workflow-step {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+    }
+    .workflow-step .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.75rem;
+      height: 1.75rem;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .workflow-step strong { display: block; font-size: 0.95rem; }
+    .workflow-step span { font-size: 0.82rem; color: var(--muted); }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .audience-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.15rem 1.25rem;
+      border-left: 4px solid var(--blue);
+    }
+    .audience-card h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1rem;
+      color: var(--blue);
+    }
+    .audience-card ul { margin: 0.35rem 0 0 1.1rem; font-size: 0.9rem; }
+    pre {
+      background: #07182d;
+      color: #e8edf2;
+      padding: 1rem 1.15rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 0.82rem;
+      line-height: 1.45;
+      margin: 0.75rem 0;
+    }
+    pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
+    code {
+      background: #e1e6eb;
+      padding: 0.1em 0.35em;
+      border-radius: 3px;
+      font-size: 0.88em;
+    }
+    .discovery-q {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 0.75rem 0;
+    }
+    .discovery-q strong { color: var(--blue); }
+    footer {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem 2rem 2.5rem;
+      font-size: 0.82rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+    footer a { color: var(--blue); }
+    @media (max-width: 700px) {
+      .grid-2 { grid-template-columns: 1fr; }
+      main, header, nav.toc { padding-left: 1rem; padding-right: 1rem; }
+    }
+    @media print {
+      nav.toc { position: static; }
+      .use-case { break-inside: avoid; }
+      header { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <p class="eyebrow">Claroty xDome · Medigate · Splunk · Cisco</p>
+    <h1>Clinical SOC: Splunk + Claroty xDome (Medigate) Sales Enablement</h1>
+    <p class="subtitle">
+      Position Splunk as the analytics and incident-response hub for healthcare IoMT/IoT security.
+      Inject deep clinical context and device intelligence from Claroty xDome into Enterprise Security,
+      SOAR, and operational dashboards—bridging IT Security and Clinical Engineering.
+    </p>
+    <div class="meta">
+      <span>Audience: Splunk AEs · Sales Engineers · Partners</span>
+      <span>Vertical: Healthcare · Life Sciences</span>
+      <span>Focus: Use cases · ROI · Technical positioning</span>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Contents">
+  <ul>
+    <li><a href="#thesis">Positioning</a></li>
+    <li><a href="#stats">ROI stats</a></li>
+    <li><a href="#discovery">Discovery</a></li>
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#ingestion">Data ingestion</a></li>
+    <li><a href="#cim">CIM mapping</a></li>
+    <li><a href="#dashboards">Dashboards</a></li>
+    <li><a href="#use-cases">Use cases</a></li>
+    <li><a href="#spl">SPL examples</a></li>
+    <li><a href="#es-soar">ES &amp; SOAR</a></li>
+    <li><a href="#objections">Objections</a></li>
+    <li><a href="#references">References</a></li>
+  </ul>
+</nav>
+
+<main>
+
+<section id="thesis">
+  <h2>Positioning thesis</h2>
+
+  <div class="callout dark">
+    <h3>One-line value proposition</h3>
+    <p style="margin:0;font-size:1.05rem;">
+      <strong>Claroty xDome sees every medical device on the network; Splunk turns that visibility into a Clinical SOC—unified detection, investigation, and safe response without disrupting patient care.</strong>
+    </p>
+  </div>
+
+  <p>
+    Healthcare organizations face a dual crisis: IoMT and IoT devices proliferate faster than traditional IT security can inventory or protect them, while Clinical Engineering teams lack centralized visibility into device utilization, location, and risk. The <strong>Claroty xDome Add-on for Splunk</strong> (formerly Medigate) resolves both by funneling high-fidelity, clinically contextualized data from deep packet inspection into Splunk's centralized analytics platform.
+  </p>
+
+  <p>
+    For Splunk sellers, this is not a niche add-on—it is a <strong>platform expansion play</strong> that:
+  </p>
+  <ul>
+    <li>Extends Splunk ES and SOAR into the <strong>Clinical SOC</strong> use case—a net-new buyer (CISO + Biomedical Engineering)</li>
+    <li>Maps natively to <strong>CIM Vulnerabilities</strong> and the <strong>OT Security Add-On</strong>, minimizing custom field work</li>
+    <li>Delivers pre-packaged dashboards for security, clinical workflows, and asset management out of the box</li>
+    <li>Integrates with Cisco enforcement (ISE, FortiNAC) for automated, safe segmentation</li>
+    <li>Produces quantifiable ROI: breach prevention, capital expenditure reduction, and operational efficiency</li>
+  </ul>
+
+  <div class="talk-track">
+    <h4>30-second talk track</h4>
+    <p>
+      "Your SOC sees IT assets—but can it tell you which infusion pumps are running telnet, which MRIs are talking to Russia, or which devices are only 12% utilized? Claroty xDome profiles every IoMT device on the network and pushes that intelligence into Splunk. You get a Clinical SOC with ES correlation, SOAR playbooks, and dashboards for both Security and Biomedical Engineering—without a separate siloed tool."
+    </p>
+  </div>
+
+  <div class="talk-track">
+    <h4>Executive talk track (CISO / CIO)</h4>
+    <p>
+      "Healthcare breaches average $9.77 million. Claroty customers like Bupa Cromwell contained a ransomware attempt in March 2024 by detecting anomalous device behavior before lateral movement. Splunk becomes your single pane of glass—correlating Medigate device intelligence with your existing security stack, triggering safe isolation via Cisco ISE, and giving leadership defensible metrics on risk and device ROI."
+    </p>
+  </div>
+</section>
+
+<section id="stats">
+  <h2>Quantifiable ROI — lead with these numbers</h2>
+
+  <div class="hero-stat">
+    <div class="stat-card">
+      <div class="value">$9.77M</div>
+      <div class="label">Average healthcare data breach cost (2024 IBM data)—position prevention, not detection alone</div>
+    </div>
+    <div class="stat-card blue">
+      <div class="value">10–20%</div>
+      <div class="label">Capital expenditure savings via device utilization tracking—speaks to CFO and Biomedical</div>
+    </div>
+    <div class="stat-card clinical">
+      <div class="value">Hours → Min</div>
+      <div class="label">Device locate/patch time reduction (Interior Health Authority + Cisco DNA Spaces)</div>
+    </div>
+    <div class="stat-card">
+      <div class="value">100%</div>
+      <div class="label">IoMT visibility via passive DPI—no agents on clinical devices</div>
+    </div>
+  </div>
+
+  <h3>Proof points by impact area</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Impact area</th>
+        <th>Outcome</th>
+        <th>Customer example</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Breach / ransomware containment</strong></td>
+        <td>Rapid detection of anomalous behavior; prevention of lateral movement on clinical networks</td>
+        <td>Bupa Cromwell Hospital — contained March 2024 ransomware attempt</td>
+      </tr>
+      <tr>
+        <td><strong>Workflow optimization</strong></td>
+        <td>Device maintenance and patching search reduced from hours to minutes</td>
+        <td>Interior Health Authority (IHA) — Medigate + Cisco DNA Spaces integration</td>
+      </tr>
+      <tr>
+        <td><strong>Capital expenditure</strong></td>
+        <td>10–20% reduction in over-purchasing of clinical assets through utilization metrics</td>
+        <td>Large healthcare provider — EHR modernization + Cisco ISE + global IoT footprint management</td>
+      </tr>
+      <tr>
+        <td><strong>Security posture</strong></td>
+        <td>Unified IT + IoMT security operations; reduced incident volume</td>
+        <td>General large healthcare provider — Cisco ISE enforcement + Splunk correlation</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout accent">
+    <h3>Seller tip</h3>
+    <p style="margin:0;">
+      Lead with <strong>breach cost avoidance</strong> for CISO conversations and <strong>utilization / capex savings</strong> for Biomedical Engineering and CFO. The dual-audience story is what differentiates this from generic OT security plays.
+    </p>
+  </div>
+</section>
+
+<section id="discovery">
+  <h2>Discovery questions</h2>
+  <p>Use these to qualify opportunity size and identify champions across IT Security and Clinical Engineering.</p>
+
+  <h3>Security &amp; SOC</h3>
+  <div class="discovery-q">
+    <strong>Visibility:</strong> "Do you have a complete inventory of every medical device on your network—including manufacturer, OS, firmware, and VLAN—updated in real time?"
+  </div>
+  <div class="discovery-q">
+    <strong>Detection gap:</strong> "When a clinical device exhibits anomalous behavior—talking externally, scanning laterally, or using legacy protocols—how does your SOC detect it today? Is it in Splunk or a separate silo?"
+  </div>
+  <div class="discovery-q">
+    <strong>Response:</strong> "If you needed to isolate an infusion pump suspected of compromise, could you do it without disrupting patient care? What's your enforcement path—ISE, NAC, manual?"
+  </div>
+  <div class="discovery-q">
+    <strong>ES maturity:</strong> "Are you running Splunk Enterprise Security today? Do your correlation searches cover IoMT/IoT, or is clinical traffic a blind spot?"
+  </div>
+
+  <h3>Clinical Engineering &amp; Biomedical</h3>
+  <div class="discovery-q">
+    <strong>Asset management:</strong> "How do you track device location, last-seen timestamps, and switch associations when equipment goes missing or moves between departments?"
+  </div>
+  <div class="discovery-q">
+    <strong>Utilization:</strong> "When planning capital purchases for infusion pumps, MRIs, or monitors—do you have utilization data to right-size orders, or are you relying on estimates?"
+  </div>
+  <div class="discovery-q">
+    <strong>Patching:</strong> "How long does it take your team to locate a specific device model for a firmware patch or recall? Hours? Days?"
+  </div>
+
+  <h3>Architecture &amp; integration</h3>
+  <div class="discovery-q">
+    <strong>Splunk footprint:</strong> "Splunk Cloud or Enterprise? Do you have HEC configured? Any existing OT or IoT data sources in Splunk?"
+  </div>
+  <div class="discovery-q">
+    <strong>Claroty status:</strong> "Are you an existing Claroty xDome / Medigate customer, evaluating, or greenfield? That determines whether we lead with the add-on or a joint platform sale."
+  </div>
+  <div class="discovery-q">
+    <strong>Network visibility:</strong> "Do you have SPAN/TAP or a network broker (Gigamon, etc.) providing traffic visibility to Claroty, or is that part of the deployment scope?"
+  </div>
+</section>
+
+<section id="architecture">
+  <h2>Architecture &amp; deployment</h2>
+
+  <p>Medigate (Claroty xDome) acts as the <strong>network intelligence engine</strong>; Splunk acts as the <strong>analytics and incident response hub</strong>. Enforcement is handled by network security tools—not Splunk directly.</p>
+
+  <div class="workflow">
+    <div class="workflow-step">
+      <div class="step-num">1</div>
+      <strong>Capture</strong>
+      <span>Network TAP/SPAN or broker (e.g., Gigamon) feeds traffic to Claroty xDome for passive DPI</span>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">2</div>
+      <strong>Profile</strong>
+      <span>xDome identifies devices (infusion pumps, MRIs, monitors), maps protocols, detects anomalies and CVEs</span>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">3</div>
+      <strong>Ingest</strong>
+      <span>Alerts via Syslog/HEC; asset profiles via REST API polling into Splunk index</span>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">4</div>
+      <strong>Analyze</strong>
+      <span>Splunk ES correlation, dashboards, SPL alerts; CIM-normalized for OT Security Add-On</span>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">5</div>
+      <strong>Respond</strong>
+      <span>SOAR playbooks trigger safe isolation via Cisco ISE, Fortinet FortiNAC, or other NAC</span>
+    </div>
+  </div>
+
+  <h3>Installation checklist</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Platform</th>
+        <th>Step</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Claroty xDome</strong></td>
+        <td>API credentials</td>
+        <td>Settings → Admin Settings → User Management → generate API user and token</td>
+      </tr>
+      <tr>
+        <td><strong>Splunk</strong></td>
+        <td>HEC token</td>
+        <td>Settings → Data Inputs → HTTP Event Collector → create token for Medigate payloads</td>
+      </tr>
+      <tr>
+        <td><strong>Splunk</strong></td>
+        <td>Install add-on</td>
+        <td>Download <strong>Claroty xDome Add-on for Splunk</strong> from Splunkbase; install on search head</td>
+      </tr>
+      <tr>
+        <td><strong>Splunk</strong></td>
+        <td>Configure</td>
+        <td>Define dedicated index (e.g., <code>medigate</code>); input xDome API URL and token</td>
+      </tr>
+      <tr>
+        <td><strong>Splunk</strong></td>
+        <td>Initial sync</td>
+        <td>Start asset profile import; verify continuous event/state updates</td>
+      </tr>
+      <tr>
+        <td><strong>Network</strong></td>
+        <td>Syslog (optional)</td>
+        <td>Route real-time alerts via Universal/Heavy Forwarder (TCP/UDP 514, CEF or JSON)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout warn">
+    <h3>SE note — deployment dependencies</h3>
+    <p style="margin:0;">
+      Claroty xDome requires network visibility (TAP/SPAN/broker). If the customer lacks this, scope network engineering alongside the Splunk add-on. Cisco Gigamon and ISE integrations are common co-sell paths.
+    </p>
+  </div>
+</section>
+
+<section id="ingestion">
+  <h2>Data ingestion methods</h2>
+  <p>Customers typically combine push and pull methods to balance real-time alerting with comprehensive asset synchronization.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Method</th>
+        <th>Direction</th>
+        <th>Protocol / format</th>
+        <th>Use case</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Syslog</strong></td>
+        <td>Push</td>
+        <td>TCP/UDP (port 514), CEF or JSON</td>
+        <td>Real-time alerts routed through Splunk Universal/Heavy Forwarder; standard enterprise pattern</td>
+      </tr>
+      <tr>
+        <td><strong>HEC</strong></td>
+        <td>Push</td>
+        <td>JSON via HTTP</td>
+        <td>Real-time, scalable ingestion into Splunk Cloud or Enterprise; preferred for cloud deployments</td>
+      </tr>
+      <tr>
+        <td><strong>REST API</strong></td>
+        <td>Pull</td>
+        <td>JSON</td>
+        <td>Scheduled polling for complete asset profiles, vulnerability updates, and device state sync</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <h3>Positioning tip</h3>
+    <p style="margin:0;">
+      <strong>Syslog/HEC</strong> = security operations (alerts, anomalies, incidents). <strong>REST API</strong> = asset management and vulnerability lifecycle (inventory, CVE tracking, utilization). Both feed the same Splunk index—one platform, two buyer conversations.
+    </p>
+  </div>
+</section>
+
+<section id="cim">
+  <h2>CIM &amp; OT Security Add-On mapping</h2>
+  <p>
+    Medigate's schema maps natively to Splunk's <strong>Common Information Model (CIM) Vulnerabilities data model</strong> and the <strong>OT Security Add-On</strong>. This means minimal custom field extraction and immediate compatibility with ES correlation searches, risk-based alerting, and OT Security dashboards.
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Claroty / Medigate field</th>
+        <th>Splunk CIM field</th>
+        <th>Context</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>cve_id</code></td>
+        <td><code>Cve</code></td>
+        <td>NIST NVD CVE identifier</td>
+      </tr>
+      <tr>
+        <td><code>cvss_v3_score</code></td>
+        <td><code>Cvss</code></td>
+        <td>Standardized vulnerability severity scoring</td>
+      </tr>
+      <tr>
+        <td><code>risk_severity</code></td>
+        <td><code>severity</code></td>
+        <td>Claroty-assigned risk incorporating clinical impact</td>
+      </tr>
+      <tr>
+        <td><code>device_mac</code></td>
+        <td><code>dest_mac</code></td>
+        <td>Target device hardware address for network mapping</td>
+      </tr>
+      <tr>
+        <td><code>cisa_kev</code></td>
+        <td><code>signature</code></td>
+        <td>CISA Known Exploited Vulnerabilities catalog mapping</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="talk-track">
+    <h4>Technical SE talk track</h4>
+    <p>
+      "You don't need a six-month custom parsing project. Medigate data lands CIM-compliant out of the box—Vulnerabilities model, OT Security Add-On ready. Your ES correlation searches, risk scores, and notable events work on IoMT data the same way they work on IT. Tag the add-on during tech win demos."
+    </p>
+  </div>
+</section>
+
+<section id="dashboards">
+  <h2>Pre-packaged dashboards</h2>
+  <p>The Claroty xDome Add-on ships with specialized dashboards—use these to map to buyer personas in demos and POC scoping.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Dashboard</th>
+        <th>Focus</th>
+        <th>Primary audience</th>
+        <th>Splunk attach</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Visibility &amp; Asset Inventory</strong></td>
+        <td>Real-time counts by type, manufacturer, OS, VLAN</td>
+        <td>IT Operations, Biomedical Engineering</td>
+        <td>Core Splunk + add-on</td>
+      </tr>
+      <tr>
+        <td><strong>Risk Intelligence &amp; Threat Detection</strong></td>
+        <td>CVEs, ICS-CERT advisories, behavioral anomalies, vulnerability tracking</td>
+        <td>Security Operations (SOC)</td>
+        <td><span class="tag tag-es">ES</span> correlation + risk scoring</td>
+      </tr>
+      <tr>
+        <td><strong>Clinical Workflows &amp; Flows</strong></td>
+        <td>Device utilization, communication patterns, behavioral deviations</td>
+        <td>Clinical Engineering</td>
+        <td>Core Splunk + add-on</td>
+      </tr>
+      <tr>
+        <td><strong>Clinical SOC Context</strong></td>
+        <td>Attack vector tracing, ES/SOAR integration, safe remediation triggers</td>
+        <td>Incident Responders, CISO</td>
+        <td><span class="tag tag-es">ES</span> <span class="tag tag-soar">SOAR</span></td>
+      </tr>
+      <tr>
+        <td><strong>Security Events / Details</strong></td>
+        <td>End-to-end communication alerts, granular alert data for deep investigations</td>
+        <td>Threat Hunters, Tier 2/3 analysts</td>
+        <td><span class="tag tag-es">ES</span> + SPL</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="grid-2" style="margin-top:1.25rem;">
+    <div class="audience-card">
+      <h3><span class="tag tag-ops">SOC / CISO</span> Demo flow</h3>
+      <ul>
+        <li>Risk Intelligence dashboard → CVE on infusion pump</li>
+        <li>Clinical SOC Context → attack path visualization</li>
+        <li>ES notable event → SOAR playbook → ISE quarantine</li>
+      </ul>
+    </div>
+    <div class="audience-card">
+      <h3><span class="tag tag-biomed">Biomedical</span> Demo flow</h3>
+      <ul>
+        <li>Asset Inventory → filter by department, device type</li>
+        <li>Clinical Workflows → utilization % by device</li>
+        <li>Missing equipment report → last-seen, switch, location</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="use-cases">
+  <h2>Top use cases to lead with</h2>
+
+  <div class="use-case">
+    <h3><span class="tag tag-es">Security</span> 1. Clinical device communicating externally</h3>
+    <p><strong>Problem:</strong> Medical devices reaching IPs outside approved internal subnets—potential compromise, misconfiguration, or data exfiltration.</p>
+    <p><strong>Splunk value:</strong> Real-time SPL alert → ES notable → SOAR enrichment with device profile (manufacturer, clinical impact, patient proximity) → safe isolation playbook.</p>
+    <p><strong>Buyer:</strong> CISO, SOC Manager, Compliance</p>
+  </div>
+
+  <div class="use-case">
+    <h3><span class="tag tag-es">Security</span> 2. Lateral movement / port scanning from clinical assets</h3>
+    <p><strong>Problem:</strong> Compromised IoMT device scanning internal network—early ransomware indicator.</p>
+    <p><strong>Splunk value:</strong> Behavioral baseline in Splunk; spike detection across unique destinations/ports; correlation with ES threat intel and MITRE ATT&amp;CK ICS techniques.</p>
+    <p><strong>Buyer:</strong> SOC, Incident Response</p>
+    <p><strong>Proof point:</strong> Bupa Cromwell ransomware containment (March 2024)</p>
+  </div>
+
+  <div class="use-case">
+    <h3><span class="tag tag-es">Security</span> 3. Unauthorized / legacy protocol on high-risk devices</h3>
+    <p><strong>Problem:</strong> Telnet, FTP, SMBv1, or cleartext HTTP on devices that should only use clinical protocols.</p>
+    <p><strong>Splunk value:</strong> CIM-normalized vulnerability and network traffic data; ES risk score elevation; compliance reporting for HIPAA/NIST CSF.</p>
+    <p><strong>Buyer:</strong> CISO, GRC, SOC</p>
+  </div>
+
+  <div class="use-case">
+    <h3><span class="tag tag-biomed">Operations</span> 4. Device utilization by department</h3>
+    <p><strong>Problem:</strong> Capital planning relies on estimates; expensive devices (infusion pumps, monitors) sit underutilized while departments request more.</p>
+    <p><strong>Splunk value:</strong> Utilization % dashboards from passive network observation—no agents on devices; data-driven capex decisions.</p>
+    <p><strong>Buyer:</strong> Biomedical Engineering, CFO, Supply Chain</p>
+    <p><strong>ROI:</strong> 10–20% reduction in over-purchasing</p>
+  </div>
+
+  <div class="use-case">
+    <h3><span class="tag tag-biomed">Operations</span> 5. Missing or misplaced medical equipment</h3>
+    <p><strong>Problem:</strong> Devices disappear between departments; manual audits are slow and inaccurate.</p>
+    <p><strong>Splunk value:</strong> Last-seen timestamp, switch IP, and location from network telemetry; automated "missing &gt; 7 days" reports.</p>
+    <p><strong>Buyer:</strong> Biomedical Engineering, Clinical Engineering</p>
+    <p><strong>Proof point:</strong> IHA — hours to minutes for device locate/patch</p>
+  </div>
+
+  <div class="use-case">
+    <h3><span class="tag tag-es">Security</span> <span class="tag tag-soar">SOAR</span> 6. Automated safe enforcement</h3>
+    <p><strong>Problem:</strong> Manual isolation of clinical devices is slow and risks patient care disruption.</p>
+    <p><strong>Splunk value:</strong> SOAR playbook receives Medigate alert + device context → validates against clinical allow-lists → triggers Cisco ISE or FortiNAC policy → logs action in Splunk for audit.</p>
+    <p><strong>Buyer:</strong> CISO, Network Security, Biomedical (for safety assurances)</p>
+  </div>
+</section>
+
+<section id="spl">
+  <h2>SPL alert examples — SE demo scripts</h2>
+  <p>Pre-built searches from the add-on and community. Customize <code>index</code>, <code>sourcetype</code>, and CIDR ranges per customer environment.</p>
+
+  <h3>External communication from medical devices</h3>
+  <pre><code>index=medigate sourcetype=medigate_iot device_category="Medical Device"
+| iplocation dest_ip
+| where NOT cidrmatch("10.0.0.0/8", dest_ip)
+    AND NOT cidrmatch("172.16.0.0/12", dest_ip)
+    AND NOT cidrmatch("192.168.0.0/16", dest_ip)
+| stats count by _time, src_ip, device_name, dest_ip, dest_port, Country
+| sort - count</code></pre>
+
+  <h3>Lateral movement / port scanning detection</h3>
+  <pre><code>index=medigate sourcetype=medigate_iot event_type="network_flow"
+| bin _time span=5m
+| stats dc(dest_ip) as unique_destinations, dc(dest_port) as unique_ports
+    by src_ip, device_name, device_vendor
+| where unique_destinations &gt; 20 AND unique_ports &gt; 10
+| eval Alert_Trigger="Potential Lateral Movement/Scanning from Clinical Asset"
+| table _time, src_ip, device_name, device_vendor, unique_destinations, unique_ports, Alert_Trigger</code></pre>
+
+  <h3>Legacy protocol on high-risk devices</h3>
+  <pre><code>index=medigate sourcetype=medigate_iot
+| search app IN ("telnet", "ftp", "smbv1", "http")
+| stats count values(app) as protocols_used by src_ip, dest_ip, device_profile, risk_score
+| where risk_score &gt; 70
+| rename src_ip as Source_Asset, dest_ip as Destination</code></pre>
+
+  <h3>Device utilization by department (Biomedical dashboard)</h3>
+  <pre><code>index=medigate sourcetype=medigate_iot category="Infusion Pump" event_type="device_status"
+| bucket _time span=1d
+| stats sum(eval(if(status="Active", 1, 0))) as active_intervals
+    by device_mac, device_vendor, department, location
+| eval active_hours = (active_intervals * 5) / 60
+| eval utilization_pct = round((active_hours / 24) * 100, 2)
+| table device_mac, device_vendor, department, location, active_hours, utilization_pct
+| sort - utilization_pct</code></pre>
+
+  <h3>Missing equipment audit</h3>
+  <pre><code>index=medigate sourcetype=medigate_iot
+| stats latest(_time) as Last_Seen, latest(location) as Current_Location,
+         latest(switch_ip) as Switch by device_mac, device_name
+| eval Days_Missing = round((now() - Last_Seen) / 86400, 0)
+| where Days_Missing &gt; 7
+| convert ctime(Last_Seen)
+| table device_mac, device_name, Current_Location, Switch, Last_Seen, Days_Missing</code></pre>
+
+  <div class="callout clinical">
+    <h3>POC scoping tip</h3>
+    <p style="margin:0;">
+      Pick <strong>two use cases</strong> for POC: one security (external comms or lateral movement) and one operational (utilization or missing devices). This proves value to both CISO and Biomedical champions and accelerates multi-stakeholder sign-off.
+    </p>
+  </div>
+</section>
+
+<section id="es-soar">
+  <h2>Enterprise Security &amp; SOAR integration</h2>
+
+  <p>This is where Splunk platform value exceeds the add-on alone. Position ES and SOAR as the orchestration layer that makes Medigate data actionable at enterprise scale.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Capability</th>
+        <th>How Medigate data feeds it</th>
+        <th>Outcome</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>ES Correlation</strong></td>
+        <td>CIM-mapped vulnerability and network events join IT and IoMT notables in unified risk framework</td>
+        <td>Single Clinical SOC queue—not a separate IoMT SIEM</td>
+      </tr>
+      <tr>
+        <td><strong>Risk-Based Alerting (RBA)</strong></td>
+        <td>Medigate <code>risk_severity</code> and <code>cvss_v3_score</code> contribute to asset risk scores</td>
+        <td>Prioritize incidents on devices with highest clinical impact</td>
+      </tr>
+      <tr>
+        <td><strong>OT Security Add-On</strong></td>
+        <td>Native field mapping; OT dashboards and ES content updates apply to Medigate sourcetypes</td>
+        <td>Faster time-to-value; no custom TA development</td>
+      </tr>
+      <tr>
+        <td><strong>SOAR Playbooks</strong></td>
+        <td>Alert + device profile + clinical context → automated enrichment → ISE/NAC quarantine with approval gates</td>
+        <td>Sub-minute response without manual device lookup</td>
+      </tr>
+      <tr>
+        <td><strong>Threat Intel</strong></td>
+        <td>Medigate CISA KEV and CVE data correlated with ES threat intelligence frameworks</td>
+        <td>Known exploited vulnerabilities on clinical assets surfaced automatically</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="talk-track">
+    <h4>ES upsell talk track</h4>
+    <p>
+      "Medigate tells you a pump has CVE-2024-XXXX. Splunk ES tells you that pump is on the same VLAN as your EHR interface, correlates it with a lateral movement alert from yesterday, and scores it as a critical notable. SOAR quarantines it through ISE while your analyst sees the full clinical context—manufacturer, department, last patient-adjacent location. That's a Clinical SOC, not a dashboard."
+    </p>
+  </div>
+
+  <h3>Cisco co-sell alignment</h3>
+  <ul>
+    <li><strong>Cisco ISE</strong> — enforcement node for safe device isolation; common Medigate integration path</li>
+    <li><strong>Cisco DNA Spaces</strong> — location services layered on Medigate asset data (IHA reference)</li>
+    <li><strong>Gigamon</strong> — network visibility broker feeding Claroty xDome DPI</li>
+    <li><strong>Fortinet FortiNAC</strong> — alternative enforcement for mixed-vendor environments</li>
+  </ul>
+</section>
+
+<section id="objections">
+  <h2>Objection handling</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Objection</th>
+        <th>Response</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>"We already have Claroty—we don't need Splunk for this."</td>
+        <td>Claroty xDome is the visibility engine; Splunk is where that data becomes actionable alongside IT security, EHR logs, identity, and cloud telemetry. The add-on exists because customers asked to unify Clinical SOC with their existing Splunk investment—not run another silo.</td>
+      </tr>
+      <tr>
+        <td>"IoMT security is Biomedical's problem, not the SOC."</td>
+        <td>Ransomware doesn't respect org charts. Bupa Cromwell's 2024 incident started on clinical devices. The add-on gives Biomedical their dashboards <em>and</em> gives the SOC correlated alerts—with enforcement that Biomedical approves via allow-lists.</td>
+      </tr>
+      <tr>
+        <td>"We can't put agents on medical devices."</td>
+        <td>Correct—and you don't. Claroty uses passive DPI via network TAP/SPAN. Zero agents, zero clinical device changes. Splunk receives metadata and alerts, not patient data.</td>
+      </tr>
+      <tr>
+        <td>"Our Splunk license is already strained."</td>
+        <td>Scope ingestion: alerts and asset state via HEC/API are low-volume compared to raw network flow. Use summary indexing and scheduled reports for utilization dashboards. MDL tiering applies if customer is on Cisco Data Fabric.</td>
+      </tr>
+      <tr>
+        <td>"We need HIPAA compliance assurances."</td>
+        <td>Medigate observes network metadata—device types, protocols, IPs, MACs—not PHI. Splunk access controls, role-based views, and audit logging apply. Position alongside existing HIPAA logging and retention policies.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="references">
+  <h2>Resources &amp; next steps</h2>
+
+  <h3>Seller action items</h3>
+  <ol>
+    <li>Confirm healthcare vertical account mapping; identify existing Claroty xDome/Medigate customers in your territory</li>
+    <li>Qualify Splunk footprint (Cloud vs Enterprise, ES/SOAR present, HEC configured)</li>
+    <li>Schedule joint discovery with Claroty partner team when xDome is installed or in evaluation</li>
+    <li>Scope POC with one security + one operational use case; invite both CISO and Biomedical stakeholders</li>
+    <li>Attach ES/SOAR and Cisco ISE in platform conversation—not add-on only</li>
+  </ol>
+
+  <h3>Key resources</h3>
+  <ul>
+    <li><a href="https://splunkbase.splunk.com" target="_blank" rel="noopener">Splunkbase</a> — Claroty xDome Add-on for Splunk</li>
+    <li><a href="https://www.claroty.com" target="_blank" rel="noopener">Claroty xDome</a> — platform overview and healthcare solutions</li>
+    <li><a href="https://www.splunk.com/en_us/solutions/healthcare.html" target="_blank" rel="noopener">Splunk for Healthcare</a> — vertical solutions page</li>
+    <li><a href="https://www.cisco.com/c/en/us/products/security/claroty.html" target="_blank" rel="noopener">Cisco Security and Claroty</a> — joint solution brief</li>
+    <li>OT Security Add-On for Splunk — CIM compliance and OT dashboards</li>
+  </ul>
+
+  <div class="callout accent">
+    <h3>Partner alignment</h3>
+    <p style="margin:0;">
+      Engage Claroty field teams early on joint accounts. Existing xDome customers are the fastest path to Splunk add-on attach; greenfield opportunities are a platform co-sell with network visibility (Gigamon/TAP) and enforcement (ISE) in scope.
+    </p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p>
+    <strong>Internal sales enablement</strong> — Claroty xDome (Medigate) + Splunk Clinical SOC.
+    For Splunk AEs, Sales Engineers, and partners. Not for external distribution without approval.
+    Verify ROI figures and customer references with Claroty and Splunk healthcare vertical marketing before customer-facing use.
+  </p>
+  <p style="margin-top:0.5rem;">
+    Sources: Claroty, Splunk, IBM Cost of a Data Breach Report 2024, customer case studies (Bupa Cromwell, Interior Health Authority).
+  </p>
+</footer>
+
+</body>
+</html>
