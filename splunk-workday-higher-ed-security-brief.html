@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Splunk for Workday Security &amp; Compliance — Higher Education Executive Brief</title>
+  <title>Splunk for Workday Security, Availability &amp; Performance — Higher Education Executive Brief</title>
   <style>
     :root {
       --bg: #f2f5f7;
@@ -234,6 +234,7 @@
     .tag.sec { background: #e0f2fe; color: #0369a1; }
     .tag.comp { background: var(--purple-bg); color: var(--purple); }
     .tag.auto { background: #f0fdf4; color: var(--success); }
+    .tag.ops { background: #fff7ed; color: #c2410c; }
     .use-case-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -355,13 +356,13 @@
 <header>
   <div class="inner">
     <p class="eyebrow">Higher Education · CIO · CISO · CTO · CDO Executive Brief</p>
-    <h1>Splunk for Workday: The Most Impactful Use Cases to Monitor and Secure Campus HR &amp; Payroll</h1>
+    <h1>Splunk for Workday: The Most Impactful Use Cases to Monitor, Secure, and Assure Campus HR &amp; Payroll</h1>
     <p class="subtitle">
-      Workday is the system of record for employee PII, payroll, benefits, and financial controls at most large universities and college systems. Splunk transforms Workday audit and activity logs into real-time detection, cross-domain correlation, automated response, and defensible compliance evidence—protecting faculty, staff, student workers, and institutional trust.
+      Workday is the system of record for employee PII, payroll, benefits, and financial controls at most large universities and college systems. Splunk transforms Workday audit, activity, and performance telemetry into real-time threat detection, service availability assurance, integration health monitoring, automated response, and defensible compliance evidence—protecting faculty, staff, student workers, and institutional trust.
     </p>
     <div class="meta">
       <span>Audience: CIO · CISO · CTO · CDO</span>
-      <span>Focus: Workday security · payroll fraud · privilege escalation · compliance</span>
+      <span>Focus: Security · availability · performance · payroll integrity · compliance</span>
       <span>Sectors: R1 universities · state systems · multi-campus institutions</span>
     </div>
   </div>
@@ -372,7 +373,8 @@
     <li><a href="#executive">Executive summary</a></li>
     <li><a href="#why">Why Workday is a priority</a></li>
     <li><a href="#architecture">Reference architecture</a></li>
-    <li><a href="#use-cases">Top use cases</a></li>
+    <li><a href="#use-cases">Security use cases</a></li>
+    <li><a href="#availability">Availability &amp; performance</a></li>
     <li><a href="#metrics">Customer improvement ranges</a></li>
     <li><a href="#compliance">Compliance alignment</a></li>
     <li><a href="#soar">SOAR automation</a></li>
@@ -389,13 +391,13 @@
     Higher education institutions entrust Workday with some of their most sensitive data: Social Security numbers, direct deposit accounts, compensation history, benefits elections, and segregation-of-duties controls spanning thousands of faculty, staff, adjuncts, and student employees across multiple campuses. Yet native Workday reporting is optimized for HR and finance operations—not continuous security monitoring, cross-system correlation, or automated incident response.
   </p>
   <p>
-    Splunk closes that gap by ingesting Workday audit logs, sign-on activity, security group changes, report exports, API/EIB transactions, and integration events—then correlating them with identity (Okta, Entra ID, Duo), network (firewall, VPN, Zscaler), and endpoint telemetry in a single platform. The result is faster detection of payroll fraud, insider threats, and credential compromise; real-time visibility into privilege escalation; and audit-ready evidence for SOX, GDPR, FERPA-adjacent employee data mandates, and state privacy laws.
+    Splunk closes that gap by ingesting Workday audit logs, sign-on activity, security group changes, report exports, API/EIB transactions, integration events, and performance metrics—then correlating them with identity (Okta, Entra ID, Duo), network (firewall, VPN, Zscaler), middleware, and endpoint telemetry in a single platform. The result is faster detection of payroll fraud, insider threats, and credential compromise; real-time visibility into privilege escalation; continuous assurance that Workday and its integrations are available and performant during critical payroll windows; and audit-ready evidence for SOX, GDPR, FERPA-adjacent employee data mandates, and state privacy laws.
   </p>
 
   <div class="callout">
     <h3>Bottom line for campus leadership</h3>
     <p>
-      Institutions that centralize Workday telemetry in Splunk typically move from <strong>periodic, sample-based audits</strong> to <strong>continuous, correlated monitoring</strong>—cutting mean time to detect payroll and identity threats from weeks to hours, reducing compliance evidence collection by 60–80%, and enabling automated account lockout within minutes of confirmed compromise via Splunk SOAR and ServiceNow integration.
+      Institutions that centralize Workday telemetry in Splunk typically move from <strong>periodic, sample-based audits</strong> to <strong>continuous, correlated monitoring</strong>—cutting mean time to detect payroll and identity threats from weeks to hours, reducing Workday outage diagnosis time by 40–60%, reducing compliance evidence collection by 60–80%, and enabling automated account lockout within minutes of confirmed compromise via Splunk SOAR and ServiceNow integration.
     </p>
   </div>
 
@@ -423,6 +425,14 @@
     <div class="stat success">
       <b>&lt;15 min</b>
       <span>Automated compromised-account containment via SOAR playbooks (vs. hours manually)</span>
+    </div>
+    <div class="stat success">
+      <b>40–60%</b>
+      <span>MTTR reduction for Workday service incidents with ITSI correlation (customer planning range)</span>
+    </div>
+    <div class="stat">
+      <b>99%+</b>
+      <span>Payroll-window availability visibility when synthetic checks and integration KPIs are modeled in ITSI</span>
     </div>
   </div>
 </section>
@@ -455,12 +465,20 @@
       <strong>Shared credential and VPN exposure</strong>
       <span>Remote work, contractor access, and academic calendar hiring surges increase login anomaly and credential theft risk that Workday logs alone cannot contextualize.</span>
     </div>
+    <div class="pillar">
+      <strong>Payroll-window availability risk</strong>
+      <span>A Workday outage or slow integration during payroll processing affects thousands of employees; native Workday status does not cover middleware, IdP, or EIB pipeline health end-to-end.</span>
+    </div>
+    <div class="pillar">
+      <strong>Academic calendar load spikes</strong>
+      <span>Fall hiring, adjunct onboarding, and open-enrollment periods drive concurrent login and API surges that require performance baselines—not just security monitoring.</span>
+    </div>
   </div>
 
   <div class="callout warn">
     <h3>The visibility gap</h3>
     <p>
-      Workday provides robust native audit trails, but they live in an HR/finance operational context. Security teams need those events in the same platform as firewall, VPN, IdP, and endpoint data to answer questions like: <em>Was this bulk export preceded by a VPN login from an unusual geography? Did this security group change follow a brute-force pattern? Was this EIB run authorized and expected?</em> Splunk is that correlation layer.
+      Workday provides robust native audit trails, but they live in an HR/finance operational context. Security and IT operations teams need those events in the same platform as firewall, VPN, IdP, middleware, and endpoint data to answer questions like: <em>Was this bulk export preceded by a VPN login from an unusual geography? Did this security group change follow a brute-force pattern? Was this EIB run authorized and expected? Is Workday slow because of IdP latency, integration backlog, or a Workday tenant issue?</em> Splunk is that correlation layer.
     </p>
   </div>
 </section>
@@ -468,7 +486,7 @@
 <section id="architecture">
   <h2>Reference architecture — Workday telemetry in Splunk</h2>
   <p>
-    A mature higher-ed deployment ingests Workday data via Workday REST/RaaS APIs, EIB job logs, and Workday-provided audit exports—normalized to the Splunk Common Information Model (CIM) for authentication, change analysis, and data access domains—then enriched with identity and network context.
+    A mature higher-ed deployment ingests Workday data via Workday REST/RaaS APIs, EIB job logs, Workday-provided audit exports, and synthetic transaction probes—normalized to the Splunk Common Information Model (CIM) for authentication, change analysis, data access, and performance domains—then enriched with identity, network, and middleware context. Splunk ITSI models Workday as a business service with KPIs for login success, API latency, and integration throughput.
   </p>
 
   <div class="diagram-wrap">
@@ -477,6 +495,7 @@
         <div class="flow-box workday">Workday Audit Logs<br><small>Sign-on · Security · Reports</small></div>
         <div class="flow-box workday">Workday API / RaaS<br><small>Integration activity</small></div>
         <div class="flow-box workday">EIB &amp; Studio Jobs<br><small>Bulk data pipelines</small></div>
+        <div class="flow-box workday">Synthetic Probes<br><small>Login · API · payroll path</small></div>
       </div>
       <div class="flow-arrow">▼</div>
       <div class="flow-row">
@@ -492,6 +511,7 @@
       <div class="flow-arrow">▼</div>
       <div class="flow-row">
         <div class="flow-box highlight">Splunk Enterprise Security<br><small>Correlation · Notables · UBA</small></div>
+        <div class="flow-box highlight">Splunk ITSI<br><small>Service health · KPIs · Episodes</small></div>
         <div class="flow-box highlight">Splunk SOAR<br><small>Playbooks · HITL gates</small></div>
       </div>
     </div>
@@ -502,7 +522,7 @@
     <thead>
       <tr>
         <th>Source</th>
-        <th>Security value</th>
+        <th>Security / ops value</th>
         <th>Example events</th>
       </tr>
     </thead>
@@ -537,12 +557,32 @@
         <td>Segregation-of-duties violations, approval bypass</td>
         <td>Workflow completions, override actions, proxy approvals</td>
       </tr>
+      <tr>
+        <td><strong>API performance &amp; error metrics</strong></td>
+        <td>Latency degradation, integration failures, capacity planning</td>
+        <td>Response time, HTTP 4xx/5xx rates, timeout events, queue depth</td>
+      </tr>
+      <tr>
+        <td><strong>EIB job execution metrics</strong></td>
+        <td>Payroll pipeline health, batch job SLA, data sync reliability</td>
+        <td>Job start/end, duration, record counts, failure codes, retry attempts</td>
+      </tr>
+      <tr>
+        <td><strong>Synthetic transaction monitoring</strong></td>
+        <td>End-user availability, login path health, pre-payroll readiness</td>
+        <td>Scheduled login tests, report render time, critical workflow completion</td>
+      </tr>
+      <tr>
+        <td><strong>Workday Trust / status feeds</strong></td>
+        <td>Tenant-level incident correlation, planned maintenance awareness</td>
+        <td>Incident announcements, maintenance windows, service degradation notices</td>
+      </tr>
     </tbody>
   </table>
 </section>
 
 <section id="use-cases">
-  <h2>Seven most impactful Splunk use cases for Workday in higher education</h2>
+  <h2>Seven most impactful Splunk security use cases for Workday</h2>
   <p>
     Ranked by executive impact—combining financial exposure, regulatory risk, detection difficulty without correlation, and proven customer outcomes. Each use case includes the Splunk capability that delivers it and representative improvement ranges from higher-ed and public-sector Splunk deployments.
   </p>
@@ -650,6 +690,138 @@
   </div>
 </section>
 
+<section id="availability">
+  <h2>Five most impactful availability &amp; performance monitoring use cases</h2>
+  <p>
+    Workday is a mission-critical business service—not just a security target. Payroll deadlines, open enrollment, and academic hiring cycles demand continuous availability and performance assurance. Splunk ITSI and Observability extend the same Workday telemetry used for security into service-aware monitoring with KPIs, adaptive thresholds, and episode-based alerting that reduces noise and accelerates root-cause analysis.
+  </p>
+
+  <div class="callout">
+    <h3>Why IT ops leaders care</h3>
+    <p>
+      When Workday is slow or unavailable, HR, payroll, and finance teams cannot process hires, approve timesheets, or run payroll—and the CIO hears about it immediately. Native Workday dashboards show tenant health but not the full path: IdP authentication delays, middleware bottlenecks, EIB job backlogs, or network issues between campus and cloud. Splunk provides <strong>end-to-end service visibility</strong> with business-context alerting tied to payroll calendars and academic hiring windows.
+    </p>
+  </div>
+
+  <div class="use-case-grid">
+
+    <div class="use-case">
+      <p><span class="tag primary">Priority 1</span> <span class="tag ops">Availability</span></p>
+      <h3>End-to-end Workday service health and synthetic availability monitoring</h3>
+      <p>
+        Splunk ITSI models Workday as a business service spanning tenant login, critical workflows (time entry, payroll approval, benefits enrollment), and dependent integrations. Synthetic transactions probe login and report-render paths from campus network and cloud vantage points; KPIs track success rate, response time, and error budgets—with alerts before users flood the help desk.
+      </p>
+      <p><strong>Splunk capabilities:</strong> ITSI service modeling, synthetic monitoring, adaptive thresholds, glass-table dashboards, ServiceNow incident auto-creation.</p>
+      <div class="impact">
+        <strong>Customer improvement range:</strong>
+        <span class="metric-range">30–50 min earlier</span> detection of user-impacting degradation (before ticket volume spikes);
+        <span class="metric-range">99.5–99.9%</span> measured payroll-window availability with end-to-end probes (vs. tenant-only visibility).
+      </div>
+    </div>
+
+    <div class="use-case">
+      <p><span class="tag primary">Priority 1</span> <span class="tag ops">Payroll readiness</span></p>
+      <h3>Payroll-cycle readiness and pre-disbursement pipeline monitoring</h3>
+      <p>
+        Before each payroll run, Splunk validates that Workday, payroll EIB jobs, finance integrations, and time-tracking feeds are healthy—alerting if batch jobs fail, record counts drop unexpectedly, or API latency exceeds baselines within 72 hours of cutoff. ITSI episodes group related failures across the payroll chain into a single actionable incident.
+      </p>
+      <p><strong>Splunk capabilities:</strong> ITSI KPIs tied to payroll calendar, EIB job success/failure trending, episode correlation, executive payroll-readiness dashboard.</p>
+      <div class="impact">
+        <strong>Customer improvement range:</strong>
+        <span class="metric-range">80–95%</span> of integration failures caught before payroll processing (vs. day-of discovery);
+        <span class="metric-range">$50K–$500K</span> avoided per payroll disruption at large institutions (late pay, manual processing, overtime).
+      </div>
+    </div>
+
+    <div class="use-case">
+      <p><span class="tag primary">Priority 2</span> <span class="tag ops">Performance</span></p>
+      <h3>API, RaaS, and integration latency monitoring</h3>
+      <p>
+        Workday integrations with benefits carriers, time clocks, data warehouses, and ERP systems depend on API throughput and response times. Splunk tracks RaaS query duration, REST error rates, concurrent integration sessions, and middleware queue depth—surfacing performance degradation that causes timeouts during peak hiring or open enrollment.
+      </p>
+      <p><strong>Splunk capabilities:</strong> Observability APM/trace correlation (where deployed), ITSI KPIs for API latency and error rate, anomaly detection, capacity trend dashboards.</p>
+      <div class="impact">
+        <strong>Customer improvement range:</strong>
+        <span class="metric-range">50–70%</span> faster root-cause identification for integration slowness;
+        <span class="metric-range">25–40%</span> reduction in integration-related help desk tickets during peak periods.
+      </div>
+    </div>
+
+    <div class="use-case">
+      <p><span class="tag primary">Priority 2</span> <span class="tag ops">User experience</span></p>
+      <h3>Login performance and concurrent-user load monitoring</h3>
+      <p>
+        Academic calendar events—fall semester hiring, adjunct onboarding, benefits open enrollment—drive login surges that stress IdP and Workday concurrently. Splunk correlates sign-on volume, authentication latency (Okta/Entra/Duo), failed login rates, and session duration to distinguish capacity issues from security attacks and to right-size infrastructure before peak load.
+      </p>
+      <p><strong>Splunk capabilities:</strong> Sign-on audit trending, IdP performance correlation, ITSI adaptive baselines by calendar period, capacity planning dashboards.</p>
+      <div class="impact">
+        <strong>Customer improvement range:</strong>
+        <span class="metric-range">40–60%</span> reduction in MTTR for login-performance incidents;
+        <span class="metric-range">20–35%</span> fewer false-positive security alerts during known hiring/enrollment spikes.
+      </div>
+    </div>
+
+    <div class="use-case">
+      <p><span class="tag primary">Priority 3</span> <span class="tag ops">Operations</span></p>
+      <h3>EIB and batch job performance with cross-domain root-cause analysis</h3>
+      <p>
+        EIB jobs moving worker, payroll, and finance data are batch-critical—and slow or failed jobs cascade across systems. Splunk tracks job duration, record throughput, retry counts, and failure codes; ITSI episodes correlate EIB delays with network congestion, middleware errors, or upstream API throttling to pinpoint root cause without war-room log hunting.
+      </p>
+      <p><strong>Splunk capabilities:</strong> EIB execution dashboards, ITSI episode grouping, dependency maps (Workday → middleware → finance), historical job duration baselines.</p>
+      <div class="impact">
+        <strong>Customer improvement range:</strong>
+        <span class="metric-range">40–60%</span> MTTR reduction for batch/integration incidents;
+        <span class="metric-range">60–85%</span> faster identification of whether failure is Workday, middleware, or downstream system.
+      </div>
+    </div>
+
+  </div>
+
+  <h3>Availability &amp; performance KPIs modeled in ITSI (examples)</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>KPI</th>
+        <th>What it measures</th>
+        <th>Alert threshold pattern</th>
+        <th>Business context</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Login success rate</strong></td>
+        <td>Synthetic + organic successful sign-ons vs. attempts</td>
+        <td>Adaptive: drops below 98% over 15 min</td>
+        <td>All users; critical during hiring and enrollment</td>
+      </tr>
+      <tr>
+        <td><strong>API p95 latency</strong></td>
+        <td>95th percentile RaaS/REST response time</td>
+        <td>Adaptive: &gt;2× baseline for integration accounts</td>
+        <td>Integration health; payroll EIB dependencies</td>
+      </tr>
+      <tr>
+        <td><strong>EIB job success rate</strong></td>
+        <td>Completed vs. failed batch jobs per cycle</td>
+        <td>Static: any failure within 72h of payroll cutoff</td>
+        <td>Payroll readiness; finance reconciliation</td>
+      </tr>
+      <tr>
+        <td><strong>Report render time</strong></td>
+        <td>Synthetic critical report completion duration</td>
+        <td>Adaptive: &gt;3× historical median</td>
+        <td>HR/payroll analyst productivity</td>
+      </tr>
+      <tr>
+        <td><strong>Integration error rate</strong></td>
+        <td>HTTP 5xx and timeout percentage by connector</td>
+        <td>Adaptive: sustained elevation over 10 min</td>
+        <td>Benefits, time tracking, data warehouse feeds</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
 <section id="metrics">
   <h2>Customer improvement ranges — defensible planning metrics</h2>
   <p>
@@ -737,13 +909,55 @@
         <td><span class="metric-range">40–60% lower</span> external audit support costs</td>
         <td>CDO · GRC</td>
       </tr>
+      <tr>
+        <td><strong>MTTR — Workday service incidents</strong></td>
+        <td>2–6 hours (manual correlation across Workday, IdP, network, integration logs)</td>
+        <td>30–90 minutes (ITSI episodes with pre-mapped dependencies)</td>
+        <td><span class="metric-range">40–60% reduction</span></td>
+        <td>CIO · IT Ops</td>
+      </tr>
+      <tr>
+        <td><strong>Time to detect service degradation</strong></td>
+        <td>User-reported (help desk ticket as first signal)</td>
+        <td>Proactive via synthetic checks and KPI thresholds</td>
+        <td><span class="metric-range">30–50 min earlier</span> detection</td>
+        <td>CIO · IT Ops</td>
+      </tr>
+      <tr>
+        <td><strong>Payroll pipeline failure detection</strong></td>
+        <td>Day-of payroll run (manual EIB status checks)</td>
+        <td>Continuous EIB/API monitoring with payroll-calendar alerts</td>
+        <td><span class="metric-range">80–95% pre-run detection</span></td>
+        <td>CIO · CFO</td>
+      </tr>
+      <tr>
+        <td><strong>Integration performance root-cause time</strong></td>
+        <td>1–4 hours (war-room log gathering)</td>
+        <td>15–45 minutes (ITSI dependency maps + correlated KPIs)</td>
+        <td><span class="metric-range">50–70% faster</span></td>
+        <td>CTO · Integration team</td>
+      </tr>
+      <tr>
+        <td><strong>False-positive ops alerts during peak load</strong></td>
+        <td>High—static thresholds fire during hiring/enrollment surges</td>
+        <td>ITSI adaptive baselines by academic calendar period</td>
+        <td><span class="metric-range">20–35% reduction</span></td>
+        <td>CIO · IT Ops</td>
+      </tr>
+      <tr>
+        <td><strong>Payroll-window availability visibility</strong></td>
+        <td>Workday Trust page only (tenant-level)</td>
+        <td>End-to-end synthetic + integration KPI coverage</td>
+        <td><span class="metric-range">99.5–99.9%</span> measured availability</td>
+        <td>CIO · CFO</td>
+      </tr>
     </tbody>
   </table>
 
   <div class="callout warn">
     <h3>Planning note</h3>
     <p>
-      Outcomes depend on Workday log coverage (sign-on, security, reports, integrations), identity and network data onboarding, ES content maturity, and SOAR playbook deployment. Institutions with existing Splunk investments see faster time-to-value by extending current indexes and correlation rules rather than standing up a parallel monitoring stack.
+      Outcomes depend on Workday log coverage (sign-on, security, reports, integrations, performance metrics), identity and network data onboarding, ES content maturity, ITSI service modeling, synthetic monitoring deployment, and SOAR playbook maturity. Institutions with existing Splunk investments see faster time-to-value by extending current indexes, correlation rules, and ITSI services rather than standing up a parallel monitoring stack.
     </p>
   </div>
 </section>
@@ -837,6 +1051,11 @@
         <td>Disable integration account; notify integration owner; preserve API call logs for investigation</td>
         <td>HITL for production finance integrations</td>
       </tr>
+      <tr>
+        <td>ITSI episode — Workday KPI breach before payroll cutoff</td>
+        <td>Create ServiceNow P2 with dependency map; notify payroll and integration owners; page on-call if EIB success rate drops</td>
+        <td>Auto-notify; HITL for integration restart or payroll hold decisions</td>
+      </tr>
     </tbody>
   </table>
 </section>
@@ -847,15 +1066,15 @@
   <div class="stakeholder-grid">
     <div class="stakeholder">
       <h3><span class="tag sec">CIO</span> Chief Information Officer</h3>
-      <p>Extends existing Splunk investment to cover the institution's largest SaaS ERP; reduces integration of point HR-security tools; delivers measurable MTTD/MTTR for board reporting; protects payroll integrity and service continuity.</p>
+      <p>Extends existing Splunk investment to cover the institution's largest SaaS ERP; delivers unified security and service assurance for Workday; reduces point-tool sprawl; provides measurable MTTD/MTTR and payroll-window availability for board reporting; protects payroll integrity and workforce service continuity.</p>
     </div>
     <div class="stakeholder">
       <h3><span class="tag risk">CISO</span> Chief Information Security Officer</h3>
-      <p>Closes the Workday visibility gap; correlates HR threats with identity and network telemetry; enables risk-based alerting and SOAR containment; provides defensible metrics for cyber insurance and incident reporting.</p>
+      <p>Closes the Workday visibility gap; correlates HR threats with identity and network telemetry; enables risk-based alerting and SOAR containment; distinguishes security attacks from performance incidents during peak load; provides defensible metrics for cyber insurance and incident reporting.</p>
     </div>
     <div class="stakeholder">
       <h3><span class="tag">CTO</span> Chief Technology Officer</h3>
-      <p>Secures API and EIB integration pipelines; monitors third-party connectors and data warehouse feeds; supports zero-trust identity architecture with continuous Workday access validation.</p>
+      <p>Secures and monitors API and EIB integration pipelines; tracks latency, error rates, and batch job health; supports zero-trust identity architecture with continuous Workday access validation; accelerates integration root-cause analysis with dependency mapping.</p>
     </div>
     <div class="stakeholder">
       <h3><span class="tag comp">CDO</span> Chief Data Officer</h3>
@@ -890,16 +1109,16 @@
         <td>High-fidelity notables; 50%+ MTTD improvement on identity threats</td>
       </tr>
       <tr>
-        <td><strong>3 — Integration monitoring</strong></td>
+        <td><strong>3 — Integration &amp; performance</strong></td>
         <td>Weeks 13–18</td>
-        <td>Onboard API/RaaS and EIB logs; baseline integration accounts; alert on anomalies</td>
-        <td>Full pipeline visibility; reduced shadow integration risk</td>
+        <td>Onboard API/RaaS and EIB logs; ITSI service model for Workday; synthetic login probes; KPI baselines</td>
+        <td>Full pipeline visibility; proactive degradation detection; payroll-readiness dashboard</td>
       </tr>
       <tr>
-        <td><strong>4 — Automation &amp; compliance</strong></td>
+        <td><strong>4 — Automation, ops &amp; compliance</strong></td>
         <td>Weeks 19–24</td>
-        <td>SOAR playbooks with HITL gates; ServiceNow integration; compliance dashboards for SOX/GRC</td>
-        <td>Sub-15-minute containment; 60–80% faster audit evidence collection</td>
+        <td>SOAR playbooks with HITL gates; ServiceNow integration; ITSI episode alerting; compliance dashboards for SOX/GRC</td>
+        <td>Sub-15-minute security containment; 40–60% MTTR improvement on service incidents; 60–80% faster audit evidence</td>
       </tr>
     </tbody>
   </table>
@@ -907,7 +1126,7 @@
   <div class="callout">
     <h3>Quick win for institutions already on Splunk</h3>
     <p>
-      If your campus already runs Splunk Enterprise Security for network and endpoint monitoring, adding Workday audit logs is typically a <strong>4–6 week</strong> onboarding effort—not a new platform purchase. The highest immediate value comes from correlating Workday sign-on and direct deposit changes with existing identity and VPN data—a pattern that has prevented payroll fraud at multiple large public-sector and higher-ed customers.
+      If your campus already runs Splunk Enterprise Security and/or ITSI for network and application monitoring, adding Workday audit logs and performance telemetry is typically a <strong>4–8 week</strong> onboarding effort—not a new platform purchase. The highest immediate value comes from correlating Workday sign-on and direct deposit changes with existing identity and VPN data (security), and modeling Workday login plus EIB job health as ITSI KPIs before the next payroll cycle (operations).
     </p>
   </div>
 </section>
@@ -916,7 +1135,7 @@
 
 <footer>
   <p>
-    <strong>Splunk for Workday — Higher Education Executive Brief.</strong>
+    <strong>Splunk for Workday — Higher Education Executive Brief (Security, Availability &amp; Performance).</strong>
     Customer improvement ranges are planning assumptions synthesized from Splunk public-sector and higher-education deployment patterns; validate against your institution's baselines before board or budget submission.
     Metrics sources include IBM Cost of a Data Breach Report, Verizon DBIR, and Splunk customer outcome benchmarks. Not a contractual commitment or performance guarantee.
   </p>
