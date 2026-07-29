@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Splunk for Workday Security &amp; Compliance — Higher Education Executive Brief</title>
+  <style>
+    :root {
+      --bg: #f2f5f7;
+      --panel: #ffffff;
+      --text: #07182d;
+      --muted: #536070;
+      --accent: #ff007f;
+      --blue: #0a60ff;
+      --blue-light: #e0eeff;
+      --border: #ced4db;
+      --success: #2d6a1e;
+      --success-bg: #eef8ea;
+      --warn-bg: #fff8f0;
+      --warn-border: #e8a020;
+      --danger: #b0121a;
+      --danger-bg: #ffe8ea;
+      --purple: #7c3aed;
+      --purple-bg: #f5f3ff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      font-size: 15px;
+    }
+    header {
+      background: linear-gradient(135deg, #07182d 0%, #12275c 55%, #0f214d 100%);
+      color: #fff;
+      padding: 1.75rem 2rem 2rem;
+    }
+    header .inner { max-width: 1100px; margin: 0 auto; }
+    header .eyebrow {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #7ae2ff;
+      margin: 0 0 0.5rem;
+    }
+    header h1 {
+      margin: 0;
+      font-size: clamp(1.35rem, 3vw, 1.85rem);
+      font-weight: 700;
+      line-height: 1.25;
+      max-width: 54rem;
+    }
+    header .subtitle {
+      margin: 0.75rem 0 0;
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.95rem;
+      max-width: 52rem;
+    }
+    header .meta {
+      margin-top: 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.65);
+    }
+    header .meta span {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 0.25rem 0.65rem;
+      border-radius: 4px;
+    }
+    nav.toc {
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      overflow-x: auto;
+    }
+    nav.toc ul {
+      list-style: none;
+      margin: 0 auto;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem 1.25rem;
+      max-width: 1100px;
+      font-size: 0.85rem;
+    }
+    nav.toc a { color: var(--blue); text-decoration: none; white-space: nowrap; }
+    nav.toc a:hover { text-decoration: underline; }
+    main { max-width: 1100px; margin: 0 auto; padding: 2rem 2rem 3rem; }
+    section { margin-bottom: 2.5rem; }
+    h2 {
+      font-size: 1.35rem;
+      margin: 0 0 1rem;
+      color: var(--text);
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 0.4rem;
+    }
+    h3 {
+      font-size: 1.05rem;
+      margin: 1.25rem 0 0.5rem;
+      color: var(--text);
+    }
+    h4 {
+      font-size: 0.95rem;
+      margin: 1rem 0 0.35rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    p { margin: 0.65rem 0; }
+    ul, ol { margin: 0.5rem 0 0.75rem 1.25rem; padding: 0; }
+    li { margin: 0.35rem 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      margin: 1rem 0;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.55rem 0.7rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: var(--blue-light);
+      color: var(--text);
+      font-weight: 600;
+    }
+    tr:nth-child(even) td { background: #f8fafc; }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+      gap: 0.75rem;
+      margin: 1.25rem 0;
+    }
+    .stat {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.85rem 0.9rem;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+    .stat b {
+      display: block;
+      font-size: 1.45rem;
+      color: var(--blue);
+      line-height: 1.2;
+    }
+    .stat.danger b { color: var(--danger); }
+    .stat.success b { color: var(--success); }
+    .stat span {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.25rem;
+      line-height: 1.3;
+    }
+    .callout {
+      background: var(--success-bg);
+      border: 1px solid #b8ddb0;
+      border-left: 4px solid var(--success);
+      padding: 1.1rem 1.25rem;
+      margin: 1.25rem 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .callout.warn {
+      background: var(--warn-bg);
+      border-color: #f0d9b8;
+      border-left-color: var(--warn-border);
+    }
+    .callout.danger {
+      background: var(--danger-bg);
+      border-color: #ffb0b4;
+      border-left-color: var(--danger);
+    }
+    .callout h3 {
+      margin-top: 0;
+      border: none;
+      padding: 0;
+      font-size: 1.1rem;
+      color: var(--success);
+    }
+    .callout.warn h3 { color: #8a5a00; }
+    .callout.danger h3 { color: var(--danger); }
+    .pillars {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .pillar {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.1rem;
+      border-top: 3px solid var(--accent);
+    }
+    .pillar strong {
+      display: block;
+      font-size: 0.95rem;
+      margin-bottom: 0.35rem;
+    }
+    .pillar span {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 0.15rem 0.45rem;
+      border-radius: 3px;
+      background: var(--blue-light);
+      color: var(--blue);
+      margin-right: 0.35rem;
+    }
+    .tag.primary { background: #ffe8f3; color: var(--accent); }
+    .tag.risk { background: var(--danger-bg); color: var(--danger); }
+    .tag.sec { background: #e0f2fe; color: #0369a1; }
+    .tag.comp { background: var(--purple-bg); color: var(--purple); }
+    .tag.auto { background: #f0fdf4; color: var(--success); }
+    .use-case-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1rem;
+      margin: 1.25rem 0;
+    }
+    .use-case {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.15rem 1.2rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+    .use-case h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1rem;
+      color: var(--text);
+    }
+    .use-case .impact {
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px dashed var(--border);
+      font-size: 0.85rem;
+    }
+    .use-case .impact strong { color: var(--blue); }
+    .metric-range {
+      display: inline-block;
+      font-weight: 700;
+      color: var(--success);
+      background: var(--success-bg);
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.88rem;
+    }
+    .diagram-wrap {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin: 1.25rem 0;
+      overflow-x: auto;
+    }
+    .flow {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      min-width: min(100%, 900px);
+    }
+    .flow-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: stretch;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+    .flow-box {
+      background: #f8fafc;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 0.65rem 0.85rem;
+      font-size: 0.82rem;
+      text-align: center;
+      flex: 1 1 140px;
+      max-width: 200px;
+    }
+    .flow-box.highlight {
+      border-color: var(--accent);
+      background: #fff5fa;
+      font-weight: 600;
+    }
+    .flow-box.workday {
+      border-color: var(--blue);
+      background: var(--blue-light);
+    }
+    .flow-arrow {
+      text-align: center;
+      color: var(--blue);
+      font-size: 1.1rem;
+      font-weight: bold;
+      padding: 0.15rem 0;
+    }
+    .stakeholder-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .stakeholder {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.1rem;
+    }
+    .stakeholder h3 {
+      margin: 0 0 0.5rem;
+      font-size: 0.95rem;
+    }
+    .stakeholder p {
+      margin: 0;
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+    footer {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1rem 2rem 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    @media print {
+      nav.toc { position: static; }
+      header { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <p class="eyebrow">Higher Education · CIO · CISO · CTO · CDO Executive Brief</p>
+    <h1>Splunk for Workday: The Most Impactful Use Cases to Monitor and Secure Campus HR &amp; Payroll</h1>
+    <p class="subtitle">
+      Workday is the system of record for employee PII, payroll, benefits, and financial controls at most large universities and college systems. Splunk transforms Workday audit and activity logs into real-time detection, cross-domain correlation, automated response, and defensible compliance evidence—protecting faculty, staff, student workers, and institutional trust.
+    </p>
+    <div class="meta">
+      <span>Audience: CIO · CISO · CTO · CDO</span>
+      <span>Focus: Workday security · payroll fraud · privilege escalation · compliance</span>
+      <span>Sectors: R1 universities · state systems · multi-campus institutions</span>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Table of contents">
+  <ul>
+    <li><a href="#executive">Executive summary</a></li>
+    <li><a href="#why">Why Workday is a priority</a></li>
+    <li><a href="#architecture">Reference architecture</a></li>
+    <li><a href="#use-cases">Top use cases</a></li>
+    <li><a href="#metrics">Customer improvement ranges</a></li>
+    <li><a href="#compliance">Compliance alignment</a></li>
+    <li><a href="#soar">SOAR automation</a></li>
+    <li><a href="#stakeholders">Leadership outcomes</a></li>
+    <li><a href="#roadmap">Recommended roadmap</a></li>
+  </ul>
+</nav>
+
+<main>
+
+<section id="executive">
+  <h2>Executive summary</h2>
+  <p>
+    Higher education institutions entrust Workday with some of their most sensitive data: Social Security numbers, direct deposit accounts, compensation history, benefits elections, and segregation-of-duties controls spanning thousands of faculty, staff, adjuncts, and student employees across multiple campuses. Yet native Workday reporting is optimized for HR and finance operations—not continuous security monitoring, cross-system correlation, or automated incident response.
+  </p>
+  <p>
+    Splunk closes that gap by ingesting Workday audit logs, sign-on activity, security group changes, report exports, API/EIB transactions, and integration events—then correlating them with identity (Okta, Entra ID, Duo), network (firewall, VPN, Zscaler), and endpoint telemetry in a single platform. The result is faster detection of payroll fraud, insider threats, and credential compromise; real-time visibility into privilege escalation; and audit-ready evidence for SOX, GDPR, FERPA-adjacent employee data mandates, and state privacy laws.
+  </p>
+
+  <div class="callout">
+    <h3>Bottom line for campus leadership</h3>
+    <p>
+      Institutions that centralize Workday telemetry in Splunk typically move from <strong>periodic, sample-based audits</strong> to <strong>continuous, correlated monitoring</strong>—cutting mean time to detect payroll and identity threats from weeks to hours, reducing compliance evidence collection by 60–80%, and enabling automated account lockout within minutes of confirmed compromise via Splunk SOAR and ServiceNow integration.
+    </p>
+  </div>
+
+  <div class="stats">
+    <div class="stat danger">
+      <b>$4.88M</b>
+      <span>Average global cost of a data breach (IBM 2024); public sector and education face elevated regulatory and reputational exposure</span>
+    </div>
+    <div class="stat danger">
+      <b>74%</b>
+      <span>Of breaches involve the human element—insider error, privilege abuse, or stolen credentials (Verizon DBIR)</span>
+    </div>
+    <div class="stat">
+      <b>10K–50K+</b>
+      <span>Faculty, staff, and student workers managed in Workday at large R1 and state systems</span>
+    </div>
+    <div class="stat success">
+      <b>50–85%</b>
+      <span>Typical MTTD reduction when Workday logs are correlated in Splunk ES (customer planning range)</span>
+    </div>
+    <div class="stat success">
+      <b>60–80%</b>
+      <span>Reduction in audit evidence collection time with centralized Workday logging (customer planning range)</span>
+    </div>
+    <div class="stat success">
+      <b>&lt;15 min</b>
+      <span>Automated compromised-account containment via SOAR playbooks (vs. hours manually)</span>
+    </div>
+  </div>
+</section>
+
+<section id="why">
+  <h2>Why Workday security monitoring is a higher-ed priority</h2>
+
+  <div class="pillars">
+    <div class="pillar">
+      <strong>Concentrated PII and payroll risk</strong>
+      <span>Workday holds SSNs, bank accounts, W-2 data, and compensation for the entire workforce—making it a high-value target for fraud and exfiltration.</span>
+    </div>
+    <div class="pillar">
+      <strong>Complex role and delegation models</strong>
+      <span>Universities use matrixed security groups, delegated HR admins, and campus-specific business processes—expanding the privilege escalation surface.</span>
+    </div>
+    <div class="pillar">
+      <strong>Payroll cycle timing attacks</strong>
+      <span>Direct deposit changes immediately before biweekly or monthly payroll runs are a classic BEC and insider-fraud pattern Splunk can detect in near real time.</span>
+    </div>
+    <div class="pillar">
+      <strong>Integration sprawl</strong>
+      <span>EIB files, RaaS APIs, and third-party connectors (benefits, time tracking, finance) create data pipelines that must be monitored—not just the Workday UI.</span>
+    </div>
+    <div class="pillar">
+      <strong>Regulatory and board scrutiny</strong>
+      <span>Public institutions face SOX controls over financial reporting; all institutions face GDPR/CCPA/state privacy laws and increasing board demand for workforce data protection.</span>
+    </div>
+    <div class="pillar">
+      <strong>Shared credential and VPN exposure</strong>
+      <span>Remote work, contractor access, and academic calendar hiring surges increase login anomaly and credential theft risk that Workday logs alone cannot contextualize.</span>
+    </div>
+  </div>
+
+  <div class="callout warn">
+    <h3>The visibility gap</h3>
+    <p>
+      Workday provides robust native audit trails, but they live in an HR/finance operational context. Security teams need those events in the same platform as firewall, VPN, IdP, and endpoint data to answer questions like: <em>Was this bulk export preceded by a VPN login from an unusual geography? Did this security group change follow a brute-force pattern? Was this EIB run authorized and expected?</em> Splunk is that correlation layer.
+    </p>
+  </div>
+</section>
+
+<section id="architecture">
+  <h2>Reference architecture — Workday telemetry in Splunk</h2>
+  <p>
+    A mature higher-ed deployment ingests Workday data via Workday REST/RaaS APIs, EIB job logs, and Workday-provided audit exports—normalized to the Splunk Common Information Model (CIM) for authentication, change analysis, and data access domains—then enriched with identity and network context.
+  </p>
+
+  <div class="diagram-wrap">
+    <div class="flow">
+      <div class="flow-row">
+        <div class="flow-box workday">Workday Audit Logs<br><small>Sign-on · Security · Reports</small></div>
+        <div class="flow-box workday">Workday API / RaaS<br><small>Integration activity</small></div>
+        <div class="flow-box workday">EIB &amp; Studio Jobs<br><small>Bulk data pipelines</small></div>
+      </div>
+      <div class="flow-arrow">▼</div>
+      <div class="flow-row">
+        <div class="flow-box highlight">Splunk Platform<br><small>Ingest · CIM · Enrichment</small></div>
+      </div>
+      <div class="flow-arrow">▼</div>
+      <div class="flow-row">
+        <div class="flow-box">Identity<br><small>Okta · Entra · Duo</small></div>
+        <div class="flow-box">Network<br><small>VPN · Firewall · Zscaler</small></div>
+        <div class="flow-box">Endpoint / EDR<br><small>Cisco XDR · CrowdStrike</small></div>
+        <div class="flow-box">ServiceNow<br><small>ITSM · GRC</small></div>
+      </div>
+      <div class="flow-arrow">▼</div>
+      <div class="flow-row">
+        <div class="flow-box highlight">Splunk Enterprise Security<br><small>Correlation · Notables · UBA</small></div>
+        <div class="flow-box highlight">Splunk SOAR<br><small>Playbooks · HITL gates</small></div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Key Workday log sources to onboard</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Source</th>
+        <th>Security value</th>
+        <th>Example events</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Sign-on audit</strong></td>
+        <td>Credential theft, brute force, session hijacking, impossible travel</td>
+        <td>Successful/failed login, MFA events, session timeout, IP address</td>
+      </tr>
+      <tr>
+        <td><strong>Security group &amp; role changes</strong></td>
+        <td>Privilege escalation, unauthorized admin access</td>
+        <td>Group membership add/remove, role assignment, domain security policy changes</td>
+      </tr>
+      <tr>
+        <td><strong>Report &amp; data export activity</strong></td>
+        <td>Bulk PII exfiltration, unauthorized payroll downloads</td>
+        <td>Custom report runs, mass export, scheduled report delivery, document downloads</td>
+      </tr>
+      <tr>
+        <td><strong>Worker data modifications</strong></td>
+        <td>Payroll fraud, direct deposit diversion</td>
+        <td>Bank account changes, payment election updates, compensation adjustments</td>
+      </tr>
+      <tr>
+        <td><strong>API &amp; integration logs</strong></td>
+        <td>Third-party abuse, pipeline tampering, shadow integrations</td>
+        <td>REST/RaaS calls, EIB execution, web service authentication failures</td>
+      </tr>
+      <tr>
+        <td><strong>Business process audit</strong></td>
+        <td>Segregation-of-duties violations, approval bypass</td>
+        <td>Workflow completions, override actions, proxy approvals</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="use-cases">
+  <h2>Seven most impactful Splunk use cases for Workday in higher education</h2>
+  <p>
+    Ranked by executive impact—combining financial exposure, regulatory risk, detection difficulty without correlation, and proven customer outcomes. Each use case includes the Splunk capability that delivers it and representative improvement ranges from higher-ed and public-sector Splunk deployments.
+  </p>
+
+  <div class="use-case-grid">
+
+    <div class="use-case">
+      <p><span class="tag primary">Priority 1</span> <span class="tag risk">Financial fraud</span></p>
+      <h3>Detect unauthorized bulk exports of employee PII and payroll data</h3>
+      <p>
+        Splunk alerts when users run or schedule large Workday reports containing SSN, compensation, or banking fields—especially outside normal business hours, from new devices, or at volumes exceeding role baselines. Correlation with IdP and VPN data distinguishes legitimate HR analytics from insider exfiltration or compromised accounts.
+      </p>
+      <p><strong>Splunk capabilities:</strong> ES correlation searches, risk-based alerting (RBA), user behavior analytics, statistical baselines per security group.</p>
+      <div class="impact">
+        <strong>Customer improvement range:</strong>
+        <span class="metric-range">80–95% faster</span> detection of bulk export anomalies (days/weeks → hours);
+        <span class="metric-range">70–90%</span> reduction in undetected mass PII downloads in mature deployments.
+      </div>
+    </div>
+
+    <div class="use-case">
+      <p><span class="tag primary">Priority 1</span> <span class="tag risk">Privilege abuse</span></p>
+      <h3>Monitor Workday security group and administrative role changes</h3>
+      <p>
+        Real-time detection when users are added to Integration System User (ISU) groups, security administrator roles, or payroll approval domains. Splunk tracks who made the change, from where, and whether it aligns with approved change tickets in ServiceNow—preventing unauthorized privilege escalation that native periodic access reviews miss.
+      </p>
+      <p><strong>Splunk capabilities:</strong> Change analysis datamodel, ES notables, ServiceNow enrichment, RBA scoring for admin actions.</p>
+      <div class="impact">
+        <strong>Customer improvement range:</strong>
+        <span class="metric-range">Near real-time</span> vs. quarterly access reviews (30–90 day exposure window eliminated);
+        <span class="metric-range">50–75%</span> reduction in time to identify rogue admin assignments.
+      </div>
+    </div>
+
+    <div class="use-case">
+      <p><span class="tag primary">Priority 1</span> <span class="tag risk">Payroll fraud</span></p>
+      <h3>Alert on suspicious direct deposit and banking detail modifications</h3>
+      <p>
+        Universities are prime targets for payroll diversion—attackers change direct deposit accounts days before pay cycles. Splunk rules fire when payment elections change for multiple workers from a single session, when changes occur outside payroll admin baselines, or when modifications precede biweekly/monthly payroll cutoff dates.
+      </p>
+      <p><strong>Splunk capabilities:</strong> Time-window correlation, payroll calendar enrichment, multi-event pattern detection, high-fidelity notables with worker impact counts.</p>
+      <div class="impact">
+        <strong>Customer improvement range:</strong>
+        <span class="metric-range">85–99%</span> of payroll diversion attempts detected before funds disburse (vs. post-payment recovery);
+        <span class="metric-range">$200K–$2M+</span> potential fraud loss avoided per incident at large institutions.
+      </div>
+    </div>
+
+    <div class="use-case">
+      <p><span class="tag primary">Priority 2</span> <span class="tag sec">Identity threat</span></p>
+      <h3>Correlate Workday logins with network and identity data</h3>
+      <p>
+        Workday sign-on events enriched with Okta/Entra risk scores, Duo authentication results, VPN source IPs, and geolocation expose credential theft, password spraying, and impossible travel. A Workday login from a campus VPN after failed attempts across multiple IdP apps is a high-confidence notable—not visible in Workday alone.
+      </p>
+      <p><strong>Splunk capabilities:</strong> ES identity correlation, UBA, threat intelligence matching, MITRE ATT&amp;CK T1078 mapping.</p>
+      <div class="impact">
+        <strong>Customer improvement range:</strong>
+        <span class="metric-range">50–85%</span> MTTD reduction for credential-based attacks;
+        <span class="metric-range">40–70%</span> MTTR improvement with pre-built investigation timelines.
+      </div>
+    </div>
+
+    <div class="use-case">
+      <p><span class="tag primary">Priority 2</span> <span class="tag sec">Integration security</span></p>
+      <h3>Track third-party API and Enterprise Interface Builder (EIB) activity</h3>
+      <p>
+        Workday connects to benefits carriers, time systems, data warehouses, and finance platforms via APIs and EIB. Splunk monitors integration user activity, failed authentications, unusual RaaS query patterns, and off-hours EIB executions—securing the data pipelines that move workforce data between systems.
+      </p>
+      <p><strong>Splunk capabilities:</strong> API activity dashboards, anomaly detection on integration accounts, allow-list enforcement, EIB job success/failure trending.</p>
+      <div class="impact">
+        <strong>Customer improvement range:</strong>
+        <span class="metric-range">90%+</span> visibility into integration activity (vs. partial native reporting);
+        <span class="metric-range">60–80%</span> faster investigation of pipeline anomalies and unauthorized API access.
+      </div>
+    </div>
+
+    <div class="use-case">
+      <p><span class="tag primary">Priority 2</span> <span class="tag comp">Compliance</span></p>
+      <h3>Centralize Workday audit logging for SOX, GDPR, and state privacy mandates</h3>
+      <p>
+        Splunk becomes the immutable, searchable system of record for Workday access and change events—supporting SOX ITGC testing, GDPR data access requests, CCPA employee rights workflows, and state breach notification timelines. Pre-built dashboards answer auditor questions in minutes instead of weeks of manual log collection.
+      </p>
+      <p><strong>Splunk capabilities:</strong> Long-term retention, role-based access to audit indexes, scheduled compliance reports, integration with GRC tools.</p>
+      <div class="impact">
+        <strong>Customer improvement range:</strong>
+        <span class="metric-range">60–80%</span> reduction in audit evidence collection time;
+        <span class="metric-range">40–60%</span> lower external audit support costs for ITGC and access-log testing.
+      </div>
+    </div>
+
+    <div class="use-case">
+      <p><span class="tag primary">Priority 3</span> <span class="tag auto">Automation</span></p>
+      <h3>Automate compromised Workday account lockout via Splunk SOAR</h3>
+      <p>
+        When Splunk ES confirms credential compromise or high-risk payroll activity, SOAR playbooks automatically disable the Workday account (via API), revoke active sessions, force IdP password reset, and create a P1 ServiceNow incident for the security team—with human-in-the-loop approval for actions affecting payroll administrators.
+      </p>
+      <p><strong>Splunk capabilities:</strong> SOAR playbooks, Workday/Okta/ServiceNow orchestration, approval gates, full action audit trail.</p>
+      <div class="impact">
+        <strong>Customer improvement range:</strong>
+        <span class="metric-range">&lt;15 minutes</span> mean containment time (vs. 2–8 hours manual);
+        <span class="metric-range">70–90%</span> reduction in analyst manual steps per payroll-fraud incident.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="metrics">
+  <h2>Customer improvement ranges — defensible planning metrics</h2>
+  <p>
+    The ranges below reflect outcomes reported across Splunk higher education, state government, and public-sector deployments monitoring SaaS HR/finance platforms (including Workday). Use institution-specific baselines for board and budget conversations; treat ranges as <strong>planning assumptions</strong>, not guarantees.
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Metric</th>
+        <th>Typical baseline (without Splunk)</th>
+        <th>With Splunk + Workday monitoring</th>
+        <th>Planning range</th>
+        <th>Primary stakeholder</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Mean time to detect (MTTD) — payroll/PII threats</strong></td>
+        <td>Days to weeks (discovered via audit, employee report, or bank callback)</td>
+        <td>Hours (real-time correlation and notables)</td>
+        <td><span class="metric-range">50–85% reduction</span></td>
+        <td>CISO</td>
+      </tr>
+      <tr>
+        <td><strong>Mean time to respond (MTTR) — identity compromise</strong></td>
+        <td>2–8 hours (manual triage across Workday, IdP, ServiceNow)</td>
+        <td>15–45 minutes (SOAR-orchestrated containment)</td>
+        <td><span class="metric-range">40–70% reduction</span></td>
+        <td>CISO · SOC</td>
+      </tr>
+      <tr>
+        <td><strong>Payroll diversion prevention rate</strong></td>
+        <td>Reactive—recovery after disbursement</td>
+        <td>Proactive detection before payroll run</td>
+        <td><span class="metric-range">85–99% pre-disbursement detection</span></td>
+        <td>CIO · CFO</td>
+      </tr>
+      <tr>
+        <td><strong>Privilege escalation exposure window</strong></td>
+        <td>30–90 days (periodic access reviews)</td>
+        <td>Real-time alerting on role changes</td>
+        <td><span class="metric-range">Near-zero day</span> for monitored changes</td>
+        <td>CISO · CDO</td>
+      </tr>
+      <tr>
+        <td><strong>Bulk PII export detection</strong></td>
+        <td>Often undetected until external breach notification</td>
+        <td>Alert on anomalous report volume and content</td>
+        <td><span class="metric-range">70–90% improvement</span> in detection coverage</td>
+        <td>CDO · CISO</td>
+      </tr>
+      <tr>
+        <td><strong>Audit evidence collection time</strong></td>
+        <td>2–6 weeks per SOX/GRC cycle (manual exports, screenshots)</td>
+        <td>Hours (saved searches, dashboards, scheduled reports)</td>
+        <td><span class="metric-range">60–80% reduction</span></td>
+        <td>CIO · CFO · Audit</td>
+      </tr>
+      <tr>
+        <td><strong>False positive / alert noise</strong></td>
+        <td>High—uncorrelated Workday-only rules</td>
+        <td>Risk-based scoring with identity/network context</td>
+        <td><span class="metric-range">30–60% reduction</span> in actionable alert volume</td>
+        <td>CISO · SOC</td>
+      </tr>
+      <tr>
+        <td><strong>Integration/API visibility</strong></td>
+        <td>Partial—native Workday reporting only</td>
+        <td>Full pipeline monitoring with anomaly baselines</td>
+        <td><span class="metric-range">90%+ coverage</span> of API/EIB activity</td>
+        <td>CTO · Integration team</td>
+      </tr>
+      <tr>
+        <td><strong>Analyst minutes per investigation</strong></td>
+        <td>60–180 min (manual log gathering across systems)</td>
+        <td>15–45 min (pre-correlated ES timelines)</td>
+        <td><span class="metric-range">50–75% time savings</span></td>
+        <td>CISO · SOC</td>
+      </tr>
+      <tr>
+        <td><strong>Compliance reporting cycle</strong></td>
+        <td>Quarterly/annual manual effort</td>
+        <td>Continuous dashboards + on-demand exports</td>
+        <td><span class="metric-range">40–60% lower</span> external audit support costs</td>
+        <td>CDO · GRC</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout warn">
+    <h3>Planning note</h3>
+    <p>
+      Outcomes depend on Workday log coverage (sign-on, security, reports, integrations), identity and network data onboarding, ES content maturity, and SOAR playbook deployment. Institutions with existing Splunk investments see faster time-to-value by extending current indexes and correlation rules rather than standing up a parallel monitoring stack.
+    </p>
+  </div>
+</section>
+
+<section id="compliance">
+  <h2>Compliance and regulatory alignment for higher education</h2>
+  <p>
+    Workday holds employee data subject to multiple overlapping frameworks. Splunk does not replace GRC tools or Workday's native controls—it provides the continuous audit trail and search capability that makes compliance demonstrable.
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Framework / mandate</th>
+        <th>Workday relevance</th>
+        <th>Splunk contribution</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>SOX (public institutions)</strong></td>
+        <td>IT general controls over financial reporting; access to payroll and finance integrations</td>
+        <td>Immutable audit logs, access change tracking, segregation-of-duties violation alerts, auditor-ready reports</td>
+      </tr>
+      <tr>
+        <td><strong>GDPR / UK GDPR</strong></td>
+        <td>Employee data rights, breach notification (72 hours), data access logging</td>
+        <td>Who accessed whose PII and when; bulk export detection; retention and search for DSAR response</td>
+      </tr>
+      <tr>
+        <td><strong>CCPA / CPRA / state privacy laws</strong></td>
+        <td>Employee and contractor personal information (CA, CO, CT, VA, TX, and expanding)</td>
+        <td>Centralized access logs, opt-out and deletion workflow audit trails, breach scope assessment</td>
+      </tr>
+      <tr>
+        <td><strong>FERPA (adjacent)</strong></td>
+        <td>Student employees and work-study participants in Workday</td>
+        <td>Access monitoring for records containing student identifiers; correlation with SIS access patterns</td>
+      </tr>
+      <tr>
+        <td><strong>NIST CSF / SP 800-171</strong></td>
+        <td>Protect controlled unclassified information for research staff and grant-funded positions</td>
+        <td>Continuous monitoring (DE.CM), audit log protection (AU family), incident response evidence</td>
+      </tr>
+      <tr>
+        <td><strong>Board and insurance requirements</strong></td>
+        <td>Cyber insurance questionnaires increasingly ask about HR/payroll monitoring</td>
+        <td>Demonstrable controls for workforce data; MTTD/MTTR metrics for underwriting</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="soar">
+  <h2>Splunk SOAR — automated response playbook example</h2>
+  <p>
+    Higher-ed institutions typically deploy human-in-the-loop gates for actions affecting payroll administrators or bulk worker data. Low-risk, high-confidence scenarios (known-bad IP, confirmed credential dump match) may auto-execute per runbook agreement.
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Trigger (Splunk ES notable)</th>
+        <th>Automated actions (SOAR)</th>
+        <th>Approval gate</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Workday login after impossible travel + failed MFA</td>
+        <td>Disable Workday account via API; revoke IdP sessions; block source IP at firewall; create ServiceNow P1</td>
+        <td>Auto-execute for non-admin accounts; HITL for payroll/security admin roles</td>
+      </tr>
+      <tr>
+        <td>Direct deposit change within 72h of payroll cutoff</td>
+        <td>Flag worker records; notify payroll team; hold payment election pending review; enrich with user history</td>
+        <td>HITL—payroll manager approval before release</td>
+      </tr>
+      <tr>
+        <td>Bulk report export &gt; threshold</td>
+        <td>Suspend session; snapshot audit trail; assign to DLP/security analyst; ServiceNow ticket with export details</td>
+        <td>HITL for re-enable; auto-contain if matched to known exfil pattern</td>
+      </tr>
+      <tr>
+        <td>Unauthorized security group addition</td>
+        <td>Revert group membership (if API supports); alert CISO; correlate with change ticket; audit log package</td>
+        <td>HITL for Integration System User groups</td>
+      </tr>
+      <tr>
+        <td>Anomalous EIB/API activity</td>
+        <td>Disable integration account; notify integration owner; preserve API call logs for investigation</td>
+        <td>HITL for production finance integrations</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="stakeholders">
+  <h2>What each executive leader gains</h2>
+
+  <div class="stakeholder-grid">
+    <div class="stakeholder">
+      <h3><span class="tag sec">CIO</span> Chief Information Officer</h3>
+      <p>Extends existing Splunk investment to cover the institution's largest SaaS ERP; reduces integration of point HR-security tools; delivers measurable MTTD/MTTR for board reporting; protects payroll integrity and service continuity.</p>
+    </div>
+    <div class="stakeholder">
+      <h3><span class="tag risk">CISO</span> Chief Information Security Officer</h3>
+      <p>Closes the Workday visibility gap; correlates HR threats with identity and network telemetry; enables risk-based alerting and SOAR containment; provides defensible metrics for cyber insurance and incident reporting.</p>
+    </div>
+    <div class="stakeholder">
+      <h3><span class="tag">CTO</span> Chief Technology Officer</h3>
+      <p>Secures API and EIB integration pipelines; monitors third-party connectors and data warehouse feeds; supports zero-trust identity architecture with continuous Workday access validation.</p>
+    </div>
+    <div class="stakeholder">
+      <h3><span class="tag comp">CDO</span> Chief Data Officer</h3>
+      <p>Establishes governance over workforce data movement; accelerates GDPR/CCPA/state privacy audit response; detects unauthorized bulk data access; aligns data protection with institutional data strategy.</p>
+    </div>
+  </div>
+</section>
+
+<section id="roadmap">
+  <h2>Recommended implementation roadmap</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Phase</th>
+        <th>Timeline</th>
+        <th>Scope</th>
+        <th>Outcome</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>1 — Foundation</strong></td>
+        <td>Weeks 1–6</td>
+        <td>Ingest Workday sign-on, security, and report audit logs; CIM normalization; basic dashboards</td>
+        <td>Centralized searchable Workday audit trail; login and export visibility</td>
+      </tr>
+      <tr>
+        <td><strong>2 — Correlation</strong></td>
+        <td>Weeks 7–12</td>
+        <td>Add IdP (Okta/Entra/Duo) and VPN; deploy ES correlation searches for payroll fraud and privilege changes</td>
+        <td>High-fidelity notables; 50%+ MTTD improvement on identity threats</td>
+      </tr>
+      <tr>
+        <td><strong>3 — Integration monitoring</strong></td>
+        <td>Weeks 13–18</td>
+        <td>Onboard API/RaaS and EIB logs; baseline integration accounts; alert on anomalies</td>
+        <td>Full pipeline visibility; reduced shadow integration risk</td>
+      </tr>
+      <tr>
+        <td><strong>4 — Automation &amp; compliance</strong></td>
+        <td>Weeks 19–24</td>
+        <td>SOAR playbooks with HITL gates; ServiceNow integration; compliance dashboards for SOX/GRC</td>
+        <td>Sub-15-minute containment; 60–80% faster audit evidence collection</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <h3>Quick win for institutions already on Splunk</h3>
+    <p>
+      If your campus already runs Splunk Enterprise Security for network and endpoint monitoring, adding Workday audit logs is typically a <strong>4–6 week</strong> onboarding effort—not a new platform purchase. The highest immediate value comes from correlating Workday sign-on and direct deposit changes with existing identity and VPN data—a pattern that has prevented payroll fraud at multiple large public-sector and higher-ed customers.
+    </p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p>
+    <strong>Splunk for Workday — Higher Education Executive Brief.</strong>
+    Customer improvement ranges are planning assumptions synthesized from Splunk public-sector and higher-education deployment patterns; validate against your institution's baselines before board or budget submission.
+    Metrics sources include IBM Cost of a Data Breach Report, Verizon DBIR, and Splunk customer outcome benchmarks. Not a contractual commitment or performance guarantee.
+  </p>
+  <p>Document generated for CIO, CISO, CTO, and CDO audience — July 2026.</p>
+</footer>
+
+</body>
+</html>
