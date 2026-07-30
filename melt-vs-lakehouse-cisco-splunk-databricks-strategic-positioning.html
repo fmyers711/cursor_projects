@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MELT vs. Lakehouse — Cisco/Splunk vs. Databricks Strategic Positioning</title>
+  <style>
+    :root {
+      --bg: #f2f5f7;
+      --panel: #ffffff;
+      --text: #07182d;
+      --muted: #536070;
+      --accent: #ff007f;
+      --blue: #0a60ff;
+      --blue-light: #e0eeff;
+      --border: #ced4db;
+      --success: #2d6a1e;
+      --success-bg: #eef8ea;
+      --warn-bg: #fff8f0;
+      --warn-border: #e8a020;
+      --melt: #0a60ff;
+      --lake: #7c3aed;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      font-size: 15px;
+    }
+    header {
+      background: linear-gradient(135deg, #07182d 0%, #12275c 55%, #0f214d 100%);
+      color: #fff;
+      padding: 1.75rem 2rem 2rem;
+    }
+    header .inner { max-width: 1100px; margin: 0 auto; }
+    header .eyebrow {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #7ae2ff;
+      margin: 0 0 0.5rem;
+    }
+    header h1 {
+      margin: 0;
+      font-size: clamp(1.35rem, 3vw, 1.85rem);
+      font-weight: 700;
+      line-height: 1.25;
+      max-width: 54rem;
+    }
+    header .subtitle {
+      margin: 0.75rem 0 0;
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.95rem;
+      max-width: 52rem;
+    }
+    header .meta {
+      margin-top: 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.65);
+    }
+    header .meta span {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 0.25rem 0.65rem;
+      border-radius: 4px;
+    }
+    nav.toc {
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      overflow-x: auto;
+    }
+    nav.toc ul {
+      list-style: none;
+      margin: 0 auto;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem 1.25rem;
+      max-width: 1100px;
+      font-size: 0.85rem;
+    }
+    nav.toc a { color: var(--blue); text-decoration: none; white-space: nowrap; }
+    nav.toc a:hover { text-decoration: underline; }
+    main { max-width: 1100px; margin: 0 auto; padding: 2rem 2rem 3rem; }
+    section { margin-bottom: 2.5rem; }
+    h2 {
+      font-size: 1.35rem;
+      margin: 0 0 1rem;
+      color: var(--text);
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 0.4rem;
+    }
+    h3 {
+      font-size: 1.05rem;
+      margin: 1.25rem 0 0.5rem;
+      color: var(--text);
+    }
+    h4 {
+      font-size: 0.95rem;
+      margin: 1rem 0 0.4rem;
+      color: var(--muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    p { margin: 0.65rem 0; }
+    ul, ol { margin: 0.5rem 0 0.75rem 1.25rem; padding: 0; }
+    li { margin: 0.35rem 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      margin: 1rem 0;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.55rem 0.7rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: var(--blue-light);
+      color: var(--text);
+      font-weight: 600;
+    }
+    tr:nth-child(even) td { background: #f8fafc; }
+    th.col-melt { background: #dbeafe; border-top: 3px solid var(--melt); }
+    th.col-lake { background: #ede9fe; border-top: 3px solid var(--lake); }
+    .callout {
+      background: var(--success-bg);
+      border: 1px solid #b8ddb0;
+      border-left: 4px solid var(--success);
+      padding: 1.1rem 1.25rem;
+      margin: 1.25rem 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .callout.warn {
+      background: var(--warn-bg);
+      border-color: #f0d9b8;
+      border-left-color: var(--warn-border);
+    }
+    .callout.accent {
+      background: #fff0f7;
+      border-color: #ffb8d9;
+      border-left-color: var(--accent);
+    }
+    .callout h3 {
+      margin-top: 0;
+      border: none;
+      padding: 0;
+      font-size: 1.1rem;
+      color: var(--success);
+    }
+    .callout.warn h3 { color: #8a5a00; }
+    .callout.accent h3 { color: var(--accent); }
+    .pillars {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .pillar {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.1rem;
+      border-top: 3px solid var(--accent);
+    }
+    .pillar.melt { border-top-color: var(--melt); }
+    .pillar.lake { border-top-color: var(--lake); }
+    .pillar strong {
+      display: block;
+      font-size: 0.95rem;
+      margin-bottom: 0.35rem;
+    }
+    .pillar span {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .position-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem 1.35rem;
+      margin: 1.25rem 0;
+      border-left: 4px solid var(--blue);
+    }
+    .position-card.lead { border-left-color: var(--success); }
+    .position-card.acknowledge { border-left-color: var(--lake); }
+    .position-card.convergence { border-left-color: var(--warn-border); }
+    .position-card h3 { margin-top: 0; }
+    .position-card.lead h3 { color: var(--success); }
+    .position-card.acknowledge h3 { color: var(--lake); }
+    .position-card.convergence h3 { color: #8a5a00; }
+    .tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 0.15rem 0.45rem;
+      border-radius: 3px;
+      background: var(--blue-light);
+      color: var(--blue);
+      margin-right: 0.35rem;
+    }
+    .tag.melt { background: #dbeafe; color: var(--melt); }
+    .tag.lake { background: #ede9fe; color: var(--lake); }
+    .tag.primary { background: #ffe8f3; color: var(--accent); }
+    .stat-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem 2.5rem;
+      margin: 1.25rem 0;
+    }
+    .stat-item { min-width: 140px; }
+    .metric-highlight {
+      display: inline-block;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1.2;
+    }
+    .metric-label {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 400;
+      margin-top: 0.15rem;
+    }
+    .fork-diagram {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 1rem;
+      align-items: stretch;
+      margin: 1.5rem 0;
+    }
+    @media (max-width: 700px) {
+      .fork-diagram { grid-template-columns: 1fr; }
+      .fork-arrow { display: none; }
+    }
+    .fork-box {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.1rem 1.25rem;
+    }
+    .fork-box.melt { border-top: 4px solid var(--melt); }
+    .fork-box.lake { border-top: 4px solid var(--lake); }
+    .fork-box h4 { margin-top: 0; }
+    .fork-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: var(--muted);
+      font-weight: 300;
+    }
+    .checklist {
+      list-style: none;
+      margin: 0.75rem 0;
+      padding: 0;
+    }
+    .checklist li {
+      padding: 0.45rem 0 0.45rem 1.75rem;
+      position: relative;
+      margin: 0;
+    }
+    .checklist li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--success);
+      font-weight: 700;
+    }
+    footer {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1rem 2rem 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    @media print {
+      nav.toc { position: static; }
+      header { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <p class="eyebrow">Strategic positioning · SLED sales enablement</p>
+    <h1>MELT vs. Lakehouse: Positioning Cisco/Splunk Against Databricks</h1>
+    <p class="subtitle">
+      A strategist's guide to the data-type divide — why token-cost, accuracy, architecture, and governance mechanisms differ by design, where each platform wins, and how to frame complementary (not head-to-head) positioning for public-sector customers.
+    </p>
+    <div class="meta">
+      <span>Audience: Splunk strategists &amp; account teams</span>
+      <span>Scope: CDF · Splunk · Databricks</span>
+      <span>July 2026</span>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Table of contents">
+  <ul>
+    <li><a href="#executive">Executive summary</a></li>
+    <li><a href="#divide">Data-type divide</a></li>
+    <li><a href="#token-cost">Token cost</a></li>
+    <li><a href="#accuracy">Accuracy</a></li>
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#governance">Governance</a></li>
+    <li><a href="#convergence">Convergence</a></li>
+    <li><a href="#positioning">SLED positioning</a></li>
+    <li><a href="#pilot">Pilot guidance</a></li>
+  </ul>
+</nav>
+
+<main>
+
+  <!-- EXECUTIVE SUMMARY -->
+  <section id="executive">
+    <h2>Executive Summary</h2>
+
+    <div class="callout accent">
+      <h3>Core positioning thesis</h3>
+      <p>
+        The central distinction across all four source documents is <strong>what kind of data each platform is optimized for</strong>.
+        Splunk and Cisco Data Fabric (CDF) are purpose-built for <strong>MELT</strong> — Metrics, Events, Logs, and Traces — high-volume, high-redundancy, schema-heterogeneous machine telemetry.
+        Databricks is architected for broader enterprise and business data: transactional records, customer data, research datasets, and documents.
+      </p>
+      <p>
+        This is not a minor feature gap — it is an <strong>architectural fork</strong> that explains why token-cost savings, accuracy mechanisms, retention models, and security governance differ fundamentally between the two stacks.
+      </p>
+    </div>
+
+    <div class="pillars">
+      <div class="pillar melt">
+        <strong><span class="tag melt">MELT</span> Splunk / CDF</strong>
+        <span>Compress redundancy · normalize vendor schemas · tier by time-decay value · secure SOC/IT telemetry access</span>
+      </div>
+      <div class="pillar lake">
+        <strong><span class="tag lake">Lakehouse</span> Databricks</strong>
+        <span>Reuse business semantics · unify transactional + analytical · govern agent access to business data</span>
+      </div>
+      <div class="pillar">
+        <strong><span class="tag primary">Positioning</span> Complementary layers</strong>
+        <span>Less head-to-head competitors, more specialized layers for different data types — with emerging overlap</span>
+      </div>
+    </div>
+
+    <ul>
+      <li>Splunk/CDF reduce AI token cost by <strong>compressing and normalizing noisy, repetitive telemetry</strong> (CIM, dedup, tiering).</li>
+      <li>Databricks reduces token cost by giving agents a <strong>reusable business-semantic layer</strong> (ontology) so meaning doesn't need re-explaining.</li>
+      <li>CDF's Hot/Analytics/Archive tiering is a direct response to MELT's <strong>time-decay value curve</strong> — telemetry loses operational value fast but must be retained for compliance.</li>
+      <li>The NIST AI RMF / MITRE ATLAS security mapping is itself evidence of MELT specialization — nearly every detection, correlation, and forensic capability operates on security/IT telemetry.</li>
+      <li>Where platforms overlap on AI-readiness (Parquet, Iceberg, MCP), comparisons must account for the fact that Databricks' claims are made against structured business data, not noisy operational telemetry.</li>
+    </ul>
+  </section>
+
+  <!-- SECTION 1: DATA TYPE DIVIDE -->
+  <section id="divide">
+    <h2>1. The Data-Type Divide</h2>
+
+    <div class="fork-diagram">
+      <div class="fork-box melt">
+        <h4><span class="tag melt">MELT</span> Cisco / Splunk / CDF</h4>
+        <ul>
+          <li><strong>Metrics</strong> — time-series numeric signals</li>
+          <li><strong>Events</strong> — discrete occurrences</li>
+          <li><strong>Logs</strong> — semi/unstructured text</li>
+          <li><strong>Traces</strong> — distributed request paths</li>
+        </ul>
+        <p style="font-size:0.88rem;color:var(--muted);margin-bottom:0;">
+          Generated continuously by infrastructure, security tools, applications, and network devices.
+        </p>
+      </div>
+      <div class="fork-arrow" aria-hidden="true">↔</div>
+      <div class="fork-box lake">
+        <h4><span class="tag lake">Lakehouse</span> Databricks</h4>
+        <ul>
+          <li>Transactional records (Lakebase / LTAP)</li>
+          <li>Customer data (CustomerLake)</li>
+          <li>Documents &amp; research datasets</li>
+          <li>Business metrics &amp; KPIs</li>
+        </ul>
+        <p style="font-size:0.88rem;color:var(--muted);margin-bottom:0;">
+          Data that describes business entities and operations, not system/security telemetry.
+        </p>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th class="col-melt">MELT (Splunk / CDF)</th>
+          <th class="col-lake">Lakehouse (Databricks)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Product identity</strong></td>
+          <td>"Cisco Data Fabric · Powered by Splunk · <em>MELT</em>" — named around the data type it serves</td>
+          <td>Genie Ontology encodes "how the business defines its own metrics and terms"</td>
+        </tr>
+        <tr>
+          <td><strong>Primary challenge</strong></td>
+          <td>Volume and redundancy — millions of near-duplicate log lines</td>
+          <td>Semantic ambiguity — same metric name meaning different things to different teams</td>
+        </tr>
+        <tr>
+          <td><strong>Normalization target</strong></td>
+          <td>Vendor-specific telemetry schemas (CIM) — firewalls, endpoints, cloud logs</td>
+          <td>Business concept consistency — revenue, customer, order definitions</td>
+        </tr>
+        <tr>
+          <td><strong>Schema consistency</strong></td>
+          <td>Highly heterogeneous across dozens of source systems</td>
+          <td>Fewer, more consistent source schemas by comparison</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <h3>Strategist talking point</h3>
+      <p>
+        CDF's own branding makes the specialization explicit. When a customer asks "why not just use Databricks for everything?" — the answer starts with data type, not feature checklist.
+        Databricks solves <em>business semantic consistency</em>; Splunk/CDF solve <em>telemetry volume, redundancy, and multi-vendor schema chaos</em>.
+      </p>
+    </div>
+  </section>
+
+  <!-- SECTION 2: TOKEN COST -->
+  <section id="token-cost">
+    <h2>2. Why Token-Cost Mechanisms Differ</h2>
+
+    <p>
+      Both platforms claim AI cost efficiency, but the savings come from solving <strong>different problems</strong> rooted in the data-type divide.
+      Neither mechanism transfers as-is to the other's native data type.
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Mechanism</th>
+          <th class="col-melt">Splunk / CDF</th>
+          <th class="col-lake">Databricks</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Primary savings driver</strong></td>
+          <td>Compression of redundancy</td>
+          <td>Semantic reuse (ontology)</td>
+        </tr>
+        <tr>
+          <td><strong>Problem solved</strong></td>
+          <td>Repetitive, noisy telemetry — duplicate alerts, near-identical log lines, retried events</td>
+          <td>Ambiguous business terms — same concept modeled differently across tables</td>
+        </tr>
+        <tr>
+          <td><strong>Key techniques</strong></td>
+          <td>CIM normalization, correlation, deduplication, summarization, tiering</td>
+          <td>Genie Ontology — "a metric defined once is inherited by every agent"</td>
+        </tr>
+        <tr>
+          <td><strong>Documented ranges</strong></td>
+          <td>~30–70% payload reduction (correlation); ~20–60% retrieval reduction (summarization/dedup)</td>
+          <td>Token savings via shared business definitions (no equivalent dedup story)</td>
+        </tr>
+        <tr>
+          <td><strong>Why it doesn't transfer</strong></td>
+          <td>Business data lacks millions of duplicate records the way security logs have duplicate alerts</td>
+          <td>Raw security logs still need CIM-style normalization before ontology can help</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="stat-row">
+      <div class="stat-item">
+        <span class="metric-highlight">30–70%</span>
+        <span class="metric-label">MELT payload reduction via correlation</span>
+      </div>
+      <div class="stat-item">
+        <span class="metric-highlight">20–60%</span>
+        <span class="metric-label">MELT retrieval reduction via dedup/summary</span>
+      </div>
+    </div>
+
+    <h3>CIM normalization is MELT-specific</h3>
+    <p>
+      CIM solves inconsistent field names and vendor-specific schemas that would otherwise require explanation in every agent prompt.
+      This is a direct consequence of multi-vendor telemetry — firewalls, endpoints, and cloud logs all naming fields differently.
+      Business data in a lakehouse has fewer, more consistent source schemas by comparison.
+    </p>
+
+    <div class="callout warn">
+      <h3>Pilot baseline warning</h3>
+      <p>
+        A token-cost pilot comparing Splunk/CDF against Databricks requires <strong>different baselines</strong>:
+      </p>
+      <ul>
+        <li><strong>For MELT:</strong> measure raw-event-to-summary compression ratios</li>
+        <li><strong>For lakehouse:</strong> measure how often the same metric/entity definition is re-explained across agent calls</li>
+      </ul>
+      <p>Applying one platform's benchmark methodology to the other's native data type produces misleading comparisons.</p>
+    </div>
+  </section>
+
+  <!-- SECTION 3: ACCURACY -->
+  <section id="accuracy">
+    <h2>3. Why Accuracy Mechanisms Differ</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th class="col-melt">Splunk / CDF</th>
+          <th class="col-lake">Databricks</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Accuracy problem type</strong></td>
+          <td><em>Reconstruction accuracy</em> — correlating scattered log lines into a coherent incident timeline</td>
+          <td><em>Definitional accuracy</em> — ensuring agents use consistent business concepts</td>
+        </tr>
+        <tr>
+          <td><strong>Root cause</strong></td>
+          <td>Single incident scattered across dozens of log lines from different systems</td>
+          <td>Same business concept modeled differently in different tables</td>
+        </tr>
+        <tr>
+          <td><strong>Failure mode</strong></td>
+          <td>Missed or misattributed security event</td>
+          <td>Wrong business action (bad decision, incorrect workflow trigger)</td>
+        </tr>
+        <tr>
+          <td><strong>Accuracy tooling</strong></td>
+          <td>AI Observability "Discover LLM Hallucinations" (ATLAS Discovery tactic, SOC context)</td>
+          <td>Curated ontology to reduce hallucination in business decisions and code generation</td>
+        </tr>
+        <tr>
+          <td><strong>Adversarial threat</strong></td>
+          <td>Log poisoning, RAG/context poisoning — telemetry as attack vector</td>
+          <td>Not emphasized in business-data framing</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <h3>MELT-specific accuracy threat</h3>
+      <p>
+        The NIST AI RMF / MITRE ATLAS mapping adds a third accuracy dimension Databricks doesn't emphasize:
+        <strong>adversarial manipulation of telemetry itself</strong> as an attack on AI accuracy.
+        Security telemetry is a common vector for prompt injection and forensic tampering — relevant to SOC workflows, not general business-data QA.
+      </p>
+    </div>
+  </section>
+
+  <!-- SECTION 4: ARCHITECTURE -->
+  <section id="architecture">
+    <h2>4. Architecture: Tiering vs. Unification</h2>
+
+    <p>
+      CDF's three-tier retention model and Databricks' LTAP unification model are both architectural responses to data freshness —
+      but they assume fundamentally different value curves.
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Tier / Model</th>
+          <th class="col-melt">CDF (MELT tiering)</th>
+          <th class="col-lake">Databricks (unification)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Hot</strong></td>
+          <td>7–14 days — active investigation, real-time SOC</td>
+          <td>Lakehouse RT — millisecond-latency on live Delta/Iceberg (inventory, transactions)</td>
+        </tr>
+        <tr>
+          <td><strong>Analytics</strong></td>
+          <td>90–180 days — trend analysis, hunting, compliance review</td>
+          <td>LTAP — transactional + analytical processing merged (no cold-archive needed)</td>
+        </tr>
+        <tr>
+          <td><strong>Archive</strong></td>
+          <td>Long-term — compliance-only forensic evidence</td>
+          <td>Not applicable — customer records don't "age out" like firewall logs</td>
+        </tr>
+        <tr>
+          <td><strong>Assumption</strong></td>
+          <td>Most telemetry becomes cold evidence, not ongoing operational state</td>
+          <td>Business records remain relevant; unification beats archival</td>
+        </tr>
+        <tr>
+          <td><strong>Federation purpose</strong></td>
+          <td>Search across silos of the <em>same data type</em> (agency/campus telemetry stores)</td>
+          <td>Addressability across <em>different data domains</em> under one ontology</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout accent">
+      <h3>Why tiering doesn't map to business data</h3>
+      <p>
+        A customer record doesn't "age out" of relevance the way a firewall log does.
+        CDF's tiering strategy is well-suited to MELT precisely because it assumes most telemetry becomes cold evidence rather than ongoing operational state —
+        an assumption that would be wrong applied to live customer or transactional data.
+      </p>
+    </div>
+  </section>
+
+  <!-- SECTION 5: GOVERNANCE -->
+  <section id="governance">
+    <h2>5. Governance &amp; Security: Different Questions</h2>
+
+    <p>
+      The two governance stacks answer fundamentally different questions — and a SLED customer with both a Splunk-based SOC and a Databricks analytics environment likely needs both.
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th class="col-melt">Cisco / Splunk</th>
+          <th class="col-lake">Databricks</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Core question</strong></td>
+          <td>Is the AI agent interacting safely with operational/security telemetry and non-human identities in IT/SOC contexts?</td>
+          <td>Does this agent have appropriately governed access to the business data and context it needs to act?</td>
+        </tr>
+        <tr>
+          <td><strong>Threat model</strong></td>
+          <td>NIST AI RMF / MITRE ATLAS — prompt injection via logs, agent-tool credential harvesting, RAG poisoning</td>
+          <td>Unity AI Gateway, Unity Catalog access controls — responsible-AI access over business/research data</td>
+        </tr>
+        <tr>
+          <td><strong>Key products</strong></td>
+          <td>Cisco AI Defense, Astrix, WideField, Splunk ES/SOAR</td>
+          <td>Unity AI Gateway, Unity Catalog, AI GRC framing</td>
+        </tr>
+        <tr>
+          <td><strong>Compliance framing</strong></td>
+          <td>Audit, records mandates, forensic lookback (CJIS, security incident retention)</td>
+          <td>State AI programs, ethics boards, responsible-AI access controls</td>
+        </tr>
+        <tr>
+          <td><strong>Substitutability</strong></td>
+          <td colspan="2" style="text-align:center;"><em>Neither fully substitutes for the other given the data-type divide</em></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <h3>SLED dual-stack reality</h3>
+      <p>
+        A state agency or university with both a Splunk-based SOC and a Databricks-based analytics/research environment needs both governance stacks.
+        Position Cisco/Splunk governance where telemetry and identity signals are the attack surface; acknowledge Databricks governance where business and research data are the concern.
+      </p>
+    </div>
+  </section>
+
+  <!-- SECTION 6: CONVERGENCE -->
+  <section id="convergence">
+    <h2>6. Where the Distinction Blurs — Convergence Trend</h2>
+
+    <p>
+      The data-type divide is a strong <em>current-state</em> positioning advantage, not a permanent moat.
+      Both vendors are actively building toward each other's traditional territory.
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Convergence vector</th>
+          <th>Direction</th>
+          <th>Implication</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>AI-ready open formats</strong></td>
+          <td>Both — Parquet, Iceberg, Delta, vector indexes, MCP</td>
+          <td>Data-type distinction mostly disappears once data is structured for AI consumption</td>
+        </tr>
+        <tr>
+          <td><strong>CDF MDL Analytics Table</strong></td>
+          <td>Cisco/Splunk → lakehouse territory</td>
+          <td>ML training and agentic investigation on MELT infrastructure</td>
+        </tr>
+        <tr>
+          <td><strong>Databricks Lakewatch</strong></td>
+          <td>Databricks → MELT territory</td>
+          <td>Agentic SIEM running security telemetry on the lakehouse (Panther acquisition)</td>
+        </tr>
+        <tr>
+          <td><strong>Cisco AI Defense</strong></td>
+          <td>Cisco/Splunk → agentic security</td>
+          <td>Extending MELT infrastructure into AI/agentic territory</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout warn">
+      <h3>Forward-looking competitive consideration</h3>
+      <p>
+        Databricks is trying to absorb security/telemetry workloads into its business-data lakehouse.
+        Cisco/Splunk is trying to extend MELT infrastructure into AI/agentic and analytics territory.
+        Treat the MELT specialization as today's advantage — but flag convergence as the real strategic tension in every competitive conversation.
+      </p>
+    </div>
+  </section>
+
+  <!-- SECTION 7: SLED POSITIONING -->
+  <section id="positioning">
+    <h2>7. SLED Positioning Playbook</h2>
+
+    <div class="position-card lead">
+      <h3>Lead with MELT specialization</h3>
+      <p>Use this framing where it's strongest — areas where Databricks' business-data architecture is a less natural fit:</p>
+      <ul class="checklist">
+        <li>SOC and security operations (Splunk ES, SOAR, correlation)</li>
+        <li>IT infrastructure monitoring (ITSI, observability)</li>
+        <li>Compliance and forensic retention (CDF tiering, CJIS, audit mandates)</li>
+        <li>CIM normalization for multi-vendor telemetry</li>
+        <li>ATLAS-mapped adversarial-technique coverage (AI Defense, Astrix, WideField)</li>
+        <li>Token-cost savings from telemetry compression and deduplication</li>
+      </ul>
+    </div>
+
+    <div class="position-card acknowledge">
+      <h3>Acknowledge Databricks' genuine strengths</h3>
+      <p>Don't fight where they're differentiated — credibility requires acknowledging their lane:</p>
+      <ul class="checklist">
+        <li>Business-semantic consistency (Genie Ontology)</li>
+        <li>Customer and research analytics (CustomerLake)</li>
+        <li>Transactional + analytical unification (LTAP / Lakebase)</li>
+        <li>Cross-domain federation under a shared business ontology</li>
+      </ul>
+    </div>
+
+    <div class="position-card convergence">
+      <h3>Flag convergence — don't overstate the moat</h3>
+      <p>
+        Lakewatch (Databricks → SIEM) vs. MDL Analytics Table / AI Defense (Cisco/Splunk → analytics/AI) is the real competitive front.
+        The "different data types" framing is the right default today, but both vendors are closing the gap.
+        Position complementarity now; prepare for direct overlap in 12–24 months.
+      </p>
+    </div>
+
+    <h3>Competitive response quick-reference</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Customer says…</th>
+          <th>Response frame</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>"Databricks can do everything — why do we need Splunk?"</td>
+          <td>Data-type fork: Databricks optimizes for business semantic consistency; Splunk/CDF optimize for telemetry volume, redundancy, and multi-vendor schema chaos. Different problems, different architectures.</td>
+        </tr>
+        <tr>
+          <td>"Databricks saves tokens with its ontology."</td>
+          <td>True for business data — but security logs need CIM normalization first. Measure compression ratios on MELT workloads, not business metric reuse.</td>
+        </tr>
+        <tr>
+          <td>"We want one platform for AI."</td>
+          <td>Both are AI-ready (Parquet, MCP, vector indexes). The question is which data types you need governed — telemetry/SOC (Splunk) vs. business/research (Databricks). Most SLED customers need both.</td>
+        </tr>
+        <tr>
+          <td>"Databricks has Lakewatch for security."</td>
+          <td>Convergence is real — but Lakewatch is new lakehouse-native SIEM vs. decades of CIM, ES content, SOAR playbooks, and ATLAS-mapped AI Defense. Pilot on your actual SOC workflows.</td>
+        </tr>
+        <tr>
+          <td>"Can't CDF tiering replace our archive?"</td>
+          <td>CDF tiering assumes telemetry time-decay — perfect for logs, wrong for customer/transactional data. Tiering and LTAP unification solve different freshness problems.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- PILOT GUIDANCE -->
+  <section id="pilot">
+    <h2>Pilot &amp; Proof Guidance</h2>
+
+    <p>
+      Any joint or comparative pilot must baseline against the <strong>correct data type</strong>.
+      Applying one platform's benchmark methodology to the other's native data type produces misleading results.
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Pilot type</th>
+          <th>Workload</th>
+          <th>Baseline metrics</th>
+          <th>Platform</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Token cost — MELT</strong></td>
+          <td>SOC triage, log investigation, alert correlation</td>
+          <td>Raw-event-to-summary compression ratio; dedup reduction; CIM field normalization savings</td>
+          <td>Splunk / CDF</td>
+        </tr>
+        <tr>
+          <td><strong>Token cost — business</strong></td>
+          <td>Customer analytics, business metric queries, agent workflows</td>
+          <td>Metric/entity definition reuse rate across agent calls; ontology inheritance coverage</td>
+          <td>Databricks</td>
+        </tr>
+        <tr>
+          <td><strong>Accuracy — MELT</strong></td>
+          <td>Incident reconstruction, multi-source correlation, threat hunting</td>
+          <td>Timeline reconstruction accuracy; false-positive rate; hallucination detection (AI Observability)</td>
+          <td>Splunk / CDF</td>
+        </tr>
+        <tr>
+          <td><strong>Accuracy — business</strong></td>
+          <td>Business decision support, code generation, workflow triggering</td>
+          <td>Definitional consistency across agents; ontology coverage; hallucination rate on business queries</td>
+          <td>Databricks</td>
+        </tr>
+        <tr>
+          <td><strong>Governance — MELT</strong></td>
+          <td>Agent access to SOC telemetry, non-human identity, adversarial log scenarios</td>
+          <td>ATLAS technique coverage; prompt-injection detection; forensic audit completeness</td>
+          <td>Cisco AI Defense / Splunk ES</td>
+        </tr>
+        <tr>
+          <td><strong>Governance — business</strong></td>
+          <td>Agent access to customer/research data, ethics compliance</td>
+          <td>Unity Catalog policy enforcement; AI GRC audit trail; access-control granularity</td>
+          <td>Databricks</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout accent">
+      <h3>Bottom line for strategists</h3>
+      <p>
+        Cisco/Splunk and Databricks are <strong>complementary layers for different data types</strong>, not direct substitutes.
+        Lead with MELT specialization where the architecture is genuinely differentiated.
+        Acknowledge Databricks where business semantics and LTAP unification are the customer's primary need.
+        Flag convergence as the forward-looking competitive vector — and always match pilot baselines to the correct data type.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>
+    Internal strategic positioning brief · Synthesized from harmonized analysis of Splunk/CDF optimization, Databricks AI capabilities, and NIST AI RMF / MITRE ATLAS governance mapping documents.
+    For Splunk strategist and account team use. July 2026.
+  </p>
+</footer>
+
+</body>
+</html>
