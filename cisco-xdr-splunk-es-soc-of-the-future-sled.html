@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cisco XDR &amp; Splunk Enterprise Security — SOC of the Future</title>
+  <style>
+    :root {
+      --bg: #f2f5f7;
+      --panel: #ffffff;
+      --text: #07182d;
+      --muted: #536070;
+      --accent: #0d4f8b;
+      --accent-soft: #e8f1f9;
+      --cisco: #049fd9;
+      --splunk: #ff007f;
+      --border: #ced4db;
+      --success: #0d6b4a;
+      --success-bg: #eef8f0;
+      --warn-bg: #fff8f0;
+      --radius: 10px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      font-size: 15px;
+    }
+    header.hero {
+      background: linear-gradient(135deg, #07182d 0%, #0d4f8b 50%, #12275c 100%);
+      color: #fff;
+      padding: 2rem 1.5rem 2.25rem;
+    }
+    header.hero .inner { max-width: 960px; margin: 0 auto; }
+    header.hero .eyebrow {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #7ae2ff;
+      margin: 0 0 0.5rem;
+    }
+    header.hero h1 {
+      margin: 0;
+      font-size: clamp(1.35rem, 3.5vw, 1.9rem);
+      font-weight: 700;
+      line-height: 1.25;
+      max-width: 48rem;
+    }
+    header.hero .subtitle {
+      margin: 0.85rem 0 0;
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 1rem;
+      max-width: 46rem;
+    }
+    header.hero .audience {
+      margin-top: 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      font-size: 0.82rem;
+    }
+    header.hero .audience span {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 0.3rem 0.7rem;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    nav.toc {
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      overflow-x: auto;
+    }
+    nav.toc ul {
+      list-style: none;
+      margin: 0 auto;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem 1.1rem;
+      max-width: 960px;
+      font-size: 0.82rem;
+    }
+    nav.toc a { color: var(--accent); text-decoration: none; white-space: nowrap; }
+    nav.toc a:hover { text-decoration: underline; }
+    main { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 3rem; }
+    section {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,.05);
+    }
+    section h2 {
+      margin: 0 0 1rem;
+      font-size: 1.2rem;
+      color: var(--accent);
+      border-bottom: 2px solid var(--accent-soft);
+      padding-bottom: 0.45rem;
+    }
+    section h3 {
+      margin: 1.25rem 0 0.5rem;
+      font-size: 1rem;
+      color: var(--text);
+    }
+    section h4 {
+      margin: 1rem 0 0.35rem;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+    p { margin: 0.5rem 0 0; }
+    p:first-child { margin-top: 0; }
+    ul, ol { margin: 0.5rem 0 0.5rem 1.25rem; padding: 0; }
+    li { margin-bottom: 0.35rem; }
+    .exec-summary {
+      background: var(--success-bg);
+      border: 1px solid #b8ddb0;
+      border-left: 4px solid var(--success);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .exec-summary h2 {
+      margin: 0 0 0.75rem;
+      font-size: 1.05rem;
+      color: var(--success);
+      border: none;
+      padding: 0;
+    }
+    .grid-2 {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 640px) {
+      .grid-2 { grid-template-columns: 1fr 1fr; }
+      .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+    }
+    .grid-3 {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: 1fr;
+    }
+    .card {
+      background: var(--accent-soft);
+      border-radius: 8px;
+      padding: 1rem 1.1rem;
+      border: 1px solid #c5d9eb;
+    }
+    .card.cisco { border-top: 3px solid var(--cisco); }
+    .card.splunk { border-top: 3px solid var(--splunk); }
+    .card h3 {
+      margin: 0 0 0.5rem;
+      font-size: 0.95rem;
+      color: var(--accent);
+    }
+    .card.cisco h3 { color: #0277a8; }
+    .card.splunk h3 { color: #c4006a; }
+    .card ul { margin-top: 0.35rem; font-size: 0.92rem; }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 0.75rem;
+      margin: 1rem 0;
+    }
+    .stat {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.75rem;
+      text-align: center;
+    }
+    .stat b {
+      display: block;
+      font-size: 1.4rem;
+      color: var(--accent);
+      line-height: 1.2;
+    }
+    .stat span {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      margin-top: 0.75rem;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.6rem 0.7rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-weight: 600;
+    }
+    tr:nth-child(even) td { background: #fafbfc; }
+    .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .workflow {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin: 1rem 0;
+    }
+    .workflow-step {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      padding: 0.85rem 0;
+      border-bottom: 1px dashed var(--border);
+    }
+    .workflow-step:last-child { border-bottom: none; }
+    .workflow-num {
+      flex: 0 0 2rem;
+      width: 2rem;
+      height: 2rem;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 0.85rem;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .workflow-body { flex: 1; min-width: 0; }
+    .workflow-body strong { display: block; margin-bottom: 0.25rem; }
+    .workflow-body p { margin: 0; font-size: 0.92rem; color: var(--muted); }
+    .tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 0.15rem 0.45rem;
+      border-radius: 3px;
+      margin-right: 0.35rem;
+    }
+    .tag.xdr { background: #e0f4fc; color: #0277a8; }
+    .tag.es { background: #ffe8f3; color: #c4006a; }
+    .tag.both { background: var(--accent-soft); color: var(--accent); }
+    .tdir-flow {
+      display: grid;
+      gap: 0.75rem;
+      margin: 1rem 0;
+    }
+    @media (min-width: 700px) {
+      .tdir-flow { grid-template-columns: 1fr 1fr 1fr 1fr; }
+    }
+    .tdir-phase {
+      background: var(--accent-soft);
+      border: 1px solid #c5d9eb;
+      border-radius: 8px;
+      padding: 0.85rem;
+      text-align: center;
+    }
+    .tdir-phase h4 {
+      margin: 0 0 0.35rem;
+      font-size: 0.85rem;
+      color: var(--accent);
+    }
+    .tdir-phase .lead { font-size: 0.78rem; font-weight: 600; margin-bottom: 0.35rem; }
+    .tdir-phase p { margin: 0; font-size: 0.8rem; color: var(--muted); }
+    .scenario {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.15rem;
+      margin-top: 1rem;
+      background: #fafbfc;
+    }
+    .scenario h4 {
+      margin: 0 0 0.5rem;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+    .scenario .event {
+      font-size: 0.88rem;
+      color: var(--muted);
+      font-style: italic;
+      margin-bottom: 0.75rem;
+    }
+    .callout {
+      background: var(--warn-bg);
+      border: 1px solid #f0d9b8;
+      border-left: 4px solid #e8a020;
+      border-radius: 0 8px 8px 0;
+      padding: 1rem 1.15rem;
+      margin: 1rem 0;
+      font-size: 0.92rem;
+    }
+    .callout strong { color: #8a5a00; }
+    .refs {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .refs li { margin-bottom: 0.25rem; }
+    footer {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 1.5rem 2.5rem;
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-align: center;
+    }
+    @media print {
+      nav.toc { position: static; }
+      section { break-inside: avoid; box-shadow: none; }
+      header.hero { background: #07182d; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="inner">
+    <p class="eyebrow">State Government &amp; Higher Education</p>
+    <h1>Cisco XDR &amp; Splunk Enterprise Security: Powering the SOC of the Future</h1>
+    <p class="subtitle">A unified Threat Detection, Investigation, and Response (TDIR) platform that combines Cisco's real-time detection and rapid containment with Splunk's deep analytics, long-term retention, and compliance reporting—designed for multi-agency and campus-scale security operations.</p>
+    <div class="audience">
+      <span>Primary: CISO &amp; Cybersecurity Teams</span>
+      <span>Secondary: CIO, CTO &amp; IT Leadership</span>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Table of contents">
+  <ul>
+    <li><a href="#executive-summary">Executive Summary</a></li>
+    <li><a href="#complementary">Why They Complement</a></li>
+    <li><a href="#capabilities">Capabilities</a></li>
+    <li><a href="#integration">Integration</a></li>
+    <li><a href="#tdir">TDIR Workflow</a></li>
+    <li><a href="#workflows">Analyst Workflows</a></li>
+    <li><a href="#multi-entity">Multi-Entity Operations</a></li>
+    <li><a href="#outcomes">Outcomes &amp; ROI</a></li>
+    <li><a href="#roadmap">2025–2026 Roadmap</a></li>
+    <li><a href="#references">References</a></li>
+  </ul>
+</nav>
+
+<main>
+
+  <div class="exec-summary" id="executive-summary">
+    <h2>Executive Summary for Technology Leadership</h2>
+    <p>State agencies and higher education institutions face a common challenge: protecting sprawling, hybrid environments—on-premises data centers, cloud services, remote faculty and staff, research networks, and student-facing systems—while meeting strict compliance, budget, and staffing constraints. Neither a SIEM nor an XDR platform alone delivers the full picture.</p>
+    <p><strong>Cisco XDR</strong> excels at real-time, AI-driven detection and automated containment across endpoints, networks, email, identity, and DNS. <strong>Splunk Enterprise Security (ES)</strong> provides the enterprise SIEM layer for deep investigation, custom correlation, long-term data retention, compliance reporting, and orchestration across the entire IT estate—including legacy systems and third-party tools that XDR does not natively cover.</p>
+    <p>Together, they create a complementary TDIR architecture: XDR detects and contains fast; Splunk ES investigates deeply, hunts proactively, and documents everything for audit and continuous improvement. Organizations like Elon University have demonstrated this model—transitioning from manual log review to automated workflows with faster investigations, reduced analyst workload, and more thorough threat hunting.</p>
+  </div>
+
+  <section id="complementary">
+    <h2>Why Cisco XDR and Splunk ES Are Complementary—Not Redundant</h2>
+    <p>Each platform is optimized for different phases of the security lifecycle. Used together, they eliminate the false choice between speed and depth.</p>
+    <div class="grid-2" style="margin-top:1rem">
+      <div class="card cisco">
+        <h3>Cisco XDR — Detect &amp; Contain</h3>
+        <ul>
+          <li>Real-time correlation across Cisco and integrated telemetry</li>
+          <li>High-fidelity, AI/ML-driven alerts with Talos threat intelligence</li>
+          <li>Automated response: host isolation, identity challenges, traffic blocking</li>
+          <li>Guided investigations with XDR Storyboard</li>
+          <li>API-first platform for custom integrations</li>
+        </ul>
+      </div>
+      <div class="card splunk">
+        <h3>Splunk ES — Investigate, Hunt &amp; Report</h3>
+        <ul>
+          <li>Enterprise-wide log aggregation from any source (CIM-normalized)</li>
+          <li>Custom SPL correlation, UEBA, and behavioral analytics</li>
+          <li>Long-term retention for forensics, trending, and compliance</li>
+          <li>Incident management, risk-based alerting, and audit-ready reporting</li>
+          <li>Splunk SOAR for multi-system orchestration and ITSM integration</li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top:1rem"><strong>For SLED environments specifically:</strong> Splunk ES addresses HIPAA, FERPA, PCI-DSS, CMMC, NIST CSF, and state audit requirements with continuous monitoring and evidence collection. Cisco XDR accelerates time-to-containment for ransomware, phishing, and lateral movement—the threats most likely to disrupt citizen services, research, and student operations.</p>
+  </section>
+
+  <section id="capabilities">
+    <h2>Key Capabilities in the SOC</h2>
+    <div class="grid-2">
+      <div>
+        <h3>Splunk Enterprise Security</h3>
+        <ul>
+          <li><strong>Centralized log management</strong> — Ingests and normalizes data from legacy systems, custom applications, and third-party tools</li>
+          <li><strong>Advanced threat detection</strong> — SPL-based correlation, behavioral analytics, and anomaly detection</li>
+          <li><strong>Incident management</strong> — Prioritization, ad hoc search, dynamic correlations, and visual investigation tools</li>
+          <li><strong>Threat intelligence</strong> — Feed integration with weighting, aggregation, and de-duplication</li>
+          <li><strong>Compliance &amp; reporting</strong> — Audit-ready dashboards for regulatory frameworks</li>
+          <li><strong>UEBA</strong> — Detects insider threats and compromised accounts through behavioral baselines</li>
+          <li><strong>SOAR</strong> — Automated playbooks across security and IT systems when combined with Splunk SOAR</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Cisco XDR</h3>
+        <ul>
+          <li><strong>Comprehensive telemetry</strong> — Endpoints, networks, firewalls, email, identity, and DNS in a unified view</li>
+          <li><strong>AI/ML detection</strong> — Pattern recognition for ransomware, lateral movement, and identity attacks</li>
+          <li><strong>Incident prioritization</strong> — Risk- and impact-based ranking with evidence-backed automation</li>
+          <li><strong>Automated response</strong> — Endpoint isolation, IP blocking, MFA challenges via playbooks</li>
+          <li><strong>Guided investigations</strong> — XDR Storyboard and visual attack timelines</li>
+          <li><strong>Talos intelligence</strong> — World-class threat intelligence for detection enrichment</li>
+          <li><strong>Open platform</strong> — API-first design for third-party and custom workflow integration</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="integration">
+    <h2>Integration Architecture</h2>
+    <p>The Cisco Security Cloud App for Splunk and the Cisco Security Cloud Technology Add-on provide purpose-built integration paths designed for operational SOC workflows—not just data forwarding.</p>
+    <h3>Key Integration Points</h3>
+    <ul>
+      <li><strong>Alert and detection handoff</strong> — High-fidelity XDR incidents are promoted to Splunk ES Findings, accelerating investigation with pre-correlated, prioritized context</li>
+      <li><strong>Telemetry ingestion</strong> — Cisco product telemetry (Secure Endpoint, Secure Firewall, Duo, Secure Email Threat Defense, Secure Network Analytics) mapped to the Common Information Model (CIM) for unified Splunk analysis</li>
+      <li><strong>Contextual enrichment</strong> — Splunk ES enriches XDR alerts with historical logs, asset data, and additional threat intelligence</li>
+      <li><strong>Workflow orchestration</strong> — XDR handles initial containment; Splunk SOAR orchestrates complex, multi-system response including ITSM ticketing and cloud configuration</li>
+      <li><strong>API-driven integration</strong> — Bidirectional APIs enable custom workflows, intelligence synchronization, and XDR automation triggered from Splunk notable events</li>
+    </ul>
+    <div class="callout">
+      <strong>Architecture note for multi-agency and campus environments:</strong> Splunk ES can serve as the central SIEM across agencies, colleges, or departments while Cisco XDR provides domain-specific detection and response. High-volume raw telemetry can be tiered (e.g., LogScale or similar for bulk retention) with Splunk ES as the operational correlation and reporting layer—avoiding duplicate correlation logic while maintaining a single audit trail.
+    </div>
+  </section>
+
+  <section id="tdir">
+    <h2>Unified TDIR Workflow</h2>
+    <p>An efficient workflow assigns each platform to the phase where it delivers the most value—minimizing tool-switching and maximizing analyst productivity.</p>
+    <div class="tdir-flow">
+      <div class="tdir-phase">
+        <h4>Detect</h4>
+        <p class="lead"><span class="tag xdr">XDR Primary</span></p>
+        <p>Continuous correlation of endpoint, network, email, and identity telemetry. AI/ML and Talos identify high-fidelity threats in real time.</p>
+      </div>
+      <div class="tdir-phase">
+        <h4>Investigate</h4>
+        <p class="lead"><span class="tag es">ES Primary</span></p>
+        <p>Deep pivoting across historical logs, asset context, and custom correlation. XDR Storyboard provides real-time forensic depth on demand.</p>
+      </div>
+      <div class="tdir-phase">
+        <h4>Respond</h4>
+        <p class="lead"><span class="tag xdr">XDR Contain</span> <span class="tag es">SOAR Orchestrate</span></p>
+        <p>Automated isolation and blocking in seconds. SOAR handles tickets, notifications, patching, and recovery across the full IT stack.</p>
+      </div>
+      <div class="tdir-phase">
+        <h4>Recover &amp; Improve</h4>
+        <p class="lead"><span class="tag es">ES Primary</span></p>
+        <p>Long-term incident records, post-mortem reporting, compliance evidence, and continuous control improvement.</p>
+      </div>
+    </div>
+    <h3>Phase-by-Phase Detail</h3>
+    <h4>Detection — Cisco XDR Primary, Splunk ES Secondary</h4>
+    <p>Cisco XDR continuously collects and correlates telemetry, rapidly identifying suspicious activities and high-fidelity threats such as ransomware, lateral movement, and identity attacks. Splunk ES provides a secondary detection layer for broader visibility, custom use cases, and long-term trend analysis across all data sources—including non-Cisco telemetry. High-fidelity XDR incidents are fed into Splunk ES as Findings to accelerate further investigation.</p>
+    <h4>Investigation — Splunk ES Primary, Cisco XDR for Deep Context</h4>
+    <p>Analysts use Splunk ES to review XDR-generated findings, pivot on observables, correlate with historical logs and asset data, and build complete incident timelines. For endpoint or network forensics, analysts pivot into Cisco XDR for guided investigations, Storyboard visualizations, and real-time activity analysis.</p>
+    <h4>Threat Intelligence</h4>
+    <p>Both platforms integrate threat intelligence: Cisco XDR applies Talos intelligence for real-time detection and prioritization; Splunk ES uses intelligence feeds for enrichment during investigations and custom correlation rules.</p>
+    <h4>Response — Cisco XDR for Containment, Splunk SOAR for Orchestration</h4>
+    <p>Cisco XDR initiates rapid automated containment—isolating endpoints, blocking malicious traffic, and challenging identities. Splunk SOAR handles complex orchestration: ITSM ticket creation, stakeholder notification, remediation across non-Cisco tools, password resets, firewall reconfiguration, and backup restoration.</p>
+  </section>
+
+  <section id="workflows">
+    <h2>Security Analyst Workflows</h2>
+    <p>These three scenarios illustrate how state and higher-education SOC teams combine XDR's speed with Splunk's depth across common threat types.</p>
+
+    <div class="scenario">
+      <h4>1. Phishing Incident Investigation</h4>
+      <p class="event">A user opens a malicious email attachment; malware attempts to establish command-and-control (C2) communication.</p>
+      <div class="workflow">
+        <div class="workflow-step">
+          <div class="workflow-num">1</div>
+          <div class="workflow-body">
+            <strong><span class="tag xdr">XDR</span> Detection &amp; correlation</strong>
+            <p>Secure Email identifies the malicious attachment; Secure Endpoint detects file execution; Secure Firewall telemetry confirms the attempted C2 connection. XDR correlates these into a high-fidelity phishing incident.</p>
+          </div>
+        </div>
+        <div class="workflow-step">
+          <div class="workflow-num">2</div>
+          <div class="workflow-body">
+            <strong><span class="tag xdr">XDR</span> Automated containment</strong>
+            <p>Before analyst review, XDR quarantines the infected host via Secure Endpoint and restricts the user's identity through Duo.</p>
+          </div>
+        </div>
+        <div class="workflow-step">
+          <div class="workflow-num">3</div>
+          <div class="workflow-body">
+            <strong><span class="tag es">Splunk ES</span> Investigation &amp; scope</strong>
+            <p>The Cisco Security Cloud App promotes the incident to a Finding. The analyst pivots on file hash and C2 IP across all log sources—discovering other endpoints that received the same email but did not execute the attachment, enabling proactive remediation.</p>
+          </div>
+        </div>
+        <div class="workflow-step">
+          <div class="workflow-num">4</div>
+          <div class="workflow-body">
+            <strong><span class="tag es">Splunk ES</span> Threat hunting &amp; reporting</strong>
+            <p>Custom correlation rules search for campaign-related IOCs (unusual DNS queries, outbound traffic patterns). Dashboards track the incident for compliance and trend analysis.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scenario">
+      <h4>2. Insider Threat Detection</h4>
+      <p class="event">An authorized user begins accessing and exfiltrating sensitive data in a manner outside normal behavior—without triggering standard perimeter alarms.</p>
+      <div class="workflow">
+        <div class="workflow-step">
+          <div class="workflow-num">1</div>
+          <div class="workflow-body">
+            <strong><span class="tag es">Splunk ES</span> Behavioral anomaly detection</strong>
+            <p>User Behavior Analytics (UBA) flags unusual activity—e.g., a developer downloading a large volume of sensitive files from cloud storage—creating a Notable Event.</p>
+          </div>
+        </div>
+        <div class="workflow-step">
+          <div class="workflow-num">2</div>
+          <div class="workflow-body">
+            <strong><span class="tag both">Splunk ES → XDR</span> Cross-platform enrichment</strong>
+            <p>The analyst triggers a Cisco XDR automation workflow from the notable event. XDR queries Secure Endpoint for file transfer details, Duo for login history anomalies, and Secure Firewall for outbound connection context.</p>
+          </div>
+        </div>
+        <div class="workflow-step">
+          <div class="workflow-num">3</div>
+          <div class="workflow-body">
+            <strong><span class="tag es">Splunk SOAR</span> Orchestrated response</strong>
+            <p>SOAR creates a ticket, alerts the analyst, performs identity lookup, and—based on aggregated risk score—triggers automated re-authentication via Duo.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scenario">
+      <h4>3. Ransomware Containment and Recovery</h4>
+      <p class="event">A ransomware strain infects an endpoint, begins encrypting files, and attempts lateral movement across the network.</p>
+      <div class="workflow">
+        <div class="workflow-step">
+          <div class="workflow-num">1</div>
+          <div class="workflow-body">
+            <strong><span class="tag xdr">XDR</span> Immediate detection &amp; isolation</strong>
+            <p>Secure Endpoint telemetry triggers AI-driven ransomware recognition. XDR automatically isolates the endpoint and blocks C2 traffic—often before analyst involvement.</p>
+          </div>
+        </div>
+        <div class="workflow-step">
+          <div class="workflow-num">2</div>
+          <div class="workflow-body">
+            <strong><span class="tag es">Splunk ES</span> Forensic analysis &amp; blast radius</strong>
+            <p>The incident is promoted to Splunk ES. Analysts reconstruct the attack chain—entry point, lateral spread, affected systems—correlating with firewall flow data, file logs, and internal telemetry to assess data exfiltration risk.</p>
+          </div>
+        </div>
+        <div class="workflow-step">
+          <div class="workflow-num">3</div>
+          <div class="workflow-body">
+            <strong><span class="tag es">Splunk SOAR</span> Recovery orchestration</strong>
+            <p>Playbooks trigger backup restoration, create ITSM tickets for patching and configuration updates, and track remediation progress. Splunk generates post-mortem reports for leadership and compliance.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="multi-entity">
+    <h2>Multi-Entity Security Operations</h2>
+    <p>State governments and university systems often operate across multiple agencies, colleges, or departments—each with distinct data, compliance requirements, and risk profiles. The integrated XDR + Splunk ES architecture supports this complexity.</p>
+    <h3>Integration Methods</h3>
+    <ul>
+      <li><strong>Cisco Security Cloud App for Splunk</strong> — Purpose-built app for alert promotion, finding synchronization, and analyst workflow integration</li>
+      <li><strong>Cisco Security Cloud Technology Add-on</strong> — CIM-mapped ingestion from the full Cisco security portfolio</li>
+      <li><strong>API compatibility</strong> — Documented API matrix supports custom integrations with ticketing, identity, and cloud platforms</li>
+      <li><strong>Secure Firewall &amp; XDR integration</strong> — Native correlation between network and endpoint telemetry within XDR, with enriched outputs available in Splunk</li>
+    </ul>
+    <h3>Security, Scalability, and Multi-Tenancy</h3>
+    <ul>
+      <li><strong>Data sovereignty</strong> — Cisco's Sovereign Critical Infrastructure portfolio (2025) provides air-gapped, customer-managed options for public sector and regulated environments where data must remain within jurisdictional boundaries</li>
+      <li><strong>Zero Trust alignment</strong> — Continuous validation through telemetry from Duo, ISE, and access control solutions fed into both platforms for risk-based policy enforcement</li>
+      <li><strong>Compliance frameworks</strong> — CMMC, NIST CSF 2.0, ISO/IEC 27001, and state audit requirements supported through Splunk ES reporting and Cisco framework mapping</li>
+      <li><strong>Scalable architecture</strong> — Tiered data retention (hot/warm/cold) with Splunk ES as the operational SIEM layer; XDR handles real-time fusion without requiring full log replication</li>
+    </ul>
+  </section>
+
+  <section id="outcomes">
+    <h2>Measurable Outcomes and ROI</h2>
+    <p>Integrated Cisco + Splunk deployments in healthcare, government, and higher education have demonstrated quantifiable SOC improvements. Use these as planning benchmarks—validate baselines during program design.</p>
+    <div class="stats">
+      <div class="stat"><b>85%</b><span>Faster detection &amp; triage</span></div>
+      <div class="stat"><b>70%</b><span>Alert fatigue reduction</span></div>
+      <div class="stat"><b>70%</b><span>MTTR improvement</span></div>
+      <div class="stat"><b>40%</b><span>Faster containment</span></div>
+      <div class="stat"><b>99.99%</b><span>Containment success rate</span></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Metric</th>
+            <th scope="col">Reported Improvement</th>
+            <th scope="col">Context</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Threat detection &amp; triage</td>
+            <td>85% faster</td>
+            <td>Cisco metrics from healthcare and government deployments</td>
+          </tr>
+          <tr>
+            <td>Alert fatigue</td>
+            <td>70% reduction</td>
+            <td>High-fidelity, correlated alerts from Cisco XDR</td>
+          </tr>
+          <tr>
+            <td>Mean time to respond (MTTR)</td>
+            <td>70% improvement</td>
+            <td>Automated workflows and integrated playbooks</td>
+          </tr>
+          <tr>
+            <td>Incident identification &amp; containment</td>
+            <td>40% decrease in time</td>
+            <td>Integrated XDR and automation platforms</td>
+          </tr>
+          <tr>
+            <td>Containment success rate</td>
+            <td>99.99%</td>
+            <td>Cisco XDR deployments</td>
+          </tr>
+          <tr>
+            <td>Analyst efficiency</td>
+            <td>~1 analyst saved per shift</td>
+            <td>Mature SOCs with high automation (anecdotal ROI)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:1rem"><strong>Case study — Elon University:</strong> By integrating its Cisco security stack with Splunk, the university transitioned from manual log review to automated TDIR workflows—resulting in faster investigations, reduced analyst workload, and more thorough threat hunting capabilities.</p>
+    <h3>Licensing and Cost Considerations</h3>
+    <p>For SLED budget planning, cost drivers include Splunk ingest volume (GB/day), ES content and correlation use cases, SOAR automation capacity, and Cisco XDR endpoint/network coverage tiers. The complementary model avoids duplicate tooling: XDR replaces point-solution EDR/network analytics for detection and response; Splunk ES consolidates SIEM, compliance, and orchestration functions that would otherwise require separate platforms.</p>
+  </section>
+
+  <section id="roadmap">
+    <h2>Future Roadmap and Emerging Trends (2025–2026)</h2>
+    <p>Both platforms are evolving toward AI-native, open-standards security operations aligned with the needs of public sector and higher education.</p>
+    <div class="grid-2">
+      <div>
+        <h3>Splunk</h3>
+        <ul>
+          <li><strong>AI Assistant</strong> — SPL generation, AI-powered Triage Agent, and playbook authoring in SOAR</li>
+          <li><strong>OpenTelemetry (OTel)</strong> — First-class OTel ingestion for modern application and infrastructure telemetry</li>
+          <li><strong>Frontier AI</strong> — Agentic workflows for investigation acceleration and defensible automation metrics</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Cisco</h3>
+        <ul>
+          <li><strong>AI Assistant</strong> — Guided incident response and agentic AI for threat detection and verification</li>
+          <li><strong>Sovereign Critical Infrastructure</strong> — Air-gapped, customer-managed portfolio for regulated and EU jurisdictions</li>
+          <li><strong>Security Cloud expansion</strong> — Deeper integration with Microsoft Defender, Google Cloud Security, and third-party ecosystems</li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top:1rem">These trends point toward a future SOC where federated security data is analyzed by AI across hybrid environments, with adaptive, risk-based trust policies enforced in real time—while maintaining the audit trails and data sovereignty controls that SLED organizations require.</p>
+  </section>
+
+  <section id="references">
+    <h2>Key References and Resources</h2>
+    <ul class="refs">
+      <li>Cisco Security Cloud App for Splunk — User Guide and Overview</li>
+      <li>Cisco Security Cloud App for Splunk — Configure Cisco Products</li>
+      <li>Cisco Security Cloud App for Splunk — API Compatibility Matrix</li>
+      <li>Cisco Secure Firewall Integrations Overview Guide</li>
+      <li>Cisco Secure Email Threat Defense — Security Cloud App for Splunk</li>
+      <li>Cisco Secure Firewall Threat Defense and Cisco XDR Integration Guide</li>
+      <li>Powering the SOC of the Future with Splunk &amp; Cisco Security</li>
+      <li>Cisco XDR: University Cybersecurity Case Study (Elon University)</li>
+      <li>Framework Foundations: CMMC Solution Brief — Cisco</li>
+      <li>Strengthening Cybersecurity: CMMC with Cisco's NIST CSF 2.0 Mapping</li>
+      <li>Modernizing Government Cybersecurity Solution Brief — Cisco</li>
+      <li>Framework Foundations: ISO / IEC 27001 Solution Brief — Cisco</li>
+      <li>Cisco Announces Sovereign Critical Infrastructure Portfolio</li>
+      <li>Cisco Security and Microsoft Defender / Google Cloud Security integration guides</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer>
+  <p>Customer-facing brief for state government and higher education security leadership. Metrics and outcomes cited from Cisco and Splunk deployment benchmarks; validate baselines and measurement methods during program planning. Not a contractual commitment.</p>
+</footer>
+
+</body>
+</html>
