@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cal-Secure 2.0 → Splunk Enterprise Security Premier Edition | Comprehensive Capability Mapping</title>
+  <style>
+    :root {
+      --bg: #f2f5f7;
+      --panel: #ffffff;
+      --text: #07182d;
+      --muted: #536070;
+      --accent: #ff007f;
+      --blue: #0a60ff;
+      --blue-light: #e0eeff;
+      --border: #ced4db;
+      --success: #2d6a1e;
+      --success-bg: #eef8ea;
+      --warn-bg: #fff8f0;
+      --warn-border: #e8a020;
+      --ca-blue: #003366;
+      --ca-gold: #c69214;
+      --ca-teal: #0077a8;
+      --govern: #5b3ea8;
+      --identify: #0a60ff;
+      --protect: #2d6a1e;
+      --detect: #c69214;
+      --respond: #c0392b;
+      --recover: #0077a8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      font-size: 15px;
+    }
+    header {
+      background: linear-gradient(135deg, var(--ca-blue) 0%, #12275c 55%, #0f214d 100%);
+      color: #fff;
+      padding: 1.75rem 2rem 2rem;
+    }
+    header .inner { max-width: 1200px; margin: 0 auto; }
+    header .eyebrow {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #7ae2ff;
+      margin: 0 0 0.5rem;
+    }
+    header h1 {
+      margin: 0;
+      font-size: clamp(1.35rem, 3vw, 1.9rem);
+      font-weight: 700;
+      line-height: 1.25;
+      max-width: 58rem;
+    }
+    header .subtitle {
+      margin: 0.75rem 0 0;
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.95rem;
+      max-width: 54rem;
+    }
+    header .meta {
+      margin-top: 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.65);
+    }
+    header .meta span {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 0.25rem 0.65rem;
+      border-radius: 4px;
+    }
+    nav.toc {
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      overflow-x: auto;
+    }
+    nav.toc ul {
+      list-style: none;
+      margin: 0 auto;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem 1.25rem;
+      max-width: 1200px;
+      font-size: 0.82rem;
+    }
+    nav.toc a { color: var(--blue); text-decoration: none; white-space: nowrap; }
+    nav.toc a:hover { text-decoration: underline; }
+    main { max-width: 1200px; margin: 0 auto; padding: 2rem 2rem 3rem; }
+    section { margin-bottom: 2.75rem; }
+    h2 {
+      font-size: 1.35rem;
+      margin: 0 0 1rem;
+      color: var(--text);
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 0.4rem;
+    }
+    h3 {
+      font-size: 1.05rem;
+      margin: 1.25rem 0 0.5rem;
+      color: var(--text);
+    }
+    h4 {
+      font-size: 0.95rem;
+      margin: 1rem 0 0.4rem;
+      color: var(--muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    p { margin: 0.65rem 0; }
+    ul, ol { margin: 0.5rem 0 0.75rem 1.25rem; padding: 0; }
+    li { margin: 0.35rem 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.86rem;
+      margin: 1rem 0;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.55rem 0.65rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: var(--blue-light);
+      font-weight: 600;
+    }
+    tr:nth-child(even) td { background: #f8fafc; }
+    .callout {
+      padding: 1.1rem 1.25rem;
+      margin: 1.25rem 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .callout.accent {
+      background: #fff0f7;
+      border: 1px solid #ffb8d9;
+      border-left: 4px solid var(--accent);
+    }
+    .callout.info {
+      background: var(--blue-light);
+      border: 1px solid #b8d4ff;
+      border-left: 4px solid var(--blue);
+    }
+    .callout.success {
+      background: var(--success-bg);
+      border: 1px solid #b8ddb0;
+      border-left: 4px solid var(--success);
+    }
+    .callout.warn {
+      background: var(--warn-bg);
+      border: 1px solid var(--warn-border);
+      border-left: 4px solid var(--warn-border);
+    }
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 0.75rem 0 1rem;
+    }
+    .pill {
+      display: inline-block;
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .pill-govern { background: #ede8f8; color: var(--govern); }
+    .pill-identify { background: var(--blue-light); color: var(--identify); }
+    .pill-protect { background: var(--success-bg); color: var(--protect); }
+    .pill-detect { background: #fef6e0; color: #8a6d0a; }
+    .pill-respond { background: #fdecea; color: var(--respond); }
+    .pill-recover { background: #e0f4fa; color: var(--recover); }
+    .function-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+    .function-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 5.5rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #fff;
+    }
+    .badge-govern { background: var(--govern); }
+    .badge-identify { background: var(--identify); }
+    .badge-protect { background: var(--protect); }
+    .badge-detect { background: var(--detect); color: #1a1200; }
+    .badge-respond { background: var(--respond); }
+    .badge-recover { background: var(--recover); }
+    .pillar-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .pillar-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem;
+    }
+    .pillar-card h3 { margin-top: 0; }
+    .pillar-card.people { border-top: 4px solid var(--ca-gold); }
+    .pillar-card.process { border-top: 4px solid var(--blue); }
+    .pillar-card.technology { border-top: 4px solid var(--ca-teal); }
+    .kpi { font-weight: 600; color: var(--success); }
+    .init-num {
+      display: inline-block;
+      background: var(--text);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.1rem 0.4rem;
+      border-radius: 3px;
+      margin-right: 0.25rem;
+    }
+    .roadmap-year {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--ca-gold);
+      border-radius: 0 8px 8px 0;
+      padding: 1.25rem 1.5rem;
+      margin: 1rem 0;
+    }
+    .roadmap-year h3 { margin-top: 0; color: var(--ca-blue); }
+    .roadmap-milestone {
+      background: var(--success-bg);
+      border: 1px solid #b8ddb0;
+      padding: 0.65rem 0.85rem;
+      border-radius: 4px;
+      font-size: 0.88rem;
+      margin-top: 0.75rem;
+    }
+    .component-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin: 0.75rem 0;
+    }
+    .component-tag {
+      background: #07182d;
+      color: #fff;
+      font-size: 0.75rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 3px;
+    }
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--muted);
+      background: var(--panel);
+    }
+    @media print {
+      nav.toc { position: static; }
+      section { page-break-inside: avoid; }
+      .roadmap-year { page-break-inside: avoid; }
+    }
+    @media (max-width: 768px) {
+      main { padding: 1.25rem; }
+      table { font-size: 0.78rem; }
+      th, td { padding: 0.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <p class="eyebrow">California State Cybersecurity Framework</p>
+    <h1>Cal-Secure 2.0 → Splunk Enterprise Security Premier Edition</h1>
+    <p class="subtitle">Comprehensive strategic mapping of Cal-Secure 2.0 requirements to Splunk ES Premier capabilities across NIST CSF 2.0 functions, People–Process–Technology pillars, and a phased 5-year rollout aligned to statewide cybersecurity maturity goals.</p>
+    <div class="meta">
+      <span>Framework: Cal-Secure 2.0</span>
+      <span>Platform: Splunk ES Premier (Enterprise + ES + SOAR + TIM)</span>
+      <span>Alignment: NIST CSF 2.0</span>
+      <span>Audience: Executive &amp; Technical Leadership</span>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Table of contents">
+  <ul>
+    <li><a href="#executive-summary">Executive Summary</a></li>
+    <li><a href="#platform-components">Platform Components</a></li>
+    <li><a href="#nist-overview">NIST CSF Overview</a></li>
+    <li><a href="#govern">Govern</a></li>
+    <li><a href="#identify">Identify</a></li>
+    <li><a href="#protect">Protect</a></li>
+    <li><a href="#detect">Detect</a></li>
+    <li><a href="#respond">Respond</a></li>
+    <li><a href="#recover">Recover</a></li>
+    <li><a href="#people-pillar">People Pillar</a></li>
+    <li><a href="#process-pillar">Process Pillar</a></li>
+    <li><a href="#technology-pillar">Technology Pillar</a></li>
+    <li><a href="#use-cases">High-Value Use Cases</a></li>
+    <li><a href="#metrics">Recommended Metrics</a></li>
+    <li><a href="#roadmap">5-Year Roadmap</a></li>
+    <li><a href="#positioning">Summary Positioning</a></li>
+  </ul>
+</nav>
+
+<main>
+
+  <!-- EXECUTIVE SUMMARY -->
+  <section id="executive-summary">
+    <h2>Executive Summary</h2>
+    <p>Splunk Enterprise Security Premier Edition provides a unified security analytics, automation, threat intelligence, and reporting platform that aligns directly with Cal-Secure 2.0's mission to help California state entities mature from reactive cybersecurity operations to proactive, risk-based, intelligence-driven defense. The platform supports all three Cal-Secure pillars—<strong>People</strong>, <strong>Process</strong>, and <strong>Technology</strong>—while mapping comprehensively to the six NIST CSF 2.0 functions adopted by the framework.</p>
+
+    <div class="component-list">
+      <span class="component-tag">Splunk Enterprise</span>
+      <span class="component-tag">Splunk Enterprise Security (SIEM)</span>
+      <span class="component-tag">Splunk SOAR</span>
+      <span class="component-tag">Splunk Threat Intelligence Management (TIM)</span>
+      <span class="component-tag">Splunk UBA</span>
+      <span class="component-tag">Risk-Based Alerting (RBA)</span>
+      <span class="component-tag">Asset &amp; Identity Framework</span>
+      <span class="component-tag">Mission Control</span>
+      <span class="component-tag">Splunk Attack Analyzer</span>
+    </div>
+
+    <div class="callout accent">
+      <strong>Strategic Value:</strong> Splunk ES Premier enables California entities to centralize telemetry, prioritize by business risk, automate response at machine speed, fuse statewide threat intelligence with Cal-CSIC, and deliver executive-ready compliance and maturity reporting—supporting both large agencies operating centralized SOCs and smaller entities consuming shared security services.
+    </div>
+
+    <div class="pill-row">
+      <span class="pill pill-govern">Govern</span>
+      <span class="pill pill-identify">Identify</span>
+      <span class="pill pill-protect">Protect</span>
+      <span class="pill pill-detect">Detect</span>
+      <span class="pill pill-respond">Respond</span>
+      <span class="pill pill-recover">Recover</span>
+    </div>
+  </section>
+
+  <!-- PLATFORM COMPONENTS -->
+  <section id="platform-components">
+    <h2>Splunk ES Premier Platform Components</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Component</th>
+          <th>Primary Cal-Secure Role</th>
+          <th>Key Capabilities</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Splunk Enterprise</strong></td>
+          <td>Detect, Identify, Govern</td>
+          <td>Centralized log management, scalable data repository, search and reporting, long-term retention for audit evidence</td>
+        </tr>
+        <tr>
+          <td><strong>Splunk Enterprise Security (ES)</strong></td>
+          <td>Detect, Respond, Govern</td>
+          <td>SIEM analytics, correlation searches, notable events, incident review, MITRE ATT&CK mapping, ESCU content updates</td>
+        </tr>
+        <tr>
+          <td><strong>Splunk SOAR</strong></td>
+          <td>Protect, Respond, Recover</td>
+          <td>Automated playbooks, enrichment, containment, ticketing integration, escalation workflows, approval gates</td>
+        </tr>
+        <tr>
+          <td><strong>Threat Intelligence Management (TIM)</strong></td>
+          <td>Detect, Govern, Protect</td>
+          <td>Feed aggregation, normalization, bi-directional sharing with Cal-CSIC, indicator operationalization</td>
+        </tr>
+        <tr>
+          <td><strong>User Behavior Analytics (UBA)</strong></td>
+          <td>Detect, Govern</td>
+          <td>ML-driven behavioral baselines, insider threat detection, shadow AI/SaaS anomaly identification</td>
+        </tr>
+        <tr>
+          <td><strong>Risk-Based Alerting (RBA)</strong></td>
+          <td>Govern, Identify, Detect</td>
+          <td>Continuous risk scoring across users/assets/systems, alert volume reduction, business-context prioritization</td>
+        </tr>
+        <tr>
+          <td><strong>Asset &amp; Identity Framework</strong></td>
+          <td>Identify, Protect</td>
+          <td>Dynamic asset inventory, identity correlation, CMDB/endpoint/network telemetry integration</td>
+        </tr>
+        <tr>
+          <td><strong>Mission Control</strong></td>
+          <td>Respond, Process</td>
+          <td>Unified case management, multi-tier escalation, cross-entity coordination views</td>
+        </tr>
+        <tr>
+          <td><strong>Splunk Attack Analyzer</strong></td>
+          <td>Detect, Protect</td>
+          <td>Safe file/URL detonation, malware triage, adversary emulation support</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- NIST CSF OVERVIEW -->
+  <section id="nist-overview">
+    <h2>NIST CSF 2.0 — High-Level Function Mapping</h2>
+    <p>The six core NIST CSF 2.0 functions adopted by Cal-Secure 2.0 map to Splunk ES Premier capabilities as follows. Each function area below includes strategic objectives, initiatives, technical outcomes, KPIs, and business outcomes.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Function</th>
+          <th>Cal-Secure Initiatives</th>
+          <th>Technical Outcome</th>
+          <th>KPIs / Metrics</th>
+          <th>Business Outcome</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="function-badge badge-govern">Govern</span></td>
+          <td>Risk Management, AI Governance, Metrics &amp; Reporting, Supply Chain Management, Emerging Technology, Quantum Encryption Readiness</td>
+          <td>Centralizes risk scoring via RBA; executive dashboards for compliance, AI usage monitoring, and security posture metrics</td>
+          <td class="kpi">30–50% improvement in risk visibility; 40–60% reduction in audit preparation time</td>
+          <td>Empowers executive leadership with data-driven insights to manage enterprise risk, ensure regulatory compliance, and safely adopt emerging technologies</td>
+        </tr>
+        <tr>
+          <td><span class="function-badge badge-identify">Identify</span></td>
+          <td>Asset Management, Vulnerability Management</td>
+          <td>Asset &amp; Identity frameworks contextualize IT/OT assets; vulnerability scanner data correlated to prioritize patching by active exploitation and asset criticality</td>
+          <td class="kpi">40–60% faster critical vulnerability prioritization; 50–70% improvement in asset visibility</td>
+          <td>Reduces attack surface through accurate asset tracking and remediation focused on the most impactful vulnerabilities</td>
+        </tr>
+        <tr>
+          <td><span class="function-badge badge-protect">Protect</span></td>
+          <td>AI SecOps Protection, Network/Infrastructure Threat Protection, Identity Management, DLP, OT Security, Anti-Phishing, Enterprise Encryption</td>
+          <td>Splunk SOAR automates containment and adaptive access controls; integrates with firewalls, IAM, and endpoint tools for zero-trust enforcement</td>
+          <td class="kpi">50–75% increase in automated containment; 40–60% reduction in unauthorized access reaching critical systems</td>
+          <td>Safeguards critical operations, sensitive data, and physical infrastructure through proactive, automated defensive measures</td>
+        </tr>
+        <tr>
+          <td><span class="function-badge badge-detect">Detect</span></td>
+          <td>AI SecOps Detection, Continuous Monitoring, Log Management, Insider Threat, Threat Hunting, Threat Intelligence, Anti-Malware</td>
+          <td>ES continuous log monitoring + UBA ML for insider anomalies; TIM enrichment for proactive threat hunting</td>
+          <td class="kpi">60–80% increase in unknown/insider threat detection; 70–90% improvement in log search/retrieval times</td>
+          <td>Protects intellectual property and brand reputation by rapidly identifying hidden threats before material damage</td>
+        </tr>
+        <tr>
+          <td><span class="function-badge badge-respond">Respond</span></td>
+          <td>Incident Management and Analysis, Incident Reporting and Mitigation</td>
+          <td>Centralized investigation in ES; standardized SOAR playbooks for triage, containment, and eradication</td>
+          <td class="kpi">70–90% reduction in MTTR; 60–80% improvement in analyst triage speed</td>
+          <td>Minimizes financial loss and business disruption through rapid, consistent incident mitigation</td>
+        </tr>
+        <tr>
+          <td><span class="function-badge badge-recover">Recover</span></td>
+          <td>Business Continuity Integration, Incident &amp; Disaster Recovery, Continuous Learning &amp; Adaptation</td>
+          <td>Post-incident dashboards; ITSM integration for DR workflows; automated feedback loops to tune detection rules</td>
+          <td class="kpi">30–50% reduction in repeat incidents; 40–60% faster post-incident reporting</td>
+          <td>Ensures organizational resilience by rapidly restoring operations and continuously adapting security posture</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- GOVERN -->
+  <section id="govern">
+    <div class="function-header">
+      <span class="function-badge badge-govern">Govern</span>
+      <h2 style="border:none;margin:0;padding:0;">Deep Dive — Govern Function</h2>
+    </div>
+    <p>Cal-Secure 2.0 Govern initiatives (1–6) establish statewide oversight, risk management, supply chain security, AI governance, emerging technology policy, and quantum encryption readiness. Splunk ES Premier provides the analytics, risk scoring, and reporting layer to operationalize these requirements.</p>
+
+    <h3>Govern Risk Management &amp; Reporting</h3>
+    <p><span class="init-num">2</span><span class="init-num">6</span> Govern Risk Management · Govern Metrics and Reporting</p>
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>Detail</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Technical Outcome</strong></td><td>Implements Risk-Based Alerting (RBA) to aggregate risk scores across users and systems; centralized dashboards visualize security performance indicators and compliance posture</td></tr>
+        <tr><td><strong>Splunk Capabilities</strong></td><td>RBA, executive dashboards, maturity reporting, MITRE ATT&CK/NIST framework mapping, role-based access for multi-tier governance views</td></tr>
+        <tr><td><strong>KPIs</strong></td><td class="kpi">40–60% reduction in overall alert volume; 30–50% improvement in compliance reporting speed</td></tr>
+        <tr><td><strong>Business Outcome</strong></td><td>Empowers executive leadership with clear, data-driven insights for informed risk decisions and continuous regulatory compliance</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Govern Supply Chain Security</h3>
+    <p><span class="init-num">1</span> Govern Supply Chain Management</p>
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>Detail</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Technical Outcome</strong></td><td>Ingests third-party vendor access logs; correlates with TIM to monitor external service provider activity and detect compromised supply chain vectors</td></tr>
+        <tr><td><strong>Splunk Capabilities</strong></td><td>TIM indicator matching, vendor access log correlation, anomaly detection on third-party network activity, supply chain threat feed integration</td></tr>
+        <tr><td><strong>KPIs</strong></td><td class="kpi">50–70% increase in third-party network access visibility; 30–45% faster vendor-related anomaly identification</td></tr>
+        <tr><td><strong>Business Outcome</strong></td><td>Protects organizational integrity by mitigating third-party risks and ensuring external partners adhere to corporate security standards</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Govern AI &amp; Emerging Technology</h3>
+    <p><span class="init-num">3</span><span class="init-num">5</span> Govern Artificial Intelligence Governance · Govern Emerging Technology</p>
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>Detail</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Technical Outcome</strong></td><td>Monitors network and proxy logs to identify unauthorized "Shadow AI" usage; UBA detects anomalous interactions with newly adopted enterprise technologies</td></tr>
+        <tr><td><strong>Splunk Capabilities</strong></td><td>Proxy/web gateway log analysis, UBA behavioral baselines, SaaS discovery dashboards, policy enforcement triggers via SOAR</td></tr>
+        <tr><td><strong>KPIs</strong></td><td class="kpi">60–80% improvement in detecting unauthorized AI/SaaS tool usage; 40–60% faster policy enforcement on emerging tech platforms</td></tr>
+        <tr><td><strong>Business Outcome</strong></td><td>Enables safe adoption of innovative technologies while preventing data leakage and maintaining strict corporate governance</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Govern Quantum Readiness</h3>
+    <p><span class="init-num">4</span> Govern Quantum Encryption Readiness</p>
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>Detail</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Technical Outcome</strong></td><td>Analyzes network traffic and certificate logs to build continuous inventory of cryptographic protocols; identifies legacy encryption standards (e.g., outdated TLS) requiring modernization</td></tr>
+        <tr><td><strong>Splunk Capabilities</strong></td><td>Certificate authority log ingestion, TLS handshake analysis, cryptographic algorithm/key length inventory dashboards, non-compliant protocol alerting</td></tr>
+        <tr><td><strong>KPIs</strong></td><td class="kpi">70–90% increase in cryptographic asset visibility; 50–75% faster identification of non-compliant encryption protocols</td></tr>
+        <tr><td><strong>Business Outcome</strong></td><td>Future-proofs sensitive data against advanced computational threats, ensuring long-term confidentiality and strategic preparedness</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout warn">
+      <strong>Note:</strong> Splunk provides visibility and reporting for crypto-agility planning. Actual post-quantum cryptographic remediation requires PKI and application-layer tooling outside Splunk's scope.
+    </div>
+  </section>
+
+  <!-- IDENTIFY -->
+  <section id="identify">
+    <div class="function-header">
+      <span class="function-badge badge-identify">Identify</span>
+      <h2 style="border:none;margin:0;padding:0;">Deep Dive — Identify Function</h2>
+    </div>
+    <p>Cal-Secure 2.0 Identify initiatives (7–8) focus on maintaining accurate asset inventories and prioritizing vulnerability remediation based on real-world risk rather than static scores.</p>
+
+    <h3>Identify Asset Management</h3>
+    <p><span class="init-num">7</span> Identify Asset Management</p>
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>Detail</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Technical Outcome</strong></td><td>Integrates CMDB, endpoint, and network telemetry into the Splunk ES Asset and Identity Framework for dynamic, real-time inventory of enterprise hardware, software, and system classifications</td></tr>
+        <tr><td><strong>Splunk Capabilities</strong></td><td>Asset &amp; Identity Framework, CMDB integration, endpoint agent telemetry, network discovery, IT/OT asset classification, rogue device detection</td></tr>
+        <tr><td><strong>KPIs</strong></td><td class="kpi">50–70% improvement in real-time asset visibility; 40–60% reduction in unmanaged or rogue devices</td></tr>
+        <tr><td><strong>Business Outcome</strong></td><td>Optimizes IT investments and reduces attack surface through accurate, continuous accounting of all enterprise infrastructure</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Identify Vulnerability Management</h3>
+    <p><span class="init-num">8</span> Identify Vulnerability Management</p>
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>Detail</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Technical Outcome</strong></td><td>Ingests and normalizes vulnerability scanner data; correlates with asset criticality and TIM to prioritize patching based on active exploitation risk</td></tr>
+        <tr><td><strong>Splunk Capabilities</strong></td><td>Scanner data ingestion (Tenable, Qualys, Rapid7), exploit-intelligence correlation, asset criticality weighting, SOAR-driven patch remediation ticketing, SLA tracking</td></tr>
+        <tr><td><strong>KPIs</strong></td><td class="kpi">40–60% faster critical vulnerability prioritization; 30–50% reduction in time-to-patch for high-risk assets</td></tr>
+        <tr><td><strong>Business Outcome</strong></td><td>Focuses remediation resources on the most imminent threats, reducing overall corporate risk exposure</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- PROTECT -->
+  <section id="protect">
+    <div class="function-header">
+      <span class="function-badge badge-protect">Protect</span>
+      <h2 style="border:none;margin:0;padding:0;">Deep Dive — Protect Function</h2>
+    </div>
+    <p>Cal-Secure 2.0 Protect initiatives (9–22) span AI-driven defensive automation, network/infrastructure protection, identity and data safeguards, OT/mobile/application security, and human-risk reduction. Splunk SOAR is the primary automation engine for protective actions.</p>
+
+    <h3>Protect AI SecOps &amp; Infrastructure</h3>
+    <p><span class="init-num">9</span><span class="init-num">12</span><span class="init-num">19</span> AI SecOps Protection · Network Threat Protection · Infrastructure Threat Protection</p>
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>Detail</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Technical Outcome</strong></td><td>Deploys Splunk SOAR to execute AI-driven, automated response playbooks that dynamically update firewall rules, isolate compromised endpoints, and block malicious network traffic across hybrid environments</td></tr>
+        <tr><td><strong>Splunk Capabilities</strong></td><td>SOAR playbook automation, firewall/IAM/EDR integration, network traffic blocking, endpoint isolation workflows, hybrid cloud containment</td></tr>
+        <tr><td><strong>KPIs</strong></td><td class="kpi">50–75% increase in automated threat containment; 60–80% reduction in time-to-mitigate network threats</td></tr>
+        <tr><td><strong>Business Outcome</strong></td><td>Safeguards critical business operations and infrastructure by neutralizing active cyber threats at machine speed</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Protect Identity &amp; Data</h3>
+    <p><span class="init-num">17</span><span class="init-num">18</span><span class="init-num">15</span> Identity Management, Authentication &amp; Access Control · DLP · Enterprise Encryption</p>
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>Detail</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Technical Outcome</strong></td><td>Correlates IAM, MFA, and DLP telemetry within Splunk ES to monitor access anomalies; SOAR automatically revokes compromised credentials and enforces zero-trust data protection policies</td></tr>
+        <tr><td><strong>Splunk Capabilities</strong></td><td>IAM/MFA log correlation, DLP event monitoring, automated credential revocation playbooks, zero-trust policy enforcement, encryption compliance dashboards</td></tr>
+        <tr><td><strong>KPIs</strong></td><td class="kpi">40–60% reduction in unauthorized access reaching critical systems; 50–70% faster containment of potential data exfiltration</td></tr>
+        <tr><td><strong>Business Outcome</strong></td><td>Protects sensitive corporate and customer data, ensuring privacy regulation adherence and brand trust</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Protect Application, OT &amp; Endpoint</h3>
+    <p><span class="init-num">13</span><span class="init-num">16</span><span class="init-num">20</span><span class="init-num">14</span> Application Security · OT Security · Application Whitelisting · Mobile Device Management</p>
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>Detail</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Technical Outcome</strong></td><td>Integrates OT/SCADA, MDM, and application logs into Splunk to monitor critical control systems and enforce application allowlisting; triggers automated alerts for unauthorized software execution or mobile device non-compliance</td></tr>
+        <tr><td><strong>Splunk Capabilities</strong></td><td>OT/ICS telemetry ingestion (specialized TAs), MDM log monitoring, application allowlist enforcement, unauthorized execution alerting, Claroty/Medigate integration</td></tr>
+        <tr><td><strong>KPIs</strong></td><td class="kpi">60–80% improvement in OT and mobile environment visibility; 40–60% reduction in unauthorized application executions</td></tr>
+        <tr><td><strong>Business Outcome</strong></td><td>Ensures continuous, safe operation of industrial control systems and mobile workforces, preventing costly physical disruptions</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Protect Human Risk &amp; Physical Security</h3>
+    <p><span class="init-num">10</span><span class="init-num">11</span><span class="init-num">21</span><span class="init-num">22</span> Anti-Phishing · Security &amp; Privacy Training · Cybersecurity Skills Training · Physical &amp; Environmental Security</p>
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>Detail</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Technical Outcome</strong></td><td>Automates phishing email analysis and extraction via Splunk SOAR; dashboards correlate physical badge access logs with logical access and track enterprise-wide security training compliance</td></tr>
+        <tr><td><strong>Splunk Capabilities</strong></td><td>SOAR phishing triage playbooks, email security integration, physical access log correlation, training compliance dashboards, badge/logical access anomaly detection</td></tr>
+        <tr><td><strong>KPIs</strong></td><td class="kpi">70–90% faster triage and removal of malicious phishing emails; 30–50% improvement in physical access anomaly and training compliance tracking</td></tr>
+        <tr><td><strong>Business Outcome</strong></td><td>Reduces human attack surface and physical vulnerabilities, fostering security awareness and mitigating socially engineered breaches</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- DETECT -->
+  <section id="detect">
+    <div class="function-header">
+      <span class="function-badge badge-detect">Detect</span>
+      <h2 style="border:none;margin:0;padding:0;">Deep Dive — Detect Function</h2>
+    </div>
+    <p>Cal-Secure 2.0 Detect initiatives (23–30) establish continuous monitoring, AI-driven detection, insider threat programs, threat intelligence fusion, and proactive threat hunting capabilities.</p>
+
+    <h3>Detect Log Management &amp; Continuous Monitoring</h3>
+    <p><span class="init-num">26</span><span class="init-num">27</span> Continuous Monitoring · Log Management</p>
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>Detail</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Technical Outcome</strong></td><td>Centralizes and normalizes log data across the enterprise into a scalable repository; enables real-time continuous monitoring and automated compliance auditing</td></tr>
+        <tr><td><strong>Splunk Capabilities</strong></td><td>Splunk Enterprise data platform, CIM normalization, log source health monitoring, scheduled compliance searches, long-term retention for audit evidence</td></tr>
+        <tr><td><strong>KPIs</strong></td><td class="kpi">70–90% improvement in log search and retrieval times; 40–60% increase in overall security visibility</td></tr>
+        <tr><td><strong>Business Outcome</strong></td><td>Ensures regulatory compliance and operational resilience through a comprehensive system of record for all enterprise activities</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Detect Network &amp; Malware Threats</h3>
+    <p><span class="init-num">24</span><span class="init-num">25</span> Network Threat Detection · Anti-Malware</p>
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>Detail</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Technical Outcome</strong></td><td>Correlates network traffic and endpoint telemetry within Splunk ES to identify unauthorized access attempts, lateral movement, and malicious payloads in real-time</td></tr>
+        <tr><td><strong>Splunk Capabilities</strong></td><td>ES correlation searches, network traffic analysis, endpoint telemetry correlation, ESCU detection content, Splunk Attack Analyzer for malware detonation</td></tr>
+        <tr><td><strong>KPIs</strong></td><td class="kpi">50–70% faster network anomaly detection; 40–60% reduction in malware dwell time</td></tr>
+        <tr><td><strong>Business Outcome</strong></td><td>Protects critical infrastructure and sensitive data from external compromise, minimizing operational downtime and financial loss</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Detect AI SecOps &amp; Insider Threats</h3>
+    <p><span class="init-num">23</span><span class="init-num">29</span> AI SecOps Detection · Insider Threat</p>
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>Detail</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Technical Outcome</strong></td><td>Leverages Splunk UBA and machine learning to establish behavioral baselines; automatically detects anomalous activities and unauthorized data access by credentialed users</td></tr>
+        <tr><td><strong>Splunk Capabilities</strong></td><td>UBA ML models, behavioral baseline establishment, insider threat use cases, anomalous data access detection, risk score aggregation via RBA</td></tr>
+        <tr><td><strong>KPIs</strong></td><td class="kpi">60–80% increase in unknown and insider threat detection; 50–75% reduction in false positive alerts</td></tr>
+        <tr><td><strong>Business Outcome</strong></td><td>Safeguards intellectual property and brand reputation by proactively identifying malicious or negligent internal behaviors</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Detect Threat Intelligence &amp; Hunting</h3>
+    <p><span class="init-num">28</span><span class="init-num">30</span> Threat Intelligence · Threat Hunting Program</p>
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>Detail</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Technical Outcome</strong></td><td>Integrates external threat feeds via TIM to enrich security events; empowers analysts with contextual data to proactively hunt for advanced persistent threats</td></tr>
+        <tr><td><strong>Splunk Capabilities</strong></td><td>TIM feed aggregation, indicator operationalization into ES rules, threat hunting workspaces, Cal-CSIC bi-directional intel sharing, campaign mapping</td></tr>
+        <tr><td><strong>KPIs</strong></td><td class="kpi">50–70% improvement in threat intelligence correlation speed; 40–60% increase in proactive threat discoveries</td></tr>
+        <tr><td><strong>Business Outcome</strong></td><td>Enhances resilience by shifting from reactive to proactive defense, neutralizing sophisticated adversaries before business impact</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- RESPOND -->
+  <section id="respond">
+    <div class="function-header">
+      <span class="function-badge badge-respond">Respond</span>
+      <h2 style="border:none;margin:0;padding:0;">Deep Dive — Respond Function</h2>
+    </div>
+    <p>Cal-Secure 2.0 Respond initiatives (31–32) centralize incident management and automate standardized response, heavily leveraging Splunk SOAR for orchestration.</p>
+
+    <h3>Respond Incident Management and Analysis</h3>
+    <p><span class="init-num">31</span> Incident Management and Analysis</p>
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>Detail</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Technical Outcome</strong></td><td>Centralizes security alerts within the Splunk ES Incident Review dashboard; SOAR automates evidence gathering, threat enrichment, and root cause analysis across disparate security tools</td></tr>
+        <tr><td><strong>Splunk Capabilities</strong></td><td>ES Incident Review, Mission Control case management, SOAR automated enrichment, multi-tool evidence collection, guided investigation workflows</td></tr>
+        <tr><td><strong>KPIs</strong></td><td class="kpi">60–80% improvement in analyst triage speed; 50–70% reduction in manual investigation steps</td></tr>
+        <tr><td><strong>Business Outcome</strong></td><td>Maximizes security team efficiency and ensures rapid, accurate understanding of cyber threats to minimize business disruption</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Respond Incident Reporting and Mitigation</h3>
+    <p><span class="init-num">32</span> Incident Reporting and Mitigation</p>
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>Detail</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Technical Outcome</strong></td><td>Executes standardized SOAR playbooks to automatically contain threats (host isolation, credential disablement), generate compliance-ready incident reports, and trigger stakeholder notifications</td></tr>
+        <tr><td><strong>Splunk Capabilities</strong></td><td>SOAR containment playbooks, automated reporting, ServiceNow/ITSM ticket creation, escalation chains, approval workflows, stakeholder notification automation</td></tr>
+        <tr><td><strong>KPIs</strong></td><td class="kpi">70–90% reduction in MTTR; 40–60% faster threat containment execution</td></tr>
+        <tr><td><strong>Business Outcome</strong></td><td>Protects corporate assets and brand reputation by swiftly neutralizing active cyber events with transparent, timely communication to leadership and regulators</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- RECOVER -->
+  <section id="recover">
+    <div class="function-header">
+      <span class="function-badge badge-recover">Recover</span>
+      <h2 style="border:none;margin:0;padding:0;">Deep Dive — Recover Function</h2>
+    </div>
+    <p>Cal-Secure 2.0 Recover initiatives (33–35) integrate business continuity, disaster recovery, and continuous learning to build long-term organizational resilience.</p>
+
+    <h3>Recover Business Continuity &amp; Disaster Recovery</h3>
+    <p><span class="init-num">33</span><span class="init-num">34</span> Business Continuity Integration · Incident and Disaster Recovery</p>
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>Detail</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Technical Outcome</strong></td><td>Integrates Splunk ES and SOAR with ITSM platforms to orchestrate disaster recovery workflows; real-time dashboards monitor system restoration and validate recovered asset integrity</td></tr>
+        <tr><td><strong>Splunk Capabilities</strong></td><td>ITSM integration (ServiceNow), recovery readiness dashboards, backup health monitoring, restoration timeline tracking, privileged access anomaly detection during recovery windows</td></tr>
+        <tr><td><strong>KPIs</strong></td><td class="kpi">40–60% faster post-recovery system integrity validation; 30–50% reduction in downtime during critical service restoration</td></tr>
+        <tr><td><strong>Business Outcome</strong></td><td>Ensures organizational resilience and minimizes financial impact by rapidly restoring critical business operations</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Recover Continuous Learning &amp; Adaptation</h3>
+    <p><span class="init-num">35</span> Continuous Learning and Adaptation</p>
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>Detail</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Technical Outcome</strong></td><td>Leverages post-incident data within Splunk ES for comprehensive root-cause analysis; dynamically tunes RBA thresholds and updates SOAR playbooks against newly identified attack vectors</td></tr>
+        <tr><td><strong>Splunk Capabilities</strong></td><td>Post-incident analysis dashboards, RBA threshold tuning, SOAR playbook iteration, detection rule refinement, after-action reporting automation</td></tr>
+        <tr><td><strong>KPIs</strong></td><td class="kpi">30–50% reduction in repeat security incidents; 40–60% improvement in post-incident audit and reporting speed</td></tr>
+        <tr><td><strong>Business Outcome</strong></td><td>Drives continuous improvement of security posture, ensuring the organization adapts to new threats and maximizes ROI on existing controls</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- PEOPLE PILLAR -->
+  <section id="people-pillar">
+    <h2>Cal-Secure 2.0 People Pillar Mapping</h2>
+    <p><strong>Goal:</strong> Build a ready, capable, and diverse public sector cybersecurity workforce and be known as a place to grow a mission-driven career.</p>
+
+    <div class="pillar-grid">
+      <div class="pillar-card people">
+        <h3>Workforce Optimization</h3>
+        <p>Splunk SOAR reduces analyst fatigue by automating repetitive, low-level tasks so staff can focus on high-value investigations and threat hunting.</p>
+      </div>
+      <div class="pillar-card people">
+        <h3>Skills Development</h3>
+        <p>Built-in guided investigation workflows within ES help junior analysts upskill quickly. RBA dashboards teach risk aggregation reasoning. SOAR playbook editors build automation skills aligned to the NICE framework.</p>
+      </div>
+      <div class="pillar-card people">
+        <h3>Career Pathways</h3>
+        <p>Role-based dashboard views (Tier 1 triage → Tier 2 investigation → Tier 3 hunting → detection engineering → SOC leadership) create natural career-progression checkpoints formalizable into job ladders.</p>
+      </div>
+      <div class="pillar-card people">
+        <h3>Executive Communication</h3>
+        <p>ES executive dashboards and Mission Control case views translate technical events into business-risk language for agency leaders, OIS, and legislative stakeholders.</p>
+      </div>
+      <div class="pillar-card people">
+        <h3>Streamlined Onboarding</h3>
+        <p>Prebuilt ESCU content updates and out-of-the-box correlation rules reduce ramp-up time. SOAR playbooks encode institutional knowledge, reducing dependency on tribal knowledge.</p>
+      </div>
+      <div class="pillar-card people">
+        <h3>Resource Sharing</h3>
+        <p>A shared Splunk platform allows entities to exchange detection content, dashboards, and playbooks statewide. CDT/Cal-CSIC can host a central content repository for cross-entity reuse.</p>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Cal-Secure Priority / Initiative</th>
+          <th>Splunk ES Premier Capability</th>
+          <th>Alignment</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Tailored cybersecurity training workshops and learning pathways</td>
+          <td>Notable event workflows, RBA dashboards, SOAR playbook editors</td>
+          <td>Hands-on SOC operations training tied to real detections rather than generic exercises</td>
+        </tr>
+        <tr>
+          <td>Standardized cybersecurity career pathways and retention toolkit</td>
+          <td>Repeatable SOC workflows, content libraries, detection engineering patterns, SOAR playbooks</td>
+          <td>Defines standardized responsibilities across Tier 1–3, hunters, detection engineers, and SOC managers</td>
+        </tr>
+        <tr>
+          <td>Cybersecurity communication skills development</td>
+          <td>Executive dashboards, risk scores, incident timelines, business-context reporting</td>
+          <td>Translates technical events into operational risk for non-technical stakeholders</td>
+        </tr>
+        <tr>
+          <td>Streamlined cybersecurity hiring and onboarding</td>
+          <td>Prebuilt detections, dashboards, investigation workflows, automated playbooks</td>
+          <td>Reduces dependency on tribal knowledge; shortens ramp time for new analysts</td>
+        </tr>
+        <tr>
+          <td>Vendor and resource sharing education program</td>
+          <td>Common platform for sharing dashboards, searches, playbooks, detections</td>
+          <td>Supports cross-entity reuse of security content and operational knowledge</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- PROCESS PILLAR -->
+  <section id="process-pillar">
+    <h2>Cal-Secure 2.0 Process Pillar Mapping</h2>
+    <p><strong>Goal:</strong> Strengthen collaboration, integration, and accountability to provide effective statewide oversight.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Cal-Secure Priority / Initiative</th>
+          <th>Splunk ES Premier Capability</th>
+          <th>Alignment</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Standardize and automate cybersecurity metrics and reporting</td>
+          <td>Customizable KPI dashboards (MTTD, MTTR, notable event volume, SLA adherence, vulnerability exposure, control coverage)</td>
+          <td>Measurable, automated cybersecurity maturity reporting for OIS oversight</td>
+        </tr>
+        <tr>
+          <td>Update risk models and KPIs for AI-accelerated exploit timelines</td>
+          <td>Risk-Based Alerting correlates activity across users, assets, identities, endpoints, networks, cloud, applications, and threat intelligence</td>
+          <td>Prioritizes the riskiest users, systems, and behaviors instead of treating every alert equally</td>
+        </tr>
+        <tr>
+          <td>Continuous-control validation and targeted risk mitigation</td>
+          <td>Telemetry ingestion from EDR, IAM, vulnerability scanners, firewalls, cloud platforms, email security, network sensors, and application logs</td>
+          <td>Creates a continuous evidence layer for control performance and gap identification</td>
+        </tr>
+        <tr>
+          <td>Formalize and evolve multi-tiered cybersecurity governance</td>
+          <td>Agency-level, department-level, and statewide dashboards with RBAC and segmentation; Mission Control escalation chains</td>
+          <td>Supports federated oversight while allowing entities to manage operational views; mirrors CalOES Cyber Task Force escalation tiers</td>
+        </tr>
+        <tr>
+          <td>Exercise statewide escalation procedures and cross-entity coordination</td>
+          <td>SOAR playbooks automate escalation paths, notifications, evidence collection, ticket creation, and response approvals</td>
+          <td>Repeatable incident escalation and coordinated response across agencies</td>
+        </tr>
+        <tr>
+          <td>Develop and deploy cybersecurity strategy and planning toolkits</td>
+          <td>Configuration bundles (apps, dashboards, detection packs) packaged as a "Cal-Secure 2.0 Starter Kit"</td>
+          <td>Operationalizes Cal-Secure practices through repeatable technical content for lower-maturity entities</td>
+        </tr>
+        <tr>
+          <td>Continuous security audit, assessment, and improvement program</td>
+          <td>Searchable evidence, historical logs, incident timelines, audit dashboards, compliance reporting, exportable PDF reports</td>
+          <td>Supports audits, self-assessments, peer reviews, and continuous improvement</td>
+        </tr>
+        <tr>
+          <td>Enhance cybersecurity procurement processes</td>
+          <td>Vendor-agnostic ingestion via CIM-compliant Technology Add-ons</td>
+          <td>Reduces tool fragmentation; new AI/defensive tools route telemetry into existing Splunk rather than triggering new architecture reviews</td>
+        </tr>
+        <tr>
+          <td>Strengthen public-private and cross-government collaboration</td>
+          <td>TIM bi-directional sharing, shared dashboards, common detections, SOAR workflows with Cal-CSIC, federal partners, and private sector</td>
+          <td>Enables shared situational awareness and operational collaboration</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- TECHNOLOGY PILLAR -->
+  <section id="technology-pillar">
+    <h2>Cal-Secure 2.0 Technology Pillar Mapping</h2>
+    <p><strong>Goal:</strong> Invest in modern tools and services to protect California's data and systems from new and growing cyber threats.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Cal-Secure Priority / Initiative</th>
+          <th>Splunk ES Premier Capability</th>
+          <th>Alignment</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Enhance security operations with AI and automation</td>
+          <td>Analytics, anomaly detection, RBA, SOAR playbooks for triage, investigation, enrichment, and response</td>
+          <td>SOC teams operate at greater speed and scale against AI-accelerated threats</td>
+        </tr>
+        <tr>
+          <td>Automated triage and enrichment</td>
+          <td>SOAR enriches alerts with asset data, identity context, threat intel, vulnerability data, geolocation, and endpoint details</td>
+          <td>Reduces manual analyst effort and improves response consistency</td>
+        </tr>
+        <tr>
+          <td>AI-assisted detection engineering</td>
+          <td>Correlation search recommendations, ESCU content packs, behavioral analytics, risk rules, MITRE ATT&CK mapping</td>
+          <td>Entities build and refine detections based on current threats</td>
+        </tr>
+        <tr>
+          <td>Response playbooks</td>
+          <td>SOAR visual playbook editor with hundreds of prebuilt playbooks for ticketing, containment, notifications, evidence gathering, and approvals</td>
+          <td>Faster, more consistent incident response</td>
+        </tr>
+        <tr>
+          <td>Provide statewide security services through shared cyber portfolio</td>
+          <td>Multi-tenant / role-segmented architecture for centralized SOC, MDR, shared SIEM, shared SOAR, entity-specific dashboards</td>
+          <td>Extends enterprise-grade security to small, medium, and large entities via CDT SOC / MSSP model</td>
+        </tr>
+        <tr>
+          <td>Statewide Cybersecurity Innovation Lab</td>
+          <td>Sandboxed Splunk instance for simulated attack telemetry, detection validation, playbook testing, and tool evaluation</td>
+          <td>Analytics backbone for cyber range; reduces risk to production environments</td>
+        </tr>
+        <tr>
+          <td>Strengthen critical infrastructure, OT, and cyber recovery</td>
+          <td>OT/ICS telemetry ingestion alongside IT data; recovery-readiness dashboards for backup health, privileged access anomalies, restoration timelines</td>
+          <td>Unified visibility across transportation, water, energy, and public-safety systems</td>
+        </tr>
+        <tr>
+          <td>Test recovery under ransomware and supply-chain scenarios</td>
+          <td>Backup health tracking, privileged access monitoring, anomalous authentication detection, restoration timeline metrics</td>
+          <td>Supports cyber recovery monitoring and after-action analysis</td>
+        </tr>
+        <tr>
+          <td>Enhance statewide threat intelligence fusion with Cal-CSIC</td>
+          <td>TIM aggregates, normalizes, correlates, and operationalizes intel from commercial, government, open-source, and internal sources</td>
+          <td>Closes the loop from intelligence received to detection deployed</td>
+        </tr>
+        <tr>
+          <td>Prepare for post-quantum cryptography</td>
+          <td>Certificate, TLS, application, asset, and configuration telemetry for cryptographic inventory and legacy algorithm identification</td>
+          <td>Supports crypto-agility planning visibility (remediation requires PKI/application tooling)</td>
+        </tr>
+        <tr>
+          <td>Accelerate vulnerability and patch management</td>
+          <td>Scanner data correlated with asset criticality, exploit intelligence, active detections, and business context; SOAR patch remediation ticketing</td>
+          <td>Patching based on active exploitation rather than CVSS score alone</td>
+        </tr>
+        <tr>
+          <td>Continuous monitoring and behavioral analysis</td>
+          <td>Telemetry correlation across endpoints, identities, networks, cloud, SaaS, applications, and infrastructure</td>
+          <td>Proactive monitoring and anomalous behavior detection</td>
+        </tr>
+        <tr>
+          <td>Accessible and highly available cybersecurity technology</td>
+          <td>Centralized, shared, or federated security analytics platform deployment models</td>
+          <td>Enterprise-grade security services for entities of all sizes</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>AI &amp; Automation Sub-Capability Detail</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Cal-Secure Sub-Capability</th>
+          <th>Splunk ES Premier Feature</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Automated triage and enrichment</td><td>SOAR auto-enrichment with asset/identity context, threat intel, geolocation</td></tr>
+        <tr><td>Continuous exposure management</td><td>RBA continuously re-scores exposure as new vulnerability/threat data arrives</td></tr>
+        <tr><td>Automated penetration testing / adversary emulation</td><td>Splunk Attack Analyzer for safe file/URL detonation; BAS tool integration</td></tr>
+        <tr><td>AI-assisted detection engineering</td><td>ES correlation search recommendations and ESCU content packs</td></tr>
+        <tr><td>Response playbooks</td><td>SOAR visual playbook editor with prebuilt and custom playbooks</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout info">
+      <strong>ITSI / ServiceNow Integration:</strong> Splunk IT Service Intelligence can complement ES by correlating security notable events with service-health KPIs, supporting the "uninterrupted delivery of vital public services" theme. ServiceNow integration enables SOAR-driven cases to automatically create ITSM tickets, aligning with cross-functional coordination requirements.
+    </div>
+  </section>
+
+  <!-- HIGH-VALUE USE CASES -->
+  <section id="use-cases">
+    <h2>High-Value Splunk Use Cases for Cal-Secure 2.0</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Cal-Secure Outcome</th>
+          <th>Splunk-Enabled Use Case</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Statewide visibility</td><td>Centralize security telemetry from agencies, departments, cloud environments, endpoints, identity systems, networks, and applications</td></tr>
+        <tr><td>Risk-based prioritization</td><td>Use RBA to focus analysts on high-risk users, assets, systems, and behaviors</td></tr>
+        <tr><td>Faster incident response</td><td>Automate enrichment, triage, escalation, containment coordination, and ticketing through SOAR</td></tr>
+        <tr><td>Threat intelligence fusion</td><td>Operationalize intel from Cal-CSIC, federal partners, commercial feeds, and internal investigations</td></tr>
+        <tr><td>Vulnerability prioritization</td><td>Correlate scanner findings with exploit activity, asset criticality, and observed attacker behavior</td></tr>
+        <tr><td>Executive reporting</td><td>Dashboards showing cybersecurity posture, risk trends, incident metrics, control coverage, and maturity progress</td></tr>
+        <tr><td>Shared SOC services</td><td>Enable CDT, Cal-CSIC, or large agencies to provide monitoring and response services to smaller entities</td></tr>
+        <tr><td>Audit readiness</td><td>Maintain searchable evidence, incident history, control validation data, and compliance-oriented reports</td></tr>
+        <tr><td>Critical infrastructure monitoring</td><td>Ingest IT and OT telemetry for transportation, water, energy, and public-safety systems</td></tr>
+        <tr><td>Cyber recovery monitoring</td><td>Track recovery readiness, backup status, identity activity, infrastructure health, and restoration timelines</td></tr>
+        <tr><td>Shadow AI / SaaS governance</td><td>Monitor proxy and network logs for unauthorized AI tool usage; UBA for anomalous SaaS interactions</td></tr>
+        <tr><td>Post-quantum crypto inventory</td><td>Continuous cryptographic protocol inventory from certificate and TLS telemetry</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- RECOMMENDED METRICS -->
+  <section id="metrics">
+    <h2>Recommended Cal-Secure 2.0 Metrics Splunk Can Support</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Metric Category</th>
+          <th>Example Metrics</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Detection</strong></td>
+          <td>Alert volume, notable event trends, detection coverage, MITRE ATT&CK coverage, false-positive rate, time to detect</td>
+        </tr>
+        <tr>
+          <td><strong>Response</strong></td>
+          <td>Mean time to acknowledge, mean time to triage, mean time to contain, mean time to resolve, playbook execution rate</td>
+        </tr>
+        <tr>
+          <td><strong>Risk</strong></td>
+          <td>Highest-risk users, highest-risk assets, recurring risky behaviors, critical asset exposure, risk trend by entity</td>
+        </tr>
+        <tr>
+          <td><strong>Vulnerability</strong></td>
+          <td>Critical vulnerabilities by business service, exploit-aware prioritization, patch SLA status, exposure duration</td>
+        </tr>
+        <tr>
+          <td><strong>Threat Intelligence</strong></td>
+          <td>Indicator matches, feed utilization, threat actor campaign mapping, intelligence-to-detection conversion rate</td>
+        </tr>
+        <tr>
+          <td><strong>Workforce Efficiency</strong></td>
+          <td>Analyst workload, automation rate, manual task reduction, case backlog, escalation volume</td>
+        </tr>
+        <tr>
+          <td><strong>Governance</strong></td>
+          <td>Entity maturity dashboards, reporting compliance, control coverage, audit evidence availability, remediation progress</td>
+        </tr>
+        <tr>
+          <td><strong>Recovery</strong></td>
+          <td>Backup completion rates, restoration timelines, repeat incident rate, post-incident report turnaround, playbook update frequency</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 5-YEAR ROADMAP -->
+  <section id="roadmap">
+    <h2>5-Year Rollout Roadmap Aligned to Cal-Secure 2.0</h2>
+    <p>This roadmap phases Splunk ES Premier capabilities across the same multi-year horizon as Cal-Secure 2.0, progressing entities from foundational visibility to full AI-accelerated, statewide-integrated security operations.</p>
+
+    <div class="roadmap-year">
+      <h3>Year 1 — Foundation &amp; Visibility</h3>
+      <p><strong>Cal-Secure Theme:</strong> Establish baseline capabilities and common definitions across entities.</p>
+      <h4>People</h4>
+      <ul>
+        <li>Onboard core SOC staff with Splunk ES fundamentals and notable-event triage workflows</li>
+        <li>Establish role-based dashboard views for Tier 1 analysts to standardize daily operations</li>
+      </ul>
+      <h4>Process</h4>
+      <ul>
+        <li>Deploy baseline KPI dashboards (MTTD, MTTR, alert volume) to establish statewide reporting norms</li>
+        <li>Map initial data sources to NIST CSF 2.0 functions (Govern, Identify, Protect) within the Organizational Profile</li>
+      </ul>
+      <h4>Technology</h4>
+      <ul>
+        <li>Onboard priority log sources (identity, endpoint, network, cloud) into Splunk ES</li>
+        <li>Deploy Splunk ES Content Updates (ESCU) for out-of-the-box detection coverage</li>
+        <li>Stand up Splunk SOAR with high-value playbooks (phishing triage, account lockout)</li>
+      </ul>
+      <div class="roadmap-milestone"><strong>Milestone:</strong> Entities achieve baseline detection and reporting maturity, enabling participation in statewide metrics.</div>
+    </div>
+
+    <div class="roadmap-year">
+      <h3>Year 2 — Standardization &amp; Risk-Based Prioritization</h3>
+      <p><strong>Cal-Secure Theme:</strong> Adopt risk-based approach; streamline hiring, training, and procurement.</p>
+      <h4>People</h4>
+      <ul>
+        <li>Launch tailored training pathways using real Splunk detections as training scenarios</li>
+        <li>Formalize career-ladder checkpoints (Tier 1 → Tier 2 → Detection Engineer) tied to Splunk content authorship</li>
+      </ul>
+      <h4>Process</h4>
+      <ul>
+        <li>Implement Risk-Based Alerting aligned with NIST SP 800-37 RMF categorization</li>
+        <li>Begin continuous-control validation reporting for audit and self-assessment support</li>
+        <li>Integrate SOAR case escalation with agency-level governance tiers</li>
+      </ul>
+      <h4>Technology</h4>
+      <ul>
+        <li>Expand SOAR automation for automated enrichment and triage across more use cases</li>
+        <li>Onboard vulnerability scanner data; correlate with asset criticality for exploit-aware patch prioritization</li>
+        <li>Begin threat intelligence feed integration via Splunk Intelligence Management</li>
+      </ul>
+      <div class="roadmap-milestone"><strong>Milestone:</strong> Entities shift from reactive alerting to risk-prioritized operations; statewide KPI reporting becomes consistent.</div>
+    </div>
+
+    <div class="roadmap-year">
+      <h3>Year 3 — Automation &amp; Cross-Entity Collaboration</h3>
+      <p><strong>Cal-Secure Theme:</strong> Formalize governance, strengthen public-private collaboration, expand shared services.</p>
+      <h4>People</h4>
+      <ul>
+        <li>Roll out Cybersecurity Communication Skills training using Splunk executive dashboards</li>
+        <li>Cross-train analysts on SOAR playbook development</li>
+      </ul>
+      <h4>Process</h4>
+      <ul>
+        <li>Formalize multi-tiered governance escalation within Mission Control, aligned to CalOES Cyber Task Force procedures</li>
+        <li>Package standardized Splunk dashboard/detection bundles as Cal-Secure 2.0 Toolkit for lower-maturity entities</li>
+        <li>Establish shared threat-intel playbooks with Cal-CSIC for bi-directional intelligence sharing</li>
+      </ul>
+      <h4>Technology</h4>
+      <ul>
+        <li>Expand SOAR toward continuous exposure management and adversary emulation support</li>
+        <li>Integrate OT/ICS telemetry for critical infrastructure entities</li>
+        <li>Pilot Splunk Attack Analyzer for automated malware/URL triage</li>
+      </ul>
+      <div class="roadmap-milestone"><strong>Milestone:</strong> Statewide shared services model begins; smaller entities gain access to centralized detection/response support.</div>
+    </div>
+
+    <div class="roadmap-year">
+      <h3>Year 4 — AI-Accelerated Operations &amp; Resilience</h3>
+      <p><strong>Cal-Secure Theme:</strong> Match machine-speed threats; strengthen cyber recovery and critical infrastructure protection.</p>
+      <h4>People</h4>
+      <ul>
+        <li>Advance senior analysts into detection engineering and threat-hunting roles with AI-assisted tools</li>
+        <li>Expand leadership training on translating AI/automation risk decisions to executive and legislative stakeholders</li>
+      </ul>
+      <h4>Process</h4>
+      <ul>
+        <li>Update KPIs and risk models to reflect AI-accelerated exploit timelines using continuously recalculated risk scores</li>
+        <li>Formalize joint tabletop exercises with automated SOAR playbooks simulating sector-spanning incidents</li>
+      </ul>
+      <h4>Technology</h4>
+      <ul>
+        <li>Deploy AI-assisted detection engineering and automated adversary emulation workflows</li>
+        <li>Build cyber recovery dashboards tracking backup integrity, anomalous privileged access, and restoration timelines</li>
+        <li>Begin cryptographic inventory visibility (certificates, TLS, key lengths) for post-quantum readiness</li>
+      </ul>
+      <div class="roadmap-milestone"><strong>Milestone:</strong> Entities operate at near machine-speed detection/response; critical infrastructure and recovery resilience are measurable.</div>
+    </div>
+
+    <div class="roadmap-year">
+      <h3>Year 5 — Statewide Maturity &amp; Sustained Innovation</h3>
+      <p><strong>Cal-Secure Theme:</strong> Sustain progress, embed innovation, and maintain the roadmap as a living framework.</p>
+      <h4>People</h4>
+      <ul>
+        <li>Institutionalize Splunk-based career pathways as part of statewide cybersecurity workforce planning</li>
+        <li>Recognize high-performing entities/analysts through statewide recognition programs tied to maturity metrics</li>
+      </ul>
+      <h4>Process</h4>
+      <ul>
+        <li>Achieve full statewide reporting automation with maturity dashboards feeding directly into OIS oversight</li>
+        <li>Continuously refine toolkits and playbooks based on lessons learned (living-document model)</li>
+      </ul>
+      <h4>Technology</h4>
+      <ul>
+        <li>Operate a mature, AI-driven SOC with automated remediation for well-understood threat patterns</li>
+        <li>Fully integrate Statewide Cybersecurity Innovation Lab testing into production rollout decisions</li>
+        <li>Maintain crypto-agility tracking as NIST post-quantum algorithms are finalized and adopted</li>
+      </ul>
+      <div class="roadmap-milestone"><strong>Milestone:</strong> California entities operate a unified, adaptive, statewide security ecosystem consistent with Cal-Secure 2.0's long-term vision.</div>
+    </div>
+
+    <h3>Summary Progression</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Year</th>
+          <th>Primary Focus</th>
+          <th>Key Splunk Capability Introduced</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>Foundation &amp; Visibility</td><td>Core SIEM, basic SOAR playbooks, ESCU content</td></tr>
+        <tr><td>2</td><td>Risk-Based Prioritization</td><td>Risk-Based Alerting, vulnerability correlation, TIM integration</td></tr>
+        <tr><td>3</td><td>Automation &amp; Collaboration</td><td>Shared services, threat intel fusion, OT ingestion, Attack Analyzer</td></tr>
+        <tr><td>4</td><td>AI-Accelerated Resilience</td><td>AI-assisted detection, cyber recovery monitoring, crypto inventory</td></tr>
+        <tr><td>5</td><td>Statewide Maturity</td><td>Automated remediation, innovation lab integration, PQC tracking</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- SUMMARY POSITIONING -->
+  <section id="positioning">
+    <h2>Summary Positioning</h2>
+    <p>Splunk Enterprise Security Premier Edition supports Cal-Secure 2.0 by providing a common security analytics, automation, threat intelligence, and reporting platform that helps California entities mature from reactive cybersecurity operations to proactive, risk-based, intelligence-driven defense.</p>
+
+    <div class="pillar-grid">
+      <div class="pillar-card process">
+        <h3>Strongest Alignment — Process</h3>
+        <ul>
+          <li>Standardized metrics and KPI reporting</li>
+          <li>Risk-based governance via RBA</li>
+          <li>Auditability and compliance evidence</li>
+          <li>Incident workflows and escalation</li>
+          <li>Statewide accountability and oversight</li>
+        </ul>
+      </div>
+      <div class="pillar-card technology">
+        <h3>Strong Alignment — Technology</h3>
+        <ul>
+          <li>Continuous monitoring and log management</li>
+          <li>AI-assisted analytics and UBA</li>
+          <li>SOAR automation at machine speed</li>
+          <li>Threat intelligence fusion with Cal-CSIC</li>
+          <li>Vulnerability prioritization and shared SOC services</li>
+        </ul>
+      </div>
+      <div class="pillar-card people">
+        <h3>Supporting Alignment — People</h3>
+        <ul>
+          <li>Analyst enablement and reduced manual workload</li>
+          <li>Repeatable training workflows</li>
+          <li>Career pathway formalization</li>
+          <li>Executive communication tooling</li>
+          <li>Cross-entity knowledge sharing</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>NIST CSF 2.0 Cross-Reference</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>NIST CSF 2.0 Function</th>
+          <th>Cal-Secure 2.0 Relevance</th>
+          <th>Splunk ES Premier Capability</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Govern</td><td>Statewide governance, metrics, oversight, accountability</td><td>Executive dashboards, maturity reporting, risk scoring, audit evidence, role-based visibility</td></tr>
+        <tr><td>Identify</td><td>Asset, identity, vulnerability, risk, and data context</td><td>Asset &amp; Identity correlation, vulnerability ingestion, RBA, entity-level reporting</td></tr>
+        <tr><td>Protect</td><td>Proactive safeguards and risk reduction</td><td>Detection-informed prioritization, SOAR containment workflows, control monitoring</td></tr>
+        <tr><td>Detect</td><td>Continuous monitoring, analytics, behavioral detection</td><td>SIEM analytics, correlation searches, anomaly detection, TIM, UBA</td></tr>
+        <tr><td>Respond</td><td>Coordinated incident response and escalation</td><td>SOAR playbooks, Mission Control case management, escalation workflows, automated response</td></tr>
+        <tr><td>Recover</td><td>Cyber recovery validation and resilience</td><td>Recovery dashboards, backup telemetry monitoring, incident timelines, post-incident reporting</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout success">
+      <strong>Cal-Secure 2.0 Initiative Coverage:</strong> Splunk ES Premier Edition maps to all 35 Cal-Secure 2.0 initiatives across the six NIST CSF 2.0 functions, three strategic pillars, and the statewide shared services model—providing California entities a single platform to achieve, measure, and report cybersecurity maturity progress.
+    </div>
+
+    <div class="callout warn">
+      <strong>Licensing Note:</strong> Exact capabilities may vary by Splunk licensing and packaging. This mapping focuses on common Premier-level security outcomes including SIEM, risk-based alerting, SOAR, threat intelligence, behavioral analytics, dashboards, investigation workflows, and integrations. Confirm specific feature availability with your Splunk account team.
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Cal-Secure 2.0 → Splunk Enterprise Security Premier Edition Capability Mapping</p>
+  <p>Framework alignment: Cal-Secure 2.0 · NIST CSF 2.0 · California Office of Information Security (OIS)</p>
+  <p>Document generated August 2026 · For executive and technical planning purposes</p>
+</footer>
+
+</body>
+</html>
